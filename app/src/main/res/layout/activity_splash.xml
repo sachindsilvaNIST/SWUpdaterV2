@@ -26,12 +26,12 @@
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <!--        SWUpdater AppName with TagLine -->
+    <!-- SWUpdater AppName with TagLine -->
     <TextView
         android:id="@+id/mAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/InterLight"
+        android:fontFamily="@font/fontinterlight"
         android:text="@string/app_name"
         android:textColor="@color/white"
         android:textSize="25sp"
@@ -57,5 +57,4 @@
         android:indeterminateTintMode="src_atop"
         android:indeterminateTint="@color/white"
         />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
