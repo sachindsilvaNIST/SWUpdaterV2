@@ -1,6 +1,28 @@
 package com.nidec.swupdater.v2.ui;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 
-public class MainActivity {
+import com.nidec.swupdater.v2.R;
+
+public class MainActivity extends Activity {
+
+    private Button mApplyButton;
+    private Button mViewConfigButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        // Defining IDs for UI Elements
+        mApplyButton = findViewById(R.id.mApplyButton);
+        mViewConfigButton = findViewById(R.id.mViewConfigButton);
+
+
+    }
 }
