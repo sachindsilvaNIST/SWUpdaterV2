@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SWUpdater</string>
+    <string name="icon_name">SWUpdater</string>
+    <string name="app_name">OTA Installer V2.0</string>
 </resources>
