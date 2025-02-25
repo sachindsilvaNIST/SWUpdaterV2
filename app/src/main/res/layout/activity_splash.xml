@@ -9,7 +9,7 @@
     tools:context="com.nidec.swupdater.v2.ui.EntrySplashActivity"
     >
 
-<!--    SWUpdater APP Logo -->
+<!--    SWUpdater Splash Screen APP Logo -->
     <ImageView
         android:id="@+id/mAppLogo"
         android:layout_width="150dp"
@@ -26,7 +26,7 @@
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <!-- SWUpdater AppName with TagLine -->
+    <!-- SWUpdater SplashScreen AppName with TagLine -->
     <TextView
         android:id="@+id/mAppName"
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_marginTop="5dp"
         />
 
-<!--    Progress / Loading Spinner -->
+<!--    SWUpdater SplashScreen Progress / Loading Spinner -->
     <ProgressBar
         android:id="@+id/mLoadingSpinner"
         android:layout_width="200dp"

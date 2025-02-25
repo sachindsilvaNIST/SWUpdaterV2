@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.nidec.swupdater.v2">
 
     <application
         android:allowBackup="true"
@@ -26,8 +27,7 @@
 
 
 <!--        Activity 2 : Launch MainActivity after SplashActivity -->
-        <activity android:name="com.nidec.swupdater.v2.ui.MainActivity" />
-
+        <activity android:name="com.nidec.swupdater.v2.ui.MainActivity"/>
 
     </application>
 
