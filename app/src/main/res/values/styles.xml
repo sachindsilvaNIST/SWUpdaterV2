@@ -3,4 +3,26 @@
     <style name="customFontStyle" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily"></item>
     </style>
+
+    <style name="Theme.SWUpdater" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--      CUSTOM THEMES -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+
+
+        <!--     CUSTOM PRIMARY COLORS -->
+        <item name="colorPrimary">@color/teal_200</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+
+        <!--     Corner Radius For Material Shapes       -->
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.SWUpdater.Medium</item>
+    </style>
+
+<!--    DEFINING CUSTOM SHAPE APPEARANCE FOR `ShapeAppearance.SWUpdater.Medium` -->
+        <style name="ShapeAppearance.SWUpdater.Medium" parent="@style/ShapeAppearance.MaterialComponents.MediumComponent">
+            <item name="cornerFamily">rounded</item>
+            <item name="cornerSize">16dp</item>
+        </style>
+
 </resources>

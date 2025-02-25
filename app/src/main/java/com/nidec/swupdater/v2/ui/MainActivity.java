@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 
 
         // Defining IDs for UI Elements
-        mApplyButton = findViewById(R.id.mApplyButton);
+        mApplyButton = findViewById(R.id.mApplyUpdateButton);
         mViewConfigButton = findViewById(R.id.mViewConfigButton);
 
 
