@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 public class EntrySplashActivity extends Activity {
 
-    String TAG_SPLASH_SCREEN = "EntrySplashActivity";
+    public String TAG_SPLASH_SCREEN = "EntrySplashActivity";
 
 
     // Splash Screen Timeout --> `2 Seconds`

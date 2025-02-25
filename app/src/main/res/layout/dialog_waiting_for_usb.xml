@@ -16,6 +16,9 @@
         android:indeterminate="true"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="60dp"
+        android:outlineAmbientShadowColor="@color/black"
+        android:indeterminateTint="@color/nidecgreen"
+
         />
 
 
