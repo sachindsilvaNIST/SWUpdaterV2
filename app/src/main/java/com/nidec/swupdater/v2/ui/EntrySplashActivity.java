@@ -9,13 +9,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
+import android.app.ActivityManager;
+import android.view.View;
 
 import com.nidec.swupdater.v2.R;
 import com.nidec.swupdater.v2.ui.MainActivity;
 import java.util.List;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -46,34 +51,6 @@ public class EntrySplashActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash);
-
-//        // Switch / Move to `MainActivity.kt` after Splash Event
-//        new Handler().postDelayed(() -> {
-//            // Initiate and trigger `EntrySplashActivity` --> `MainActivity` after 02 Seconds <2000MS>
-//            Intent intent = new Intent(EntrySplashActivity.this, MainActivity.class);
-//
-//            startActivity(intent);
-//            finish(); // Terminate the SplashActivity so that it won't be running in the back stack
-//        },SPLASH_TIMEOUT_MS);
-
-       //  SplashScreen--Entry and then check for USB Connection Status
-
-//       new Handler().postDelayed(new Runnable() {
-//           @Override
-//           public void run() {
-//               if(isUSBDriveConnected()) {
-//                   // If USB Detected --> Proceed to `MainActivity` Screen
-//                   Intent intent = new Intent(EntrySplashActivity.this, MainActivity.class);
-//                   startActivity(intent);
-//                   finish();
-//               } else {
-//                   // If No USB Detected --> Pop-up dialog box with text message
-//                   showNoUSBDetectedDialog();
-//               }
-//           }
-//       },SPLASH_TIMEOUT_MS); // Splash Screen Duration = 2000ms (02 Seconds)
-//
-//    }
 
         // After SPLASH_TIMEOUT_MS, check for USB Connection.
         mHandler.postDelayed(()-> {
@@ -120,35 +97,43 @@ public class EntrySplashActivity extends Activity {
     private void showNoUSBDetectedDialog() {
 
         if(mNoUSBDialog != null && mNoUSBDialog.isShowing()) {
-
             // The Dialog box instance is already running.
             return;
         }
 
+
+        // Inflating the custom Layout for USB Waiting connection (Loading spinner and its TextView)
+
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        View mDialogView = mInflater.inflate(R.layout.dialog_waiting_for_usb,null);
+
+        // Get the Reference IDs for Loading Spinner and TextView from `dialog_waiting_for_usb.xml`
+        ProgressBar mProgressBarWaitingForUSBConnection = mDialogView.findViewById(R.id.mProgressBarWaitingForUSBConnection);
+
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        mBuilder.setTitle("USB Not Detected!");
-        mBuilder.setMessage("Please insert a USB drive...!");
+        mBuilder.setTitle("Waiting for USB Connection...");
+        mBuilder.setMessage("Please insert a USB drive!");
+        mBuilder.setView(mDialogView);
+        mBuilder.setCancelable(false); // Ensuring the user must choose a button (Can't tap outside to dismiss.)
 
-
-        // Add `Retry` button to manually check USB Connection.
-
-        mBuilder.setPositiveButton("Retry",new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Check USB Connection Manually
-                if(isUSBDriveConnected()){
-                    usbConnectionSuccessAndActive();
-                } else {
-                    Toast.makeText(EntrySplashActivity.this, "Waiting for USB Connection...",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
 
         // `Close App` Button to terminate the app.
         mBuilder.setNegativeButton("Close App",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Terminate SWUpdater App
-                finish();
+//                finish();
+
+
+                // Remove Any Polling Callbacks if any..
+                if(mHandler != null) {
+                    mHandler.removeCallbacksAndMessages(null);
+                }
+
+                // Close the Activity stack and remove from Recents App Panel.
+                finishAndRemoveTask();
+
             }
         });
 
@@ -158,46 +143,8 @@ public class EntrySplashActivity extends Activity {
         mNoUSBDialog.setCancelable(false);
         mNoUSBDialog.show();
 
-
-
-        // DEBUG - SRD 2025-02-25 Display a Dialog box with text-message
-
-//        new AlertDialog.Builder(EntrySplashActivity.this)
-//                .setTitle("No USB Found")
-//                .setMessage("USB is not connected or not detected.\n" +
-//                            "Please connect USB and relaunch the app.")
-//                // ** User need to pick an Option ***
-//                .setCancelable(false)
-//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // Terminate SWUpdater app
-//                        finish();
-//                    }
-//                })
-//                .setNegativeButton("Relaunch",new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                        // OP 1 : Reboot the app from the beginning
-////                        recreate();
-//
-//                        // OP 2 : Re-check state for USB Connection
-//
-//                        if(isUSBDriveConnected()){
-//                            // Re-create intent for `Splash Screen` once USB connection is triggered.
-//                            Intent intent = new Intent(EntrySplashActivity.this, MainActivity.class);
-//                            startActivity(intent);
-//                            finish();
-//                        } else {
-//                            // If USB Connection is not detected, Reinitiate the launch process.
-//                            recreate();
-//                        }
-//
-//                    }
-//                }).show();
-
-
-
     }
+
 
     // Periodic check USB Connectivity -- Effectively polls for every `POLL_INTERVAL_MS`
 
@@ -215,11 +162,14 @@ public class EntrySplashActivity extends Activity {
     private final Runnable pollRunnable = new Runnable() {
         @Override
         public void run() {
+            Log.d(TAG_SPLASH_SCREEN,"pollRunnable Function was called..");
             if(!mUSBConnected) { // If mUSBConnected = TRUE
                 if(isUSBDriveConnected())  { // If return value of this function is `TRUE` --> Proceed to next Activity
                     usbConnectionSuccessAndActive();
                 } else {
                     // If USB still not connected, keep polling..
+                    Log.d(TAG_SPLASH_SCREEN,"pollRunnable Function was called again...");
+
                     mHandler.postDelayed(this,POLL_INTERVAL_MS); // Every 02 seconds
                 }
             }
@@ -247,12 +197,25 @@ public class EntrySplashActivity extends Activity {
 
     // Launch MainActivity, If USB Connection = SUCCESS, finish and terminate SplashActivity
     private void launchMainActivity() {
+        Toast.makeText(this, "USB Connected!",Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(EntrySplashActivity.this,MainActivity.class);
         startActivity(intent);
         finish();
     }
 
 
+    // When "Close App" Button pressed : Clear App's cache data
+
+    private void mClearApplicationUserData() {
+
+        ActivityManager mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+        if(mActivityManager != null){
+            // Clear the user data of your app
+            // NOTE <SRD> : The app's process will receive ACTION_CLEAR_APP_USER_DATA broadcast if needed...
+            mActivityManager.clearApplicationUserData();
+        }
+    }
 
 
 
