@@ -68,7 +68,7 @@ public final class UpdateConfigs {
         final List<StorageVolume> volumeList = context.getSystemService(StorageManager.class).getStorageVolumes();
 
         // Check whether USB contains any contents (Valid files / folders..)
-        if((volumeList != null) && !volumeList.isEmpty()) {
+        if(volumeList != null && !volumeList.isEmpty()) {
             boolean bFound = false;
 
 
@@ -78,15 +78,36 @@ public final class UpdateConfigs {
                 // Get the USB Storage's Path
                 // Eg : volumePath can be `file://` or `/media/sankyo/`
 
-                final String volumePath = volume.getDirectory().getPath();
+
+                // ===> DEBUG TEST SRD 2025-02-26
+                String volumePath = null;
+                if(volume.getDirectory() != null) {
+                    volumePath = volume.getDirectory().getPath();
+                } else {
+                    Log.w(TAG_UPDATE_CONFIGS,"volume.getDirectory() is null. Skipping.......");
+                    continue;
+                }
+
+                // <=== DEBUG TEST SRD 2025-02-26
+
+//                final String volumePath = volume.getDirectory().getPath();
 
                 // Eg : updateDirPath can be `file://Update/` or `/media/sankyo/Update/`
                 final String updateDirPath = volumePath + File.separator + "Update" + File.separator;
+                Log.d(TAG_UPDATE_CONFIGS,"DISPLAYING FILE PATH : " + updateDirPath);
 
 
                 // Find JSON File in it.
                 File file = new File(updateDirPath);
-                File fileArray[] = file.listFiles();
+
+                Log.d(TAG_UPDATE_CONFIGS,"volumePath = " + volumePath);
+                Log.d(TAG_UPDATE_CONFIGS,"isDirectory()? : " + file.isDirectory());
+                Log.d(TAG_UPDATE_CONFIGS,"Does File Exists? : " + file.exists());
+                Log.d(TAG_UPDATE_CONFIGS,"Can READ File? : " + file.canRead());
+                Log.d(TAG_UPDATE_CONFIGS,"Absolute Path : " + file.getAbsolutePath());
+
+                File[] fileArray = file.listFiles();
+                Log.d(TAG_UPDATE_CONFIGS,"File Array[] : " + fileArray);
 
                 if(fileArray != null) {
                     for(File f : fileArray) {
@@ -104,12 +125,12 @@ public final class UpdateConfigs {
                             }
 
                         }
-                        if(bFound) {
-                            break;
-                        }
+//                        if(bFound) {
+//                            break;
+//                        }
                     }
                 } else {
-                    Log.d(TAG_UPDATE_CONFIGS,"SORRY! USB Drive files/folders are empty..");
+                    Log.d(TAG_UPDATE_CONFIGS,"file.listFiles() returned NULL for " + updateDirPath);
                 }
 
                 if(bFound) {
