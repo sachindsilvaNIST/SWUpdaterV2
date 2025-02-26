@@ -85,4 +85,24 @@
         />
 
 
+<!--    PHASE 1 TESTING : TextView to display the parsed or raw JSON content -->
+
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+                android:id="@+id/mTextViewConfigDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/display_json_config_default_text"
+                android:layout_marginTop="16dp" />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -187,7 +187,6 @@ public class EntrySplashActivity extends Activity {
             mNoUSBDialog.dismiss();
         }
 
-
         // Display the "USB Connected" Message\
         Toast.makeText(this, "USB Connected!",Toast.LENGTH_SHORT).show();
 
@@ -204,7 +203,7 @@ public class EntrySplashActivity extends Activity {
     }
 
 
-    // When "Close App" Button pressed : Clear App's cache data
+    // DEBUG TEST : SRD 2025-02-25 -- When "Close App" Button pressed : Clear App's cache data
 
     private void mClearApplicationUserData() {
 
@@ -216,9 +215,5 @@ public class EntrySplashActivity extends Activity {
             mActivityManager.clearApplicationUserData();
         }
     }
-
-
-
-
 
 }
