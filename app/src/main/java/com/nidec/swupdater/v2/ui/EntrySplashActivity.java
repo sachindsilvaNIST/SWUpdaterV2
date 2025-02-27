@@ -3,7 +3,6 @@ package com.nidec.swupdater.v2.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ActivityManager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,27 +10,27 @@ import android.content.pm.PackageManager;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.View;
 
 
 import com.nidec.swupdater.v2.R;
-import com.nidec.swupdater.v2.ui.MainActivity;
 
 import android.util.Log;
 
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -43,6 +42,7 @@ public class EntrySplashActivity extends Activity {
 
     public static final String TAG_SPLASH_SCREEN = "EntrySplashActivity";
     private static final int REQUEST_CODE_STORAGE_PERMS = 101;
+    private static final int REQUEST_CODE_MANAGE_ALL_FILES = 102;
 
 
     // Splash Screen Timeout --> `2 Seconds`
@@ -76,25 +76,88 @@ public class EntrySplashActivity extends Activity {
 
     // CHECK / REQUEST ANDROID DEVICE ACCESS PERMISSIONS
     private void checkStoragePermissions() {
-        // If running on a modern device
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // If Already granted?
-            if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                // If Permission Granted?, Continue;
+
+    // 1. If Android 11 or above
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+            if(!Environment.isExternalStorageManager()) {
+                // Determine whether we already have 'All File Access' (MANAGE_EXTERNAL_STORAGE) permission
+                // This will open the "Allow app to manage all files" page.
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+
+
+                // ==> DEBUG TEST SRD : 2025-02-26 ====================
+                // Passing a URI to guide the user to specific app.
+//                intent.setData(Uri.parse("Package : " + getPackageName()));
+                // ==> DEBUG TEST SRD : 2025-02-26 ====================
+
+                startActivityForResult(intent,REQUEST_CODE_MANAGE_ALL_FILES);
+            } else {
+                proceedToNextPhaseAfterPermission();
+            }
+
+    // 2. If the build is between Marshmallow and Android 10 :
+        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check for READ_EXTERNAL_STORAGE permission.
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 proceedToNextPhaseAfterPermission();
             } else {
-                // Request for the permission
-                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_CODE_STORAGE_PERMS);
+                // Request for READ EXTERNAL ACCESS PERMISSION
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_CODE_STORAGE_PERMS);
             }
+    // 3. If the build is Pre-marshmallow (below API 23)
         } else {
-            // Pre-Marshmallow API version no runtime permission required...
             proceedToNextPhaseAfterPermission();
+        }
+
+
+
+
+
+        // ==> DEBUG TEST SRD : 2025-02-26 ====================
+//        // If running on a modern device
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            // If Already granted?
+//            if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                // If Permission Granted?, Continue;
+//                proceedToNextPhaseAfterPermission();
+//            } else {
+//                // Request for the permission
+//                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_CODE_STORAGE_PERMS);
+//            }
+//        } else {
+//            // Pre-Marshmallow API version no runtime permission required...
+//            proceedToNextPhaseAfterPermission();
+//        }
+        // ==> DEBUG TEST SRD : 2025-02-26 ====================
+
+    }
+
+
+    // Handling the Permission Results : FOR MANAGE_ALL_FILES_ACCESS
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+
+        if(requestCode == REQUEST_CODE_MANAGE_ALL_FILES) {
+            // When returning from the MANAGE_ALL_FILES_ACCESS_PERMISSION Screen:
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if(Environment.isExternalStorageManager()) {
+                    // The user has granted "All Files" Access.
+                    proceedToNextPhaseAfterPermission();
+                } else {
+                    // The user denied "All files" Access permission.
+                    Log.e(TAG_SPLASH_SCREEN,"MANAGE_EXTERNAL_STORAGE permission not granted..!");
+                    finish();
+                }
+            }
         }
     }
 
 
     /**
-     * Called once the user has responded to the permission dialog.
+     * For Android 10 / Pre-marshmallow versions  : Called once the user has responded to the permission dialog.
      */
 
     @Override
@@ -226,7 +289,6 @@ public class EntrySplashActivity extends Activity {
 
     /**
      * `pollRunnable` checks USB connectivity in the background for every `POLL_INTERVAL_MS` Milliseconds --> i.e., every 02 seconds
-     *
      * If USB Connection = FOUND? Proceed
      * Otherwise, keep polling (Call `startUSBPolling()` function)
      */
@@ -234,7 +296,6 @@ public class EntrySplashActivity extends Activity {
         @Override
         public void run() {
             Log.d(TAG_SPLASH_SCREEN,"pollRunnable Function was called..");
-            Toast.makeText(EntrySplashActivity.this,"Waiting for USB Connection...",Toast.LENGTH_LONG).show();
             if(!mUSBConnected) { // If mUSBConnected = TRUE
                 if(isUSBDriveConnected())  { // If return value of this function is `TRUE` --> Proceed to next Activity
                     usbConnectionSuccessAndActive();
@@ -277,15 +338,15 @@ public class EntrySplashActivity extends Activity {
 
     // DEBUG TEST : SRD 2025-02-25 -- When "Close App" Button pressed : Clear App's cache data
 
-    private void mClearApplicationUserData() {
-
-        ActivityManager mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-
-        if(mActivityManager != null){
-            // Clear the user data of your app
-            // NOTE <SRD> : The app's process will receive ACTION_CLEAR_APP_USER_DATA broadcast if needed...
-            mActivityManager.clearApplicationUserData();
-        }
-    }
+//    private void mClearApplicationUserData() {
+//
+//        ActivityManager mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+//
+//        if(mActivityManager != null){
+//            // Clear the user data of your app
+//            // NOTE <SRD> : The app's process will receive ACTION_CLEAR_APP_USER_DATA broadcast if needed...
+//            mActivityManager.clearApplicationUserData();
+//        }
+//    }
 
 }
