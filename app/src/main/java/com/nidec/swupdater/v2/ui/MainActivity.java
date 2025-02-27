@@ -35,7 +35,6 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this,RebootCheckActivity.class);
         startActivity(intent);
         finish();
-
     }
 
 }

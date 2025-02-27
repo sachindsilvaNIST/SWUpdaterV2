@@ -2,6 +2,7 @@
     <string name="icon_name">SWUpdater</string>
     <string name="app_name">OTA Installer V2.0</string>
     <string name="activity_main_title">This is MainActivity page.</string>
+    <string name="activity_reboot_check_title">This is RebootCheckActivity page.</string>
     <string name="apply_button">Apply Update</string>
     <string name="display_json_config_default_text">JSON Config details will be displayed here&#8230;</string>
 </resources>
