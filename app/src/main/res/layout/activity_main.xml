@@ -10,99 +10,18 @@
     tools:context="com.nidec.swupdater.v2.ui.MainActivity"
     >
 
-
-<!--    DEBUGG FOR UI DESIGN - SRD 2025-02-25 -->
-<!--    MATERIAL TOOLBAR for Top app bar -->
-<!--    <com.google.android.material.appbar.MaterialToolbar-->
-<!--        android:id="@+id/mTopAppBar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:title="@string/app_name"-->
-<!--        android:backgroundTint="@color/black"-->
-<!--        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"-->
-<!--        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"-->
-<!--        app:titleCentered="true"-->
-<!--        />-->
-<!--    -->
-<!--    -->
-<!--&lt;!&ndash;    Main content with a vertical scroll &ndash;&gt;-->
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/mContentLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginTop="?attr/actionBarSize"-->
-<!--        android:padding="16dp"-->
-<!--        tools:context=".ui.MainActivity">-->
-<!--        -->
-<!--        -->
-<!--        -->
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-
-
 <!--    MainActivity App Header -->
     <TextView
         android:id="@+id/mTextViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NIDEC - OTA Installer lorem20"
-        android:textStyle="italic"
+        android:text="@string/activity_main_title"
         android:textSize="24sp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/mApplyUpdateButton"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        />
-
-
-<!--    APPLY Button -->
-    <Button
-        android:id="@+id/mApplyUpdateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Apply Update"
-        app:layout_constraintBottom_toTopOf="@+id/mViewConfigButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-
-    <!--    ViewConfig Button -->
-
-    <Button
-        android:id="@+id/mViewConfigButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View Config"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-
-<!--    PHASE 1 TESTING : TextView to display the parsed or raw JSON content -->
-
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-                android:id="@+id/mTextViewConfigDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/display_json_config_default_text"
-                android:layout_marginTop="16dp" />
-    </LinearLayout>
+        tools:layout_editor_absoluteY="295dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
