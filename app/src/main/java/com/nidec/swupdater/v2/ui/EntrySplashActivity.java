@@ -1,32 +1,48 @@
 package com.nidec.swupdater.v2.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ActivityManager;
+
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+
 import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
-import android.app.ActivityManager;
 import android.view.View;
+
 
 import com.nidec.swupdater.v2.R;
 import com.nidec.swupdater.v2.ui.MainActivity;
-import java.util.List;
+
 import android.util.Log;
+
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.util.List;
+
+
 
 public class EntrySplashActivity extends Activity {
 
-    public String TAG_SPLASH_SCREEN = "EntrySplashActivity";
+    public static final String TAG_SPLASH_SCREEN = "EntrySplashActivity";
+    private static final int REQUEST_CODE_STORAGE_PERMS = 101;
 
 
     // Splash Screen Timeout --> `2 Seconds`
@@ -52,6 +68,60 @@ public class EntrySplashActivity extends Activity {
 
         setContentView(R.layout.activity_splash);
 
+        // CHECK / REQUEST ANDROID DEVICE ACCESS PERMISSIONS
+        checkStoragePermissions();
+
+
+    }
+
+    // CHECK / REQUEST ANDROID DEVICE ACCESS PERMISSIONS
+    private void checkStoragePermissions() {
+        // If running on a modern device
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // If Already granted?
+            if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                // If Permission Granted?, Continue;
+                proceedToNextPhaseAfterPermission();
+            } else {
+                // Request for the permission
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_CODE_STORAGE_PERMS);
+            }
+        } else {
+            // Pre-Marshmallow API version no runtime permission required...
+            proceedToNextPhaseAfterPermission();
+        }
+    }
+
+
+    /**
+     * Called once the user has responded to the permission dialog.
+     */
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,@NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+
+        if(requestCode == REQUEST_CODE_STORAGE_PERMS) {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG_SPLASH_SCREEN, "READ_EXTERNAL_STORAGE granted.");
+                proceedToNextPhaseAfterPermission();
+
+            } else {
+                // Permission denied - you can show a dialog or close the app
+                Log.e(TAG_SPLASH_SCREEN, "READ_EXTERNAL_STORAGE denied.");
+                finish();
+            }
+        }
+    }
+
+
+    /**
+     * Called once we definitely have READ_EXTERNAL_STORAGE permission.
+     *
+     * CONTINUATION WITH `EntrySplashActivity`
+     */
+
+    private void proceedToNextPhaseAfterPermission() {
         // After SPLASH_TIMEOUT_MS, check for USB Connection.
         mHandler.postDelayed(()-> {
             if(isUSBDriveConnected()) {
@@ -62,9 +132,10 @@ public class EntrySplashActivity extends Activity {
                 startUSBPolling();
             }
         },SPLASH_TIMEOUT_MS);
-
-
     }
+
+
+
 
     // Check whether USB Pendrive -- Implementation using StorageManager
     private boolean isUSBDriveConnected() {
