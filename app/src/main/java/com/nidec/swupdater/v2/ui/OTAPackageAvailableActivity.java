@@ -18,6 +18,14 @@ import com.nidec.swupdater.v2.R;
 //import com.nidec.swupdater.v2.util.UpdateConfigs;
 //import com.nidec.swupdater.v2.UpdateConfig;
 
+/**
+ * Action :
+ * 1. Show an update is available
+ * 2. Provide "Yes" to start the download
+ * 3. Provide "No" to cancel, and Go back to "OTAPackageCheckerActivity"
+ *
+ */
+
 
 
 public class OTAPackageAvailableActivity extends Activity {

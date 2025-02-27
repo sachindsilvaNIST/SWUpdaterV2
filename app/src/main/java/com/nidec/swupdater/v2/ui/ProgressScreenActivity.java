@@ -21,9 +21,15 @@ import com.nidec.swupdater.v2.R;
 //import com.nidec.swupdater.v2.UpdateConfig;
 
 
+/**
+ * Action :
+ * 1. Show the progress (percentage) of download the OTA Package.
+ * 2. If download finishes successfully, or the UpdateEngine signals "Requires Reboot", go to "UpdateCompletionActivity"
+ * 3. If user presses "Cancel", then go back to "OTAPackageCheckerActivity"
+ */
+
 
 public class ProgressScreenActivity extends Activity {
-
     private static final String TAG_PROGRESS_SCREEN_ACTIVITY = "ProgressScreenActivity";
 
     private ProgressBar mProgressBar;

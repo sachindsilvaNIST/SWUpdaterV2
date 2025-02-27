@@ -18,6 +18,16 @@ import com.nidec.swupdater.v2.R;
 //import com.nidec.swupdater.v2.util.UpdateConfigs;
 //import com.nidec.swupdater.v2.UpdateConfig;
 
+
+/**
+ * Action :
+ * 1. Check whether an OTA Update is available or not.
+ * 2. If no OTA Update --> Goto "SystemUpToDateActivity"
+ * 3. If OTA Update Available --> Goto "OTAPackageAvailableActivity"
+ *
+ */
+
+
 public class OTAPackageCheckerActivity extends Activity {
 
     @Override

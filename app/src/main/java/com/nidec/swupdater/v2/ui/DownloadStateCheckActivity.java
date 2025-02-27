@@ -19,6 +19,13 @@ import com.nidec.swupdater.v2.R;
 //import com.nidec.swupdater.v2.util.UpdateConfigs;
 //import com.nidec.swupdater.v2.UpdateConfig;
 
+/**
+ * Action:
+ * 1. Check if an OTA Package download is already in progress.
+ * 2. If "Yes" --> Goto "ProgressScreenActivity"
+ * 3. If "No" --> Goto "OTAPackageCheckerActivity"
+ */
+
 
 public class DownloadStateCheckActivity extends Activity{
 
@@ -40,8 +47,6 @@ public class DownloadStateCheckActivity extends Activity{
             // "OTA Package Checker" --> `OTAPackageCheckerActivity.java`
             Intent intent = new Intent(this,OTAPackageCheckerActivity.class);
             startActivity(intent);
-
-
         }
         finish();
     }

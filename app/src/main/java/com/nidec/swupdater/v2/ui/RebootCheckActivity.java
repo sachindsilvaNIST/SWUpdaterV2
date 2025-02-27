@@ -11,6 +11,16 @@ import com.nidec.swupdater.v2.R;
 //import com.nidec.swupdater.v2.util.UpdateConfigs;
 //import com.nidec.swupdater.v2.UpdateConfig;
 
+/**
+ * Action :
+ * 1. Check if the previous update requires a reboot.
+ * 2. If "Yes" --> Show "UpdateCompletionActivity" with "Requires Reboot" message.
+ * 3. If "No" --> Move to "DownloadStateCheckActivity" -- Checking the download state.
+ *
+ */
+
+
+
 public class RebootCheckActivity extends Activity {
 
     @Override

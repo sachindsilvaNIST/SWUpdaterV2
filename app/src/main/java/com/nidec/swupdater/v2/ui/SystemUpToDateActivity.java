@@ -18,6 +18,16 @@ import com.nidec.swupdater.v2.R;
 //import com.nidec.swupdater.v2.util.UpdateConfigs;
 //import com.nidec.swupdater.v2.UpdateConfig;
 
+/**
+ * Action:
+ * 1. Show a screen that says "System is up-to-date.
+ * 2. Offer a "Re-check" button which leads back to "OTAPackageCheckerActivity"
+ *
+ */
+
+
+
+
 public class SystemUpToDateActivity extends Activity {
 
     @Override

@@ -7,7 +7,8 @@
     <string name="activity_ota_package_checker_title">This is OTAPackageCheckerActivity page.</string>
     <string name="activity_system_up_to_date_title">This is SystemUpToDateActivity page.</string>
     <string name="activity_ota_package_available_title"> This is OTAPackageAvailable page.</string>
-    <string name="activity_progress_screen_title">This is ProgressScreenActivity page.</string>
+    <string name="activity_progress_screen_title">This is ProgressScreenActivity page.</string>\
+    <string name="activity_update_completion_title"> This is UpdateCompletion page.</string>
     <string name="apply_button">Apply Update</string>
     <string name="display_json_config_default_text">JSON Config details will be displayed here&#8230;</string>
 </resources>
