@@ -7,15 +7,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.nidec.swupdater.v2.ui.SystemUpToDateActivity"
+    tools:context="com.nidec.swupdater.v2.ui.ProgressScreenActivity"
     >
 
     <!--    MainActivity App Header -->
     <TextView
-        android:id="@+id/mSystemUpToDateMainTitle"
+        android:id="@+id/mProgressScreenMainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_system_up_to_date_title"
+        android:text="@string/activity_progress_screen_title"
         android:textSize="24sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,13 +23,26 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="295dp" />
 
-    <!--    Recheck Button -->
+<!--    Progress bar -->
+    <ProgressBar
+        android:id="@+id/mProgressScreenBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mProgressScreenMainTitle"
+        android:progress="0"
+        />
+
+    <!--    CANCEL Button -->
     <Button
-        android:id="@+id/mSystemUpToDateReCheckButton"
+        android:id="@+id/mProgressBarCancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recheck"
-        app:layout_constraintTop_toBottomOf="@+id/mSystemUpToDateMainTitle"
+        android:text="Cancel"
+        app:layout_constraintTop_toBottomOf="@+id/mProgressScreenBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

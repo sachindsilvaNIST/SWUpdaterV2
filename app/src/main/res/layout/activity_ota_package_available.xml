@@ -7,15 +7,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.nidec.swupdater.v2.ui.SystemUpToDateActivity"
+    tools:context="com.nidec.swupdater.v2.ui.OTAPackageAvailableActivity"
     >
 
     <!--    MainActivity App Header -->
     <TextView
-        android:id="@+id/mSystemUpToDateMainTitle"
+        android:id="@+id/mOTAPackageAvailableMainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_system_up_to_date_title"
+        android:text="@string/activity_ota_package_available_title"
         android:textSize="24sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,13 +23,26 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="295dp" />
 
-    <!--    Recheck Button -->
+
+    <!--    APPLY Button -->
     <Button
-        android:id="@+id/mSystemUpToDateReCheckButton"
+        android:id="@+id/mOTAPackageAvailableYesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recheck"
-        app:layout_constraintTop_toBottomOf="@+id/mSystemUpToDateMainTitle"
+        android:text="Yes"
+        app:layout_constraintTop_toBottomOf="@+id/mOTAPackageAvailableMainTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <!--    APPLY Button -->
+    <Button
+        android:id="@+id/mOTAPackageAvailableNoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No"
+        app:layout_constraintTop_toBottomOf="@+id/mOTAPackageAvailableYesButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
