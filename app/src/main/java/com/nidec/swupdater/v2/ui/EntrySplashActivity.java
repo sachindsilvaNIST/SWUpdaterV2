@@ -184,7 +184,7 @@ public class EntrySplashActivity extends Activity {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
         mBuilder.setTitle("Waiting for USB Connection...");
-        mBuilder.setMessage("Please insert a USB drive!");
+        mBuilder.setMessage("Please insert your USB drive!");
         mBuilder.setView(mDialogView);
         mBuilder.setCancelable(false); // Ensuring the user must choose a button (Can't tap outside to dismiss.)
 
@@ -234,6 +234,7 @@ public class EntrySplashActivity extends Activity {
         @Override
         public void run() {
             Log.d(TAG_SPLASH_SCREEN,"pollRunnable Function was called..");
+            Toast.makeText(EntrySplashActivity.this,"Waiting for USB Connection...",Toast.LENGTH_LONG).show();
             if(!mUSBConnected) { // If mUSBConnected = TRUE
                 if(isUSBDriveConnected())  { // If return value of this function is `TRUE` --> Proceed to next Activity
                     usbConnectionSuccessAndActive();
