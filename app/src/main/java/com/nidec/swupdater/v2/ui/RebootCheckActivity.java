@@ -19,8 +19,6 @@ import com.nidec.swupdater.v2.R;
  *
  */
 
-
-
 public class RebootCheckActivity extends Activity {
 
     @Override
