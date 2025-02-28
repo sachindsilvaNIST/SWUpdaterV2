@@ -99,7 +99,7 @@ public final class UpdateConfigs {
                 }
                 // IF `fileArray` is NULL,
                 else {
-                        Log.e(TAG_UPDATE_CONFIGS,"FileArray returned NULL!!",e);
+                        Log.e(TAG_UPDATE_CONFIGS,"FileArray returned NULL!!");
                 }
                 if(bFound) {break;}
             }
