@@ -1,4 +1,4 @@
-package com.nidec.swupdater.v2.util;
+package com.nidec.swupdater.v2;
 
 import android.os.Parcel;
 import android.os.Parcelable;
