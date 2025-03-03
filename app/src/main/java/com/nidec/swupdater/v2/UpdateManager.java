@@ -58,7 +58,7 @@ public class UpdateManager {
 
 
     // UpdateState's Initial state --> IDLE (No Updates)
-    private UpdaterState mUpdaterState = new UpdateState(UpdaterState.IDLE);
+    private UpdaterState mUpdaterState = new UpdaterState(UpdaterState.IDLE);
 
     private AtomicBoolean mManualSwitchSlotRequired = new AtomicBoolean(true);
 
