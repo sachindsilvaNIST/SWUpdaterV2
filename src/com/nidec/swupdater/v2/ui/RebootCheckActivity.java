@@ -84,6 +84,7 @@ public class RebootCheckActivity extends Activity {
 
     private void onUpdaterStateChange(int newState) {
         Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UpdaterStateChange state = " + UpdaterState.getStateText(newState) + "/" + newState);
+        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "Current State = " + newState);
 
         /**
          * 4. Always run handleState on UI Thread.
