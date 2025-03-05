@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="com.nidec.swupdater.v2.ui.UpdateCompletionActivity"
-    >
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
-    <!--    MainActivity App Header -->
     <TextView
-        android:id="@+id/mTextViewTitle"
+        android:id="@+id/TextViewUpdateCompletion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_update_completion_title"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        tools:layout_editor_absoluteY="295dp" />
-
+        android:text="Update Complete..."
+        android:textSize="16sp"
+        />
 
 </LinearLayout>
