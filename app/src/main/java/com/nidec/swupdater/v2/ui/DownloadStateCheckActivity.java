@@ -32,22 +32,6 @@ public class DownloadStateCheckActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_state_check);
-
-
-        // Check whether the OTA Package download is in progress..
-        if(isDownloadInProgress()) {
-            // If the OTA Package download is in progress, Goto "Progress screen"
-            // "Progress screen" --> `ProgressScreenActivity.java`
-            Intent intent = new Intent(this,ProgressScreenActivity.class);
-            startActivity(intent);
-
-        } else {
-            // If the OTA Package download is not in progress / not required?, Goto "OTA Package Checker"
-            // "OTA Package Checker" --> `OTAPackageCheckerActivity.java`
-            Intent intent = new Intent(this,OTAPackageCheckerActivity.class);
-            startActivity(intent);
-        }
-        finish();
     }
 
 
