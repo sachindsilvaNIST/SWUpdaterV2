@@ -52,7 +52,7 @@ public class DownloadStateCheckActivity extends Activity {
          *
          */
 
-        this.mUpdateManager.setOnEngineStatusUpdateCallback(this::onEngineStatusUpdate);
+        this.mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
 
     }
 
@@ -80,17 +80,17 @@ public class DownloadStateCheckActivity extends Activity {
 
     @Override
     protected void onDestroy(){
-        this.mUpdateManager.setOnEngineStatusUpdateCallback(null);
         super.onDestroy();
     }
+
 
 
     /**
      * This function callback is invoked, when the SWUpdaterV2's internal state changes.
      */
 
-    private void onEngineStatusUpdate(int newState) {
-        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "onEngineStatusUpdate state = " + UpdaterState.getStateText(newState) + "/" + newState);
+    private void onUpdaterStateChange(int newState) {
+        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "onUpdaterStateChange state = " + UpdaterState.getStateText(newState) + "/" + newState);
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Current State = " + newState);
 
         /**
