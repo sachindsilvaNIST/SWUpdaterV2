@@ -12,7 +12,7 @@
         android:id="@+id/TextViewDownloadStateCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Downloading Update..."
+        android:text="Checking if download is already in progress..."
         android:textSize="16sp"
         />
 

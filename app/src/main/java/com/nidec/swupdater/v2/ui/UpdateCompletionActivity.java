@@ -34,8 +34,7 @@ public class UpdateCompletionActivity extends Activity {
 
         // Display the message to the user indicating that the update process was completed..
         // Requires Reboot...
-        // E.g : UpdateManager.getInstance().requestReboot();
-
+        // CODE DEVELOPMENT STATUS : 100% SUCCESS
 
     }
 

@@ -1,41 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="com.nidec.swupdater.v2.ui.ProgressScreenActivity"
-    >
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
-    <!--    MainActivity App Header -->
     <TextView
-        android:id="@+id/mProgressScreenMainTitle"
+        android:id="@+id/TextViewProgressScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_progress_screen_title"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        tools:layout_editor_absoluteY="295dp" />
-
-<!--    Progress bar -->
-    <ProgressBar
-        android:id="@+id/mProgressScreenBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:progress="0"
+        android:text=">>> IT'S DOWNLOADING>>>>"
+        android:textSize="16sp"
         />
-
-    <!--    CANCEL Button -->
-    <Button
-        android:id="@+id/mProgressBarCancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        />
-
 
 </LinearLayout>

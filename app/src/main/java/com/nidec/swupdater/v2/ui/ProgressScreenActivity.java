@@ -32,8 +32,8 @@ import com.nidec.swupdater.v2.R;
 public class ProgressScreenActivity extends Activity {
     private static final String TAG_PROGRESS_SCREEN_ACTIVITY = "ProgressScreenActivity";
 
-    private ProgressBar mProgressBar;
-    private Button mCancelButton;
+//    private ProgressBar mProgressBar;
+//    private Button mCancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,51 +41,51 @@ public class ProgressScreenActivity extends Activity {
         setContentView(R.layout.activity_progress_screen);
 
 
-        mProgressBar = findViewById(R.id.mProgressScreenBar);
-        mCancelButton = findViewById(R.id.mProgressBarCancelButton);
-
-
-        // Listen to the download progress callbacks
-        // E.g : UpdateManager.getInstance().setOnProgressUpdateCallback(this::onProgressChanged);
-
-        // ===> Todo DOUBT!!
-        mCancelButton.setOnClickListener(v -> {
-            // If "Cancel" button was pressed, cancel the download.
-            // E.g : UpdateManager.getInstance().cancelDownload();
-            // Move to "OTA Package Checker" Page --> `OTAPackageCheckerActivity.java`
-            Intent intent = new Intent(this,OTAPackageCheckerActivity.class);
-            startActivity(intent);
-            finish();
-        });
-        // ===> Todo DOUBT!!
-
-    }
-
-    private void onProgressChanged(int progress) {
-        // This is the callback from your updateManager
-        runOnUiThread(() -> mProgressBar.setProgress(progress));
-
-        if(progress >= 100) {
-            // Download was completed... requires Reboot.
-            // ALSO, COULD check the UpdateManager for status
-
-            Intent intent = new Intent(this, UpdateCompletionActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        /**
-         * Notes:
-         * You might already have logic from SWUpdaterV1 that manages the actual engine callbacks and progress updates.
-         *
-         * Just wire them up in this activity to show the user a progress bar or logs.
-         *
-         * If the update completes and the final status from the update engine is “REBOOT_REQUIRED,” we move to UpdateCompletionActivity.
-         *
-         *
-         */
+//        mProgressBar = findViewById(R.id.mProgressScreenBar);
+//        mCancelButton = findViewById(R.id.mProgressBarCancelButton);
+//
+//
+//        // Listen to the download progress callbacks
+//        // E.g : UpdateManager.getInstance().setOnProgressUpdateCallback(this::onProgressChanged);
+//
+//        // ===> Todo DOUBT!!
+//        mCancelButton.setOnClickListener(v -> {
+//            // If "Cancel" button was pressed, cancel the download.
+//            // E.g : UpdateManager.getInstance().cancelDownload();
+//            // Move to "OTA Package Checker" Page --> `OTAPackageCheckerActivity.java`
+//            Intent intent = new Intent(this,OTAPackageCheckerActivity.class);
+//            startActivity(intent);
+//            finish();
+//        });
+//        // ===> Todo DOUBT!!
 
     }
+
+//    private void onProgressChanged(int progress) {
+//        // This is the callback from your updateManager
+//        runOnUiThread(() -> mProgressBar.setProgress(progress));
+//
+//        if(progress >= 100) {
+//            // Download was completed... requires Reboot.
+//            // ALSO, COULD check the UpdateManager for status
+//
+//            Intent intent = new Intent(this, UpdateCompletionActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//
+//        /**
+//         * Notes:
+//         * You might already have logic from SWUpdaterV1 that manages the actual engine callbacks and progress updates.
+//         *
+//         * Just wire them up in this activity to show the user a progress bar or logs.
+//         *
+//         * If the update completes and the final status from the update engine is “REBOOT_REQUIRED,” we move to UpdateCompletionActivity.
+//         *
+//         *
+//         */
+//
+//    }
 
 
 
