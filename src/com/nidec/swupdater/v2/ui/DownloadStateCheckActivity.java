@@ -122,7 +122,7 @@ public class DownloadStateCheckActivity extends Activity {
             startActivity(new Intent(this, UpdateCompletionActivity.class));
             finish();
         } else {
-            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGESS --> Switching to `OTAPackageCheckerActivity.java`");
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGRESS --> Switching to `OTAPackageCheckerActivity.java`");
             startActivity(new Intent(this, OTAPackageCheckerActivity.class));
             finish();
         }
