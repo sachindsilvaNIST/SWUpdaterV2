@@ -4,32 +4,18 @@ import android.content.Context;
 
 import android.util.Log;
 
-import android.widget.Toast;
-
 import android.os.storage.StorageVolume;
 import android.os.storage.StorageManager;
 
-import com.nidec.swupdater.v2.UpdateConfig;
-
 import java.io.File;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.IOException;
 
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 
 
 // This Utility Class will be used for working with JSON Update Configurations.

@@ -43,7 +43,7 @@
 <!--        Activity 2 : Launch MainActivity after SplashActivity -->
         <activity android:name="com.nidec.swupdater.v2.ui.MainActivity"/>
 
-        <service android:name="com.nidec.swupdater.v2.services.PrepareUpdateService"/>
+<!--        <service android:name="com.nidec.swupdater.v2.services.PrepareUpdateService"/>-->
     </application>
 
 </manifest>

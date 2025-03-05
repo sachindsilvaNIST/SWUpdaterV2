@@ -1,8 +1,5 @@
 package com.nidec.swupdater.v2.util;
 
-import com.nidec.swupdater.v2.PayloadSpec;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.BufferedReader;
 import java.io.File;

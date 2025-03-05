@@ -1,4 +1,4 @@
-# SystemUpdaterSample
+# SWUpdater Version 2.0.0
 
 This app demonstrates how to use Android system updates APIs to install
 [OTA updates](https://source.android.com/devices/tech/ota/). It contains a

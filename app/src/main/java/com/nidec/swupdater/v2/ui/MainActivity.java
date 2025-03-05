@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
 
         // Display the XML of `MainActivity` --> `activity_main.xml`
         setContentView(R.layout.activity_main);
-
         Intent intent = new Intent(this,RebootCheckActivity.class);
         startActivity(intent);
         finish();
