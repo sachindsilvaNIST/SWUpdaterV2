@@ -68,6 +68,7 @@ public class RebootCheckActivity extends Activity {
         /** 2. Binding to UpdateEngine invokes onStatusUpdate callback,
          * persisted UpdaterState has to be loaded and prepared beforehand.
          */
+        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "BINDING `RebootCheckActivity.java`");
         this.mUpdateManager.bind();
 
     }
