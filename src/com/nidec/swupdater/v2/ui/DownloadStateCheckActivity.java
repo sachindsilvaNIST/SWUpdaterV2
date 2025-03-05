@@ -117,6 +117,10 @@ public class DownloadStateCheckActivity extends Activity {
             Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "RUNNING : --> OTA Update is in progress..., --> Switching to `ProgressScreenActivity.java`");
             startActivity(new Intent(this, ProgressScreenActivity.class));
             finish();
+        } else if(state == UpdaterState.REBOOT_REQUIRED) {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
+            startActivity(new Intent(this, UpdateCompletionActivity.class));
+            finish();
         } else {
             Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGESS --> Switching to `OTAPackageCheckerActivity.java`");
             startActivity(new Intent(this, OTAPackageCheckerActivity.class));
