@@ -70,10 +70,6 @@ public class RebootCheckActivity extends Activity {
          */
         this.mUpdateManager.bind();
 
-        /**
-         * 3. Check Immediately the current state if in case it's already "REBOOT_REQUIRED"
-         */
-
     }
 
     @Override
