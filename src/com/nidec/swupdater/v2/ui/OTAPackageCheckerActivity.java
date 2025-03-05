@@ -35,26 +35,29 @@ public class OTAPackageCheckerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ota_package_checker);
 
-        boolean mUpdateAvailable = checkForOTAUpdate();
 
-        // Check whether OTA Package Update available or not
-        // IF `!mUpdateAvailable` --> TRUE => `mUpdateAvailable` --> FALSE
-        if(!mUpdateAvailable) {
-            Intent intent = new Intent(this,SystemUpToDateActivity.class);
-            startActivity(intent);
-        } else {
-            // Display the OTA Package Available screen --> `OTAPackageAvailableActivity.java`
-            Intent intent = new Intent(this,OTAPackageAvailableActivity.class);
-            startActivity(intent);
-        }
-        finish();
+
+
+//        boolean mUpdateAvailable = checkForOTAUpdate();
+//
+//        // Check whether OTA Package Update available or not
+//        // IF `!mUpdateAvailable` --> TRUE => `mUpdateAvailable` --> FALSE
+//        if(!mUpdateAvailable) {
+//            Intent intent = new Intent(this,SystemUpToDateActivity.class);
+//            startActivity(intent);
+//        } else {
+//            // Display the OTA Package Available screen --> `OTAPackageAvailableActivity.java`
+//            Intent intent = new Intent(this,OTAPackageAvailableActivity.class);
+//            startActivity(intent);
+//        }
+//        finish();
 
     }
 
-    private boolean checkForOTAUpdate() {
-        // Possibly use your existing SWUpdater V1 logic to see if an update is found.
-        // E.G: Fetch config from update server or parse JSON from local storage.
-
-        return false;
-    }
+//    private boolean checkForOTAUpdate() {
+//        // Possibly use your existing SWUpdater V1 logic to see if an update is found.
+//        // E.G: Fetch config from update server or parse JSON from local storage.
+//
+//        return false;
+//    }
 }
