@@ -8,6 +8,7 @@ import android.os.UpdateEngineCallback;
 
 import android.util.Log;
 
+import com.nidec.swupdater.v2.services.PrepareUpdateService;
 import com.nidec.swupdater.v2.util.UpdateEngineErrorCodes;
 import com.nidec.swupdater.v2.util.UpdateEngineProperties;
 
@@ -19,6 +20,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -81,7 +83,7 @@ public class UpdateManager {
 
     private final Object mLock = new Object();
 
-    private final UpdateEngineCallbackImpl mUpdateEngineCallback = new UpdateEngineCallbackImpl();
+    private final UpdateManager.UpdateEngineCallbackImpl mUpdateEngineCallback = new UpdateManager.UpdateEngineCallbackImpl();
 
     private final Handler mHandler;
 
