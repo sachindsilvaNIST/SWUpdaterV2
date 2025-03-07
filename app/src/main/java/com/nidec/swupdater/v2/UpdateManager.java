@@ -446,12 +446,6 @@ public class UpdateManager {
         updateEngineApplyPayload(builder.build());
     }
 
-
-
-    public int getEngineStatus() {
-        return mUpdateEngineStatus.get();
-    }
-
     /**
      * Synchronize UpdaterState with UpdateEngine status.
      * Apply necessary UpdateEngine operation if status are out of sync.
