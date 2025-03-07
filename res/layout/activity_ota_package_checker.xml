@@ -15,5 +15,13 @@
         android:text="Loading for OTA Package Update...."
         android:textSize="16sp"
         />
+    <ProgressBar
+        android:id="@+id/mOTAPackageCheckersProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:min="0"
+        android:max="100"
+        />
 
 </LinearLayout>

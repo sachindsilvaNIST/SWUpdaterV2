@@ -77,6 +77,15 @@ public class DownloadStateCheckActivity extends Activity {
          * 3. After binding, check the UpdaterState's currentState
          */
 
+        int currentState = mUpdateManager.getUpdaterState();
+        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "onResume() => currentState = " + UpdaterState.getStateText(currentState));
+
+        /**
+         * Handle the state
+         */
+
+        handleState(currentState);
+
     }
 
 
@@ -122,16 +131,20 @@ public class DownloadStateCheckActivity extends Activity {
     private void handleState(int state) {
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Entering `handleState()` of `DownloadStateCheckActivity.java`...");
 
-        switch (state) {
-            case UpdaterState.RUNNING :
+        if(state == UpdaterState.RUNNING) {
             Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "RUNNING : --> OTA Update is in progress..., --> Switching to `ProgressScreenActivity.java`");
-//            mTextViewDownloadStateCheck.setText();
-
+            startActivity(new Intent(this, ProgressScreenActivity.class));
+            finish();
+        } else if(state == UpdaterState.REBOOT_REQUIRED) {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
+            startActivity(new Intent(this, UpdateCompletionActivity.class));
+            finish();
+        } else {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGRESS --> Switching to `OTAPackageCheckerActivity.java`");
+            startActivity(new Intent(this, OTAPackageCheckerActivity.class));
+            finish();
         }
-
-
     }
-
 
 
 
@@ -140,20 +153,42 @@ public class DownloadStateCheckActivity extends Activity {
 //    private void handleState(int state) {
 //        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Entering `handleState()` of `DownloadStateCheckActivity.java`...");
 //
-//        if(state == UpdaterState.RUNNING) {
+//        switch (state) {
+//
+//            case UpdaterState.IDLE:
+//                Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "IDLE...");
+//                break;
+//            case UpdaterState.ERROR:
+//                Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "ERROR!!");
+//                break;
+//            case UpdaterState.PAUSED:
+//                Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "PAUSED...");
+//                break;
+//            case UpdaterState.SLOT_SWITCH_REQUIRED:
+//                Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "SLOT_SWITCH_REQUIRED...");
+//                break;
+//
+//            case UpdaterState.RUNNING :
 //            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "RUNNING : --> OTA Update is in progress..., --> Switching to `ProgressScreenActivity.java`");
-//            startActivity(new Intent(this, ProgressScreenActivity.class));
-//            finish();
-//        } else if(state == UpdaterState.REBOOT_REQUIRED) {
-//            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
-//            startActivity(new Intent(this, UpdateCompletionActivity.class));
-//            finish();
-//        } else {
+//            mTextViewDownloadStateCheck.setText("RUNNING....");
+//            startActivity(new Intent(this,ProgressScreenActivity.class));
+//                finish();
+//                break;
+//            case UpdaterState.REBOOT_REQUIRED:
+//                Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY,"REBOOT_REQUIRED : --> Switching to RebootCheckActivity.java" );
+//                startActivity(new Intent(this, RebootCheckActivity.class));
+//                finish();
+//                break;
+//            default:
 //            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGRESS --> Switching to `OTAPackageCheckerActivity.java`");
 //            startActivity(new Intent(this, OTAPackageCheckerActivity.class));
 //            finish();
 //        }
+//
+//
 //    }
+
+
 }
 
 
