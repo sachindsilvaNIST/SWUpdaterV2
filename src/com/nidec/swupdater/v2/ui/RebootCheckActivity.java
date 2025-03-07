@@ -76,7 +76,7 @@ public class RebootCheckActivity extends Activity {
         Log.d(TAG_REBOOT_CHECK_ACTIVITY, "BINDING `RebootCheckActivity.java`");
         this.mUpdateManager.bind();
 
-        synchronizeNow();
+//        synchronizeNow();
 
     }
 
