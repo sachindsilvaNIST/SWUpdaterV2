@@ -448,7 +448,7 @@ public class UpdateManager {
 
 
 
-    private int getEngineStatus() {
+    public int getEngineStatus() {
         return mUpdateEngineStatus.get();
     }
 
