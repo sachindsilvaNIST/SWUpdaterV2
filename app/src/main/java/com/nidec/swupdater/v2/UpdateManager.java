@@ -8,6 +8,7 @@ import android.os.UpdateEngineCallback;
 
 import android.util.Log;
 
+import com.nidec.swupdater.v2.services.PrepareUpdateService;
 import com.nidec.swupdater.v2.util.UpdateEngineErrorCodes;
 import com.nidec.swupdater.v2.util.UpdateEngineProperties;
 
@@ -19,6 +20,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -81,7 +83,7 @@ public class UpdateManager {
 
     private final Object mLock = new Object();
 
-    private final UpdateEngineCallbackImpl mUpdateEngineCallback = new UpdateEngineCallbackImpl();
+    private final UpdateManager.UpdateEngineCallbackImpl mUpdateEngineCallback = new UpdateManager.UpdateEngineCallbackImpl();
 
     private final Handler mHandler;
 
@@ -139,17 +141,17 @@ public class UpdateManager {
      * @param onStateChangeCallback a callback with parameter {@code state}.
      */
 
-     public void setOnStateChangeCallback(IntConsumer onStateChangeCallback) {
-         synchronized (mLock) {
-             this.mOnStateChangeCallback = onStateChangeCallback;
-         }
-     }
+    public void setOnStateChangeCallback(IntConsumer onStateChangeCallback) {
+        synchronized (mLock) {
+            this.mOnStateChangeCallback = onStateChangeCallback;
+        }
+    }
 
-     private Optional<IntConsumer> getOnStateChangeCallback() {
-         synchronized (mLock) {
-             return mOnStateChangeCallback == null ? Optional.empty() : Optional.of(mOnStateChangeCallback);
-         }
-     }
+    private Optional<IntConsumer> getOnStateChangeCallback() {
+        synchronized (mLock) {
+            return mOnStateChangeCallback == null ? Optional.empty() : Optional.of(mOnStateChangeCallback);
+        }
+    }
 
     /**
      * Sets update engine status update callback.
@@ -548,8 +550,8 @@ public class UpdateManager {
 
         if(errorCode == UpdateEngine.ErrorCodeConstants.SUCCESS || errorCode == UpdateEngineErrorCodes.UPDATED_BUT_NOT_ACTIVE) {
             setUpdaterStateSilent(isManualSwitchSlotRequired()
-            ? UpdaterState.SLOT_SWITCH_REQUIRED
-            : UpdaterState.REBOOT_REQUIRED);
+                    ? UpdaterState.SLOT_SWITCH_REQUIRED
+                    : UpdaterState.REBOOT_REQUIRED);
         } else if(errorCode != UpdateEngineErrorCodes.USER_CANCELLED) {
             setUpdaterStateSilent(UpdaterState.ERROR);
         }
