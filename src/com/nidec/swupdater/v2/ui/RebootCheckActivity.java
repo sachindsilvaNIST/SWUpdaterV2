@@ -76,7 +76,18 @@ public class RebootCheckActivity extends Activity {
         Log.d(TAG_REBOOT_CHECK_ACTIVITY, "BINDING `RebootCheckActivity.java`");
         this.mUpdateManager.bind();
 
-//        synchronizeNow();
+        /**
+         * 3. After binding, check the UpdaterState's currentState
+         */
+
+        int currentState = mUpdateManager.getUpdaterState();
+        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "onResume() => currentState = " + UpdaterState.getStateText(currentState));
+
+        /**
+         * Handle the state
+         */
+
+        handleState(currentState);
 
     }
 
