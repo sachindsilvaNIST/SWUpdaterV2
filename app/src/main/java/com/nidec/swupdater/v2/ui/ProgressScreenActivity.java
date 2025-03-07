@@ -28,8 +28,6 @@ import com.nidec.swupdater.v2.UpdateManager;
 import com.nidec.swupdater.v2.util.UpdateConfigs;
 import com.nidec.swupdater.v2.UpdateConfig;
 
-import org.checkerframework.checker.i18nformatter.qual.I18nChecksFormat;
-
 
 public class ProgressScreenActivity extends Activity {
     private static final String TAG_PROGRESS_SCREEN_ACTIVITY = "ProgressScreenActivity";
