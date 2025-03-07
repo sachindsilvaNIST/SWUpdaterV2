@@ -108,22 +108,6 @@ public class RebootCheckActivity extends Activity {
      */
 
 
-    private void synchronizeNow() {
-        int currentEngineStatus = mUpdateManager.getEngineStatus();
-
-        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "Synchronizing now... => currentEngineStatus = " + currentEngineStatus);
-
-
-        if(currentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
-            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "Engine says : UPDATED_NEED_REBOOT...");
-//            mUpdateManager.setUpdaterStateSilent(UpdaterState.REBOOT_REQUIRED);
-        }
-
-        handleState(mUpdateManager.getUpdaterState());
-
-    }
-
-
     /**
      * Handles the current state logic :
      *
