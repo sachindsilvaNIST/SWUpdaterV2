@@ -55,6 +55,11 @@ public class RebootCheckActivity extends Activity {
 
         this.mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
 
+        /**
+         *  Synchronize with the existing Update Engine Status.
+         */
+
+
     }
 
     @Override
@@ -71,12 +76,15 @@ public class RebootCheckActivity extends Activity {
         Log.d(TAG_REBOOT_CHECK_ACTIVITY, "BINDING `RebootCheckActivity.java`");
         this.mUpdateManager.bind();
 
+        synchronizeNow();
+
     }
 
     @Override
     protected void onPause() {
-        this.mUpdateManager.unbind();
+        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNBINDING --> `RebootCheckActivity.java`");
         super.onPause();
+        this.mUpdateManager.unbind();
     }
 
     /**
@@ -94,7 +102,26 @@ public class RebootCheckActivity extends Activity {
     }
 
 
+    /**
+     * This function will be called once we're bound.
+     * It will check immediately and synchronizes the SWUpdaterV2's state with the current Engine Status.
+     */
 
+
+    private void synchronizeNow() {
+        int currentEngineStatus = mUpdateManager.getEngineStatus();
+
+        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "Synchronizing now... => currentEngineStatus = " + currentEngineStatus);
+
+
+        if(currentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
+            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "Engine says : UPDATED_NEED_REBOOT...");
+            mUpdateManager.setUpdaterStateSilent(UpdaterState.REBOOT_REQUIRED);
+        }
+
+        handleState(mUpdateManager.getUpdaterState());
+
+    }
 
 
     /**
@@ -122,87 +149,6 @@ public class RebootCheckActivity extends Activity {
         }
 
     }
-
-
-
-
-
-//    private void isRebootRequired() {
-//        // Check the UpdaterState is "REBOOT_REQUIRED"
-//
-//        if(isRebootRequiredState) {
-//            /**
-//             * Case 1 : If `UpdateManager` returns "REBOOT_REQUIRED", Move to `UpdateCompletionActivity`
-//             */
-//
-//            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "REBOOT is required ---> Moving to UpdateCompletionActivity...");
-//            startActivity(new Intent(this, UpdateCompletionActivity.class));
-//            finish();
-//        } else {
-//            /**Case 2 : Otherwise, Move to next state --> `DownloadStateCheckActivity`, to check whether the current state is in "Download State" or not.\
-//             */
-//
-//            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "No Reboot required ---> Moving to DownloadStateCheckActivity...");
-//            startActivity(new Intent(this, DownloadStateCheckActivity.class));
-//            finish();
-//        }
-//    }
-
-
-//    /**
-//     * Invoked when SWUpdaterV2 app changes its state.
-//     *
-//     * The value of {@code state} will be one in {@link UpdaterState}
-//     *
-//     */
-
-//    private void onUpdaterStateChange(int state) {
-//        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "onUpdaterStateChange state = " + UpdaterState.getStateText(state) + "/" + state);
-//
-//        runOnUiThread(() -> {
-//            setUiUpdaterState(state);
-//
-//            if(state == UpdaterState.IDLE) {
-//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UpdateState.IDLE has been invoked...");
-//
-//            } else if(state == UpdaterState.RUNNING) {
-//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UpdateState.RUNNING has been invoked...");
-//
-//            } else if(state == UpdaterState.PAUSED) {
-//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UpdateState.PAUSED has been invoked...");
-//
-//            } else if(state == UpdaterState.ERROR) {
-//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UpdateState.ERROR has been invoked...");
-//
-//            } else if(state == UpdaterState.SLOT_SWITCH_REQUIRED) {
-//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UpdateState.SLOT_SWITCH_REQUIRED has been invoked...");
-//
-//            } else if(state == UpdaterState.REBOOT_REQUIRED) {
-//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UpdateState.REBOOT_REQUIRED has been invoked...");
-//            }
-//        });
-//    }
-
-//    /**
-//     * @param state --> SWUpdaterV2's state
-//     */
-
-//    private void setUiUpdaterState(int state) {
-//
-//        /**
-//         * Note : the `state` value for "REBOOT_REQUIRED" = "5".
-//         * {@link UpdaterState.STATE_MAP}
-//         */
-//        String stateText = UpdaterState.getStateText(state);
-//
-//        if(stateText.equals("REBOOT_REQUIRED")) {
-//            isRebootRequiredState = true;
-//        } else {
-//            isRebootRequiredState = false;
-//        }
-//        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "`stateText` = " + stateText);
-//        mTextViewUpdaterState.setText(stateText + "/" + state);
-//    }
 
 }
 

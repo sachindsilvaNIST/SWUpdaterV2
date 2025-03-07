@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.UpdateEngine;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import com.nidec.swupdater.v2.R;
 
@@ -33,6 +34,8 @@ public class DownloadStateCheckActivity extends Activity {
 
     private static final String TAG_DOWNLOAD_STATE_CHECK_ACTIVITY = "DownloadStateCheckActivity";
 
+    private TextView mTextViewDownloadStateCheck;
+
 
 
     /**
@@ -44,6 +47,10 @@ public class DownloadStateCheckActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_state_check);
+
+
+        this.mTextViewDownloadStateCheck = findViewById(R.id.TextViewDownloadStateCheck);
+
 
         /**
          * We need to get the callback instance to check the current state of UpdateManager.
@@ -65,9 +72,11 @@ public class DownloadStateCheckActivity extends Activity {
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "BINDING `DownloadStateCheckActivity`...");
         this.mUpdateManager.bind();
 
+
         /**
-         * Check if we are in a "RUNNING" or "DOWNLOADING" State.
+         * 3. After binding, check the UpdaterState's currentState
          */
+
     }
 
 
@@ -90,7 +99,7 @@ public class DownloadStateCheckActivity extends Activity {
      */
 
     private void onUpdaterStateChange(int newState) {
-        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "onUpdaterStateChange state = " + UpdaterState.getStateText(newState) + "/" + newState);
+        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "onUpdaterStateChange state => " + UpdaterState.getStateText(newState) + "/" + newState);
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Current State = " + newState);
 
         /**
@@ -113,20 +122,38 @@ public class DownloadStateCheckActivity extends Activity {
     private void handleState(int state) {
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Entering `handleState()` of `DownloadStateCheckActivity.java`...");
 
-        if(state == UpdaterState.RUNNING) {
+        switch (state) {
+            case UpdaterState.RUNNING :
             Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "RUNNING : --> OTA Update is in progress..., --> Switching to `ProgressScreenActivity.java`");
-            startActivity(new Intent(this, ProgressScreenActivity.class));
-            finish();
-        } else if(state == UpdaterState.REBOOT_REQUIRED) {
-            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
-            startActivity(new Intent(this, UpdateCompletionActivity.class));
-            finish();
-        } else {
-            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGRESS --> Switching to `OTAPackageCheckerActivity.java`");
-            startActivity(new Intent(this, OTAPackageCheckerActivity.class));
-            finish();
+//            mTextViewDownloadStateCheck.setText();
+
         }
+
+
     }
+
+
+
+
+
+
+//    private void handleState(int state) {
+//        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Entering `handleState()` of `DownloadStateCheckActivity.java`...");
+//
+//        if(state == UpdaterState.RUNNING) {
+//            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "RUNNING : --> OTA Update is in progress..., --> Switching to `ProgressScreenActivity.java`");
+//            startActivity(new Intent(this, ProgressScreenActivity.class));
+//            finish();
+//        } else if(state == UpdaterState.REBOOT_REQUIRED) {
+//            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
+//            startActivity(new Intent(this, UpdateCompletionActivity.class));
+//            finish();
+//        } else {
+//            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGRESS --> Switching to `OTAPackageCheckerActivity.java`");
+//            startActivity(new Intent(this, OTAPackageCheckerActivity.class));
+//            finish();
+//        }
+//    }
 }
 
 

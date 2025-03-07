@@ -1,5 +1,6 @@
 package com.nidec.swupdater.v2;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.common.collect.ImmutableMap;
@@ -13,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class UpdaterState {
+
+    private static final String TAG_UPDATER_STATE = "UpdaterState";
 
     public static final int IDLE = 0;
     public static final int ERROR = 1;
@@ -80,6 +83,8 @@ public class UpdaterState {
     // Converts STATUS CODE to STATUS NAME
 
     public static String getStateText(int state) {
+        Log.d(TAG_UPDATER_STATE, "getStateText() was called....");
+        Log.d(TAG_UPDATER_STATE, "UpdaterState.getStateText() state = " + STATE_MAP.get(state));
         return STATE_MAP.get(state);
     }
 
