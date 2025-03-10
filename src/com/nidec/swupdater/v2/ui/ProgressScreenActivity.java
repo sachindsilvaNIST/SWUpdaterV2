@@ -191,6 +191,7 @@ public class ProgressScreenActivity extends Activity {
             mProgressScreenPercentDisplay.setText(percent + "%");
             if(percent == 100) {
                 int currentUpdateState = mUpdateManager.getUpdaterState();
+                mProgressScreenPercentDisplay.setText("Processing. Please wait...");
                 checkIfComplete(currentUpdateState);
             }
         });
