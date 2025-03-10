@@ -216,6 +216,10 @@ public class ProgressScreenActivity extends Activity {
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Updater State says SLOT_SWITCH_REQUIRED.... --> Switching to RebootCheckActivity.java");
             startActivity(new Intent(this,RebootCheckActivity.class));
             finish();
+        } else if (updaterState == UpdaterState.ERROR) {
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Updater State says ERROR.... --> Switching to SystemUpToDateActivity.java");
+            startActivity(new Intent(this,SystemUpToDateActivity.class));
+            finish();
         }
 
     }

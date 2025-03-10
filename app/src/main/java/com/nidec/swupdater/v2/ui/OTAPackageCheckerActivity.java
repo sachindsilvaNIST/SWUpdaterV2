@@ -28,8 +28,10 @@ import com.nidec.swupdater.v2.util.UpdateConfigs;
 import com.nidec.swupdater.v2.util.UpdateEngineProperties;
 import com.nidec.swupdater.v2.util.UpdateEngineStatuses;
 import com.nidec.swupdater.v2.util.UpdateEngineErrorCodes;
+import com.nidec.swupdater.v2.util.SelectedUpdateConfigHolder;
 
 import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
+
 
 import java.util.List;
 
@@ -168,6 +170,7 @@ public class OTAPackageCheckerActivity extends Activity {
             // Compare if they are identical configs or not.
             if(!configName.equals(localBuild)) {
                 // We will treat any mis-match as DIFFERENT or NEWER VERSION..
+                SelectedUpdateConfigHolder.setSelectedConfig(cfg);
                 return cfg;
             }
 
