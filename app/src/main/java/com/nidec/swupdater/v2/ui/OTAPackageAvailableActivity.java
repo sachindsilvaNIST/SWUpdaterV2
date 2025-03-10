@@ -178,6 +178,7 @@ public class OTAPackageAvailableActivity extends Activity {
     private void applySelectedUpdate(UpdateConfig config) {
         try {
             mUpdateManager.applyUpdate(this,config);
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "applyUpdate() WAS CALLED FOR " + config.getName());
 
             // Move to "ProgressScreenActivity.java" to show the progress rate in percentage..
             startActivity(new Intent(this,ProgressScreenActivity.class));
@@ -187,94 +188,5 @@ public class OTAPackageAvailableActivity extends Activity {
             Log.e(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "FAILED TO APPLY THE UPDATE!!!" + config.getName(),e);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_ota_package_available);
-//
-//
-//        Button mUpdateYesButton = findViewById(R.id.mOTAPackageAvailableYesButton);
-//        Button mUpdateNoButton = findViewById(R.id.mOTAPackageAvailableNoButton);
-//
-//
-//        // IF "YES" BUTTON WAS PRESSED : If the OTA Update Available --> Start the download process.
-//        // E.g : UpdateManager.getInstance().startDownload()
-//        // Goto Progress Screen Activity --> `ProgressScreenActivity.java`
-//        mUpdateYesButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(this, ProgressScreenActivity.class);
-//            startActivity(intent);
-//            finish();
-//
-//        });
-//
-//        // ===> Todo ---> DOUBT!!!!
-//        // IF "NO" BUTTON WAS PRESSED : Cancel the update --> Back to "OTA Package Checker" Screen
-//        // E.g : UpdateManager.getInstance().cancelDownload()
-//        // Back to "OTA Package Checker" Screen --> `OTAPackageCheckerActivity.java`
-//        // <=== Todo ---> DOUBT!!!!
-//        mUpdateNoButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(this,OTAPackageCheckerActivity.class);
-//            startActivity(intent);
-//            finish();
-//
-//        });
-//
-//
-//
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
