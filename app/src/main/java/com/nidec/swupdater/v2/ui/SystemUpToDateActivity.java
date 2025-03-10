@@ -41,11 +41,11 @@ public class SystemUpToDateActivity extends Activity {
         Button mReCheckButton = findViewById(R.id.mSystemUpToDateReCheckButton);
 
         mReCheckButton.setOnClickListener(v -> {
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "RECHECK Button was pressed...");
+
             // Re-check for OTA Package Updates.
             // This will redirect again to `OTAPackageCheckerActivity.java` page.
-            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "RECHECK Button was pressed...");
-            Intent intent = new Intent(this, OTAPackageCheckerActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this,OTAPackageCheckerActivity.class));
             finish();
         });
 
