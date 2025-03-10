@@ -252,8 +252,7 @@ public class UpdateManager {
      * Same as {@link this.setUpdaterState}. Logs the error if new state
      * cannot be set.
      */
-
-    private void setUpdaterStateSilent(int newUpdaterState) {
+    public void setUpdaterStateSilent(int newUpdaterState) {
         try {
             setUpdaterState(newUpdaterState);
         } catch (UpdaterState.InvalidTransitionException e) {
@@ -262,6 +261,16 @@ public class UpdateManager {
             Log.e(TAG_UPDATE_MANAGER_ACTIVITY, "Failed to set updater state", e);
         }
     }
+
+//    private void setUpdaterStateSilent(int newUpdaterState) {
+//        try {
+//            setUpdaterState(newUpdaterState);
+//        } catch (UpdaterState.InvalidTransitionException e) {
+//            // Most likely UpdateEngine status and UpdaterSample state got de-synchronized.
+//            // To make sample app simple, we don't handle it properly.
+//            Log.e(TAG_UPDATE_MANAGER_ACTIVITY, "Failed to set updater state", e);
+//        }
+//    }
 
     /**
      * Creates new UpdaterState, assigns it to {@link this.mUpdaterState},
@@ -508,6 +517,11 @@ public class UpdateManager {
         }
 
     }
+
+    public int getEngineStatus() {
+        return mUpdateEngineStatus.get();
+    }
+
 
 
     /**

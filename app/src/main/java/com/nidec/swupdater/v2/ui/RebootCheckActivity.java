@@ -40,7 +40,7 @@ public class RebootCheckActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reboot_check);
 
-        this.mTextViewUpdaterState = findViewById(R.id.TextViewUpdaterState);
+        mTextViewUpdaterState = findViewById(R.id.TextViewUpdaterState);
 
 
         /** 1. Firstly, we need to check whether "REBOOT_REQUIRED" state is set.
@@ -53,7 +53,7 @@ public class RebootCheckActivity extends Activity {
          *
          */
 
-        this.mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
+        mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
 
         /**
          *  Synchronize with the existing Update Engine Status.
@@ -74,7 +74,7 @@ public class RebootCheckActivity extends Activity {
          * persisted UpdaterState has to be loaded and prepared beforehand.
          */
         Log.d(TAG_REBOOT_CHECK_ACTIVITY, "BINDING `RebootCheckActivity.java`");
-        this.mUpdateManager.bind();
+        mUpdateManager.bind();
 
         /**
          * 3. After binding, check the UpdaterState's currentState
@@ -95,7 +95,7 @@ public class RebootCheckActivity extends Activity {
     protected void onPause() {
         Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNBINDING --> `RebootCheckActivity.java`");
         super.onPause();
-        this.mUpdateManager.unbind();
+        mUpdateManager.unbind();
     }
 
     /**

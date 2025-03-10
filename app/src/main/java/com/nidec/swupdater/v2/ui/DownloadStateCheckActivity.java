@@ -49,7 +49,7 @@ public class DownloadStateCheckActivity extends Activity {
         setContentView(R.layout.activity_download_state_check);
 
 
-        this.mTextViewDownloadStateCheck = findViewById(R.id.TextViewDownloadStateCheck);
+        mTextViewDownloadStateCheck = findViewById(R.id.TextViewDownloadStateCheck);
 
 
         /**
@@ -59,7 +59,7 @@ public class DownloadStateCheckActivity extends Activity {
          *
          */
 
-        this.mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
+        mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
 
     }
 
@@ -70,21 +70,32 @@ public class DownloadStateCheckActivity extends Activity {
          * persisted UpdaterState has to be loaded and prepared beforehand.
          */
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "BINDING `DownloadStateCheckActivity`...");
-        this.mUpdateManager.bind();
+        mUpdateManager.bind();
 
 
         /**
-         * 3. After binding, check the UpdaterState's currentState
+         *
+         * 3. After binding, we do immediate Engine Status Sync.
          */
 
-        int currentState = mUpdateManager.getUpdaterState();
-        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "onResume() => currentState = " + UpdaterState.getStateText(currentState));
+        synchronizeWithEngineStatus();
 
-        /**
-         * Handle the state
-         */
 
-        handleState(currentState);
+
+
+//        /**
+//         * 3. After binding, check the UpdaterState's currentState
+//         */
+//
+//        int currentState = mUpdateManager.getUpdaterState();
+//        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "onResume() => currentState = " + UpdaterState.getStateText(currentState));
+//
+//        /**
+//         * Handle the state
+//         */
+//
+//        runOnUiThread(()-> handleState(currentState));
+
 
     }
 
@@ -93,13 +104,63 @@ public class DownloadStateCheckActivity extends Activity {
     protected void onPause() {
         super.onPause();
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "UNBINDING `DownloadStateCheckActivity`...");
-        this.mUpdateManager.unbind();
+        mUpdateManager.unbind();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
     }
+
+    /**
+     * Check Real Engine Status Immediately (The binder state) and set
+     * our ephemeral `UpdaterState` if its "DOWNLOADING"
+     */
+
+    private void synchronizeWithEngineStatus() {
+        int engineStatus = mUpdateManager.getEngineStatus();
+        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "synchronizeWithEngineStatus() => engineStatus No. = " + engineStatus);
+        Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Engine Status => " + UpdateEngineStatuses.getStatusText(engineStatus));
+
+
+        /**
+         * If the engine status indicates a running update,
+         * we forcibly set our ephemeral UpdaterState to `RUNNING`
+         *
+         */
+
+        if(isEngineBusy(engineStatus)) {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Engine is in a busy/ in progress state => set UpdaterState to RUNNING");
+            // we use setUpdaterStateSilent to avoid invalid transition errors.
+
+            // NOTE : D has set this function visibility to `Public`!!
+            mUpdateManager.setUpdaterStateSilent(UpdaterState.RUNNING);
+
+        } else if(engineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Engine says UPDATED_NEED_REBOOT =>  set UpdaterState to REBOOT_REQUIRED");
+            mUpdateManager.setUpdaterStateSilent(UpdaterState.REBOOT_REQUIRED);
+        } else {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Engine is not busy => Keep ephemeral state as IDLE or etc...");
+        }
+
+        /**
+         * Handle the ephemeral state we ended up with
+         */
+
+        handleState(mUpdateManager.getUpdaterState());
+
+
+    }
+
+    private boolean isEngineBusy(int engineStatus) {
+
+        return(engineStatus == UpdateEngine.UpdateStatusConstants.DOWNLOADING
+        ||     engineStatus == UpdateEngine.UpdateStatusConstants.VERIFYING
+        ||     engineStatus == UpdateEngine.UpdateStatusConstants.FINALIZING
+        );
+
+    }
+
 
 
 
