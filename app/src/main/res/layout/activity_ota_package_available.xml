@@ -18,11 +18,23 @@
         android:textStyle="italic" />
 
 
+    <TextView
+        android:id="@+id/mOTAPackageAvailableSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Do you want to proceed to update software?"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+
     <!--    APPLY Button -->
     <Button
         android:id="@+id/mOTAPackageAvailableYesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+
         android:text="Yes"
         />
 
@@ -31,6 +43,8 @@
         android:id="@+id/mOTAPackageAvailableNoButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+
         android:text="No"
         />
 
