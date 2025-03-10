@@ -88,6 +88,7 @@ public class OTAPackageAvailableActivity extends Activity {
          */
 
         mUpdateYesButton.setOnClickListener((View v) -> {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"OK Button was pressed....");
             yesButtonWasClicked();
         });
 
@@ -95,6 +96,7 @@ public class OTAPackageAvailableActivity extends Activity {
          * If "CANCEL(NO)" button was pressed ==> GoTo "SystemUpToDateActivity.java --> DEBUG PURPOSE...
          */
         mUpdateNoButton.setOnClickListener((View v) -> {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"CANCEL Button was pressed....");
             noButtonWasClicked();
         });
 
