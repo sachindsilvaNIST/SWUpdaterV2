@@ -189,6 +189,10 @@ public class ProgressScreenActivity extends Activity {
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
             mProgressBar.setProgress(percent);
             mProgressScreenPercentDisplay.setText(percent + "%");
+            if(percent == 100) {
+                int currentUpdateState = mUpdateManager.getUpdaterState();
+                checkIfComplete(currentUpdateState);
+            }
         });
     }
 
@@ -212,7 +216,6 @@ public class ProgressScreenActivity extends Activity {
             startActivity(new Intent(this,RebootCheckActivity.class));
             finish();
         }
-
 
     }
 
