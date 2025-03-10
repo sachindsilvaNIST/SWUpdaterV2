@@ -14,6 +14,7 @@ import android.app.Activity;
 
 import android.content.Intent;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -62,7 +63,7 @@ public class OTAPackageCheckerActivity extends Activity {
         mUpdateManager.bind();
 
         // Check immediately for new OTA Updates.
-        checkForNewOTA();
+        checkForNewUpdate();
     }
 
 
@@ -83,8 +84,24 @@ public class OTAPackageCheckerActivity extends Activity {
         Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "UpdaterStateChange state = " + UpdaterState.getStateText(newState) + "/" + newState);
         Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "Current State = " + newState);
 
+        runOnUiThread(() -> handleState(newState));
+    }
 
 
+    private void handleState(int state) {
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "Entering `handleState()` of `OTAPackageCheckerActivity.java`...");
+
+        if(state == UpdaterState.RUNNING) {
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CURRENT RUNNING STATE = " + state);
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "RUNNING : --> OTA Update is in progress..., --> Switching to `ProgressScreenActivity.java`");
+            startActivity(new Intent(this, ProgressScreenActivity.class));
+            finish();
+        } else if(state == UpdaterState.REBOOT_REQUIRED) {
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CURRENT RUNNING STATE = " + state);
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
+            startActivity(new Intent(this, UpdateCompletionActivity.class));
+            finish();
+        }
     }
 
 
@@ -96,10 +113,12 @@ public class OTAPackageCheckerActivity extends Activity {
      * 3. If there is new OTA => Move to "OTAPackageAvailableActivity.java"
      */
 
-    private void checkForNewOTA() {
+    private void checkForNewUpdate() {
         Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CHECKING USB PENDRIVE FOR NEW OTA UPDATES>...");
 
-        // Get the list of possible updates from USB.
+        /**
+         * Load JSON Update Configs and get the list of possible updates from USB.
+         */
         List<UpdateConfig> configs = UpdateConfigs.getUpdateConfigs(this);
 
 
@@ -110,7 +129,11 @@ public class OTAPackageCheckerActivity extends Activity {
         }
 
 
-        UpdateConfig newConfig = findNewerUpdate(configs);
+
+        /**
+         *  Find non-identical config
+         */
+        UpdateConfig newConfig = findNewerorDifferentUpdate(configs);
         if(newConfig != null) {
             // Found a new update => move to OTAPackageAvailableActivity
             // We possibly store "newConfig" somewhere if we want to pass it along.
@@ -124,8 +147,38 @@ public class OTAPackageCheckerActivity extends Activity {
 
     }
 
+    /**
+     *
+     * This method tries to find a config which might be NEW or DIFFERENT from current system's build
+     *
+     */
+
+    private UpdateConfig findNewerorDifferentUpdate(List<UpdateConfig> configs) {
+        // Eg : "S gpn600_001-AAL-AA-07009-01"
+        String localBuild = Build.DISPLAY.trim();
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "Local Build is : " + localBuild);
+
+
+        for(UpdateConfig cfg : configs) {
+
+            String configName = cfg.getName().trim();
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CHECKING CONFIG NAME = " + configName);
+
+
+            // Compare if they are identical configs or not.
+            if(!configName.equals(localBuild)) {
+                // We will treat any mis-match as DIFFERENT or NEWER VERSION..
+                return cfg;
+            }
+
+        }
+        // If they are identical, return "null"
+        return null;
+    }
+
 
     private UpdateConfig findNewerUpdate(List<UpdateConfig> configs) {
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "findNewerUpdate() => Found configs are --> " + configs.get(0));
         return configs.get(0);
     }
 
