@@ -1,5 +1,6 @@
 package com.nidec.swupdater.v2.util;
 
+
 import com.nidec.swupdater.v2.PayloadSpec;
 
 
