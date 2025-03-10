@@ -4,7 +4,7 @@ package com.nidec.swupdater.v2.ui;
  * Action :
  * 1. Show the progress (percentage) of download the OTA Package.
  * 2. If download finishes successfully, or the UpdateEngine signals "Requires Reboot", go to "UpdateCompletionActivity"
- * 3. If user presses "Cancel", then go back to "OTAPackageCheckerActivity"
+ * 3. If user presses "Cancel", then go back to "OTAPackageCheckerActivity" / "UpdateCompletionActivity"
  */
 
 import android.app.Activity;
@@ -79,6 +79,7 @@ public class ProgressScreenActivity extends Activity {
 
             try {
                 mUpdateManager.cancelRunningUpdate();
+
             } catch (UpdaterState.InvalidTransitionException e) {
                 Log.e(TAG_PROGRESS_SCREEN_ACTIVITY, "FAILED TO CANCEL THE UPDATE... : ",e);
             }
@@ -135,23 +136,23 @@ public class ProgressScreenActivity extends Activity {
      */
 
     private void synchronizeEngineState() {
-        int engineStatus = mUpdateManager.getUpdaterState();
-        String engineStatusText = UpdaterState.getStateText(engineStatus);
 
-        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "engineStatus => " + engineStatus);
-        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY,"engineStatusText => " + engineStatusText);
-
+        int currentEngineStatus = mUpdateManager.getEngineStatus();
+        String currentEngineStatusToText = UpdaterState.getStateText(currentEngineStatus);
+        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Engine Status Code => " + currentEngineStatus);
+        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Engine Status Code (TEXT) => " + currentEngineStatusToText);
 
         /**
          * Now, if the UpdateEngine is in "UPDATED_NEED_REBOOT" state,
          * we set the app state to "REBOOT_REQUIRED"
          */
 
-        if(engineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
+        if(currentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
 //            mUpdateManager.setUpdaterStateSilent(UpdaterState.REBOOT_REQUIRED);
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, " Requires REBOOT!!! --> Switching to `RebootCheckActivity.java`");
             startActivity(new Intent(this,RebootCheckActivity.class));
             finish();
+            return;
         }
 
 
@@ -182,7 +183,7 @@ public class ProgressScreenActivity extends Activity {
         runOnUiThread(() -> {
             int percent = (int) (100 * progress);
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
-            mProgressBar.setProgress(Integer.parseInt(percent + "%"));
+            mProgressBar.setProgress(percent);
         });
     }
 
