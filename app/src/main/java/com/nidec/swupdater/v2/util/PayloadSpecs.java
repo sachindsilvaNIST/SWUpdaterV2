@@ -1,6 +1,9 @@
 package com.nidec.swupdater.v2.util;
 
 
+import com.nidec.swupdater.v2.PayloadSpec;
+
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

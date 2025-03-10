@@ -4,6 +4,9 @@ import android.content.Context;
 
 import android.util.Log;
 
+import com.nidec.swupdater.v2.UpdateConfig;
+
+
 import android.os.storage.StorageVolume;
 import android.os.storage.StorageManager;
 
