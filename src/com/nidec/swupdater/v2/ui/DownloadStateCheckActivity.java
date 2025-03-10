@@ -29,6 +29,8 @@ import com.nidec.swupdater.v2.util.UpdateEngineProperties;
 import com.nidec.swupdater.v2.util.UpdateEngineStatuses;
 import com.nidec.swupdater.v2.util.UpdateConfigs;
 
+import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
+
 
 public class DownloadStateCheckActivity extends Activity {
 
@@ -41,7 +43,7 @@ public class DownloadStateCheckActivity extends Activity {
     /**
      * Creating local UpdateManager intance...
      */
-    private final UpdateManager mUpdateManager = new UpdateManager(new UpdateEngine(), new Handler());
+    private UpdateManager mUpdateManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,10 @@ public class DownloadStateCheckActivity extends Activity {
 
 
         mTextViewDownloadStateCheck = findViewById(R.id.TextViewDownloadStateCheck);
+
+
+        // Retrieve the shared UpdateManager Instance.
+        mUpdateManager = UpdateManagerHolder.getInstance();
 
 
         /**
@@ -193,14 +199,17 @@ public class DownloadStateCheckActivity extends Activity {
         Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "Entering `handleState()` of `DownloadStateCheckActivity.java`...");
 
         if(state == UpdaterState.RUNNING) {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "CURRENT RUNNING STATE = " + state);
             Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "RUNNING : --> OTA Update is in progress..., --> Switching to `ProgressScreenActivity.java`");
             startActivity(new Intent(this, ProgressScreenActivity.class));
             finish();
         } else if(state == UpdaterState.REBOOT_REQUIRED) {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "CURRENT RUNNING STATE = " + state);
             Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
             startActivity(new Intent(this, UpdateCompletionActivity.class));
             finish();
         } else {
+            Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "CURRENT RUNNING STATE = " + state);
             Log.d(TAG_DOWNLOAD_STATE_CHECK_ACTIVITY, "NO DOWNLOAD IN PROGRESS --> Switching to `OTAPackageCheckerActivity.java`");
             startActivity(new Intent(this, OTAPackageCheckerActivity.class));
             finish();

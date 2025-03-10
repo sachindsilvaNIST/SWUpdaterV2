@@ -141,17 +141,17 @@ public class UpdateManager {
      * @param onStateChangeCallback a callback with parameter {@code state}.
      */
 
-     public void setOnStateChangeCallback(IntConsumer onStateChangeCallback) {
-         synchronized (mLock) {
-             this.mOnStateChangeCallback = onStateChangeCallback;
-         }
-     }
+    public void setOnStateChangeCallback(IntConsumer onStateChangeCallback) {
+        synchronized (mLock) {
+            this.mOnStateChangeCallback = onStateChangeCallback;
+        }
+    }
 
-     private Optional<IntConsumer> getOnStateChangeCallback() {
-         synchronized (mLock) {
-             return mOnStateChangeCallback == null ? Optional.empty() : Optional.of(mOnStateChangeCallback);
-         }
-     }
+    private Optional<IntConsumer> getOnStateChangeCallback() {
+        synchronized (mLock) {
+            return mOnStateChangeCallback == null ? Optional.empty() : Optional.of(mOnStateChangeCallback);
+        }
+    }
 
     /**
      * Sets update engine status update callback.
@@ -252,8 +252,7 @@ public class UpdateManager {
      * Same as {@link this.setUpdaterState}. Logs the error if new state
      * cannot be set.
      */
-
-    private void setUpdaterStateSilent(int newUpdaterState) {
+    public void setUpdaterStateSilent(int newUpdaterState) {
         try {
             setUpdaterState(newUpdaterState);
         } catch (UpdaterState.InvalidTransitionException e) {
@@ -262,6 +261,16 @@ public class UpdateManager {
             Log.e(TAG_UPDATE_MANAGER_ACTIVITY, "Failed to set updater state", e);
         }
     }
+
+//    private void setUpdaterStateSilent(int newUpdaterState) {
+//        try {
+//            setUpdaterState(newUpdaterState);
+//        } catch (UpdaterState.InvalidTransitionException e) {
+//            // Most likely UpdateEngine status and UpdaterSample state got de-synchronized.
+//            // To make sample app simple, we don't handle it properly.
+//            Log.e(TAG_UPDATE_MANAGER_ACTIVITY, "Failed to set updater state", e);
+//        }
+//    }
 
     /**
      * Creates new UpdaterState, assigns it to {@link this.mUpdaterState},
@@ -509,6 +518,11 @@ public class UpdateManager {
 
     }
 
+    public int getEngineStatus() {
+        return mUpdateEngineStatus.get();
+    }
+
+
 
     /**
      * Invoked by update_engine whenever update status or progress changes.
@@ -550,8 +564,8 @@ public class UpdateManager {
 
         if(errorCode == UpdateEngine.ErrorCodeConstants.SUCCESS || errorCode == UpdateEngineErrorCodes.UPDATED_BUT_NOT_ACTIVE) {
             setUpdaterStateSilent(isManualSwitchSlotRequired()
-            ? UpdaterState.SLOT_SWITCH_REQUIRED
-            : UpdaterState.REBOOT_REQUIRED);
+                    ? UpdaterState.SLOT_SWITCH_REQUIRED
+                    : UpdaterState.REBOOT_REQUIRED);
         } else if(errorCode != UpdateEngineErrorCodes.USER_CANCELLED) {
             setUpdaterStateSilent(UpdaterState.ERROR);
         }

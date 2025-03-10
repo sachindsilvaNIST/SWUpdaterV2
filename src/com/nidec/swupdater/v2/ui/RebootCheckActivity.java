@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.nidec.swupdater.v2.R;
 import com.nidec.swupdater.v2.UpdateManager;
 import com.nidec.swupdater.v2.UpdaterState;
+import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
 
 public class RebootCheckActivity extends Activity {
 
@@ -30,9 +31,7 @@ public class RebootCheckActivity extends Activity {
 
     private TextView mTextViewUpdaterState;
 
-    private final UpdateManager mUpdateManager = new UpdateManager(new UpdateEngine(), new Handler());
-
-    private boolean isRebootRequiredState = false;
+    private UpdateManager mUpdateManager;
 
 
     @Override
@@ -41,6 +40,14 @@ public class RebootCheckActivity extends Activity {
         setContentView(R.layout.activity_reboot_check);
 
         mTextViewUpdaterState = findViewById(R.id.TextViewUpdaterState);
+
+
+        /**
+         * Retrieve the singleton UpdateManager..
+         *
+         */
+
+        mUpdateManager = UpdateManagerHolder.getInstance();
 
 
         /** 1. Firstly, we need to check whether "REBOOT_REQUIRED" state is set.

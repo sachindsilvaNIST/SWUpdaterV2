@@ -28,6 +28,8 @@ import com.nidec.swupdater.v2.UpdateManager;
 import com.nidec.swupdater.v2.util.UpdateConfigs;
 import com.nidec.swupdater.v2.UpdateConfig;
 
+import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
+
 
 public class ProgressScreenActivity extends Activity {
     private static final String TAG_PROGRESS_SCREEN_ACTIVITY = "ProgressScreenActivity";
@@ -37,7 +39,7 @@ public class ProgressScreenActivity extends Activity {
     private Button mCancelDownloadButton;
 
 
-    private final UpdateManager mUpdateManager = new UpdateManager(new UpdateEngine(), new Handler());
+    private UpdateManager mUpdateManager;
 
 
     @Override
@@ -47,6 +49,10 @@ public class ProgressScreenActivity extends Activity {
 
         mProgressBar = findViewById(R.id.progressBar);
         mCancelDownloadButton = findViewById(R.id.buttonCancelDownload);
+
+
+        // Retrieve the shared UpdateManager Instance..
+        mUpdateManager = UpdateManagerHolder.getInstance();
 
         /**
          * Set the callbacks for Update Status Changes and Progress Status Changes
