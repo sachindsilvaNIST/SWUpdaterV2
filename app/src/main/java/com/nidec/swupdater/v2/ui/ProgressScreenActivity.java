@@ -21,6 +21,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nidec.swupdater.v2.R;
 import com.nidec.swupdater.v2.UpdaterState;
@@ -38,6 +39,8 @@ public class ProgressScreenActivity extends Activity {
     private ProgressBar mProgressBar;
     private Button mCancelDownloadButton;
 
+    private TextView mProgressScreenPercentDisplay;
+
 
     private UpdateManager mUpdateManager;
 
@@ -49,6 +52,7 @@ public class ProgressScreenActivity extends Activity {
 
         mProgressBar = findViewById(R.id.progressBar);
         mCancelDownloadButton = findViewById(R.id.buttonCancelDownload);
+        mProgressScreenPercentDisplay = findViewById(R.id.TextViewProgressScreenPercentDisplay);
 
 
         // Retrieve the shared UpdateManager Instance..
@@ -184,6 +188,7 @@ public class ProgressScreenActivity extends Activity {
             int percent = (int) (100 * progress);
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
             mProgressBar.setProgress(percent);
+            mProgressScreenPercentDisplay.setText(percent + "%");
         });
     }
 

@@ -12,7 +12,7 @@
         android:id="@+id/TextViewProgressScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=">>> IT'S DOWNLOADING>>>>"
+        android:text="Downloading...."
         android:textSize="16sp"
         />
 
@@ -23,6 +23,13 @@
         android:layout_marginTop="20dp"
         android:min="0"
         android:max="100"
+        />
+    <TextView
+        android:id="@+id/TextViewProgressScreenPercentDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textSize="16sp"
         />
 
     <Button

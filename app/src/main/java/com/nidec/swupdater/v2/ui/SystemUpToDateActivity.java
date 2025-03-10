@@ -30,6 +30,8 @@ import com.nidec.swupdater.v2.R;
 
 public class SystemUpToDateActivity extends Activity {
 
+    private static final String TAG_SYSTEM_UP_TO_DATE_ACTIVITY = "SystemUpToDateActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class SystemUpToDateActivity extends Activity {
         mReCheckButton.setOnClickListener(v -> {
             // Re-check for OTA Package Updates.
             // This will redirect again to `OTAPackageCheckerActivity.java` page.
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "RECHECK Button was pressed...");
             Intent intent = new Intent(this, OTAPackageCheckerActivity.class);
             startActivity(intent);
             finish();
