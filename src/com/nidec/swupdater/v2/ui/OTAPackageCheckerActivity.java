@@ -156,27 +156,30 @@ public class OTAPackageCheckerActivity extends Activity {
      */
 
     private UpdateConfig findNewerorDifferentUpdate(List<UpdateConfig> configs) {
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "LISTED CONFIGS ARE : " + configs.get(0));
+        SelectedUpdateConfigHolder.setSelectedConfig(configs.get(0));
+        return configs.get(0);
         // Eg : "S gpn600_001-AAL-AA-07009-01"
-        String localBuild = Build.DISPLAY.trim();
-        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "Local Build is : " + localBuild);
-
-
-        for(UpdateConfig cfg : configs) {
-
-            String configName = cfg.getName().trim();
-            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CHECKING CONFIG NAME = " + configName);
-
-
-            // Compare if they are identical configs or not.
-            if(!configName.equals(localBuild)) {
-                // We will treat any mis-match as DIFFERENT or NEWER VERSION..
-                SelectedUpdateConfigHolder.setSelectedConfig(cfg);
-                return cfg;
-            }
-
-        }
-        // If they are identical, return "null"
-        return null;
+//        String localBuild = Build.DISPLAY.trim();
+//        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "Local Build is : " + localBuild);
+//
+//
+//        for(UpdateConfig cfg : configs) {
+//
+//            String configName = cfg.getName().trim();
+//            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CHECKING CONFIG NAME = " + configName);
+//
+//
+//            // Compare if they are identical configs or not.
+//            if(!configName.equals(localBuild)) {
+//                // We will treat any mis-match as DIFFERENT or NEWER VERSION..
+//                SelectedUpdateConfigHolder.setSelectedConfig(cfg);
+//                return cfg;
+//            }
+//
+//        }
+//        // If they are identical, return "null"
+//        return null;
     }
 
 
@@ -200,89 +203,3 @@ public class OTAPackageCheckerActivity extends Activity {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//import android.app.Activity;
-//import android.app.AlertDialog;
-//
-//import android.content.Intent;
-//
-//import android.os.Bundle;
-//
-//import android.util.Log;
-//
-//import android.view.View;
-//
-//import android.widget.Button;
-//import android.widget.TextView;
-//
-//import com.nidec.swupdater.v2.R;
-////import com.nidec.swupdater.v2.util.UpdateConfigs;
-////import com.nidec.swupdater.v2.UpdateConfig;
-
-
-//
-//public class OTAPackageCheckerActivity extends Activity {
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_ota_package_checker);
-//
-//
-//
-//
-////        boolean mUpdateAvailable = checkForOTAUpdate();
-////
-////        // Check whether OTA Package Update available or not
-////        // IF `!mUpdateAvailable` --> TRUE => `mUpdateAvailable` --> FALSE
-////        if(!mUpdateAvailable) {
-////            Intent intent = new Intent(this,SystemUpToDateActivity.class);
-////            startActivity(intent);
-////        } else {
-////            // Display the OTA Package Available screen --> `OTAPackageAvailableActivity.java`
-////            Intent intent = new Intent(this,OTAPackageAvailableActivity.class);
-////            startActivity(intent);
-////        }
-////        finish();
-//
-//    }
-//
-////    private boolean checkForOTAUpdate() {
-////        // Possibly use your existing SWUpdater V1 logic to see if an update is found.
-////        // E.G: Fetch config from update server or parse JSON from local storage.
-////
-////        return false;
-////    }
-//}
