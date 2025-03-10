@@ -207,7 +207,13 @@ public class ProgressScreenActivity extends Activity {
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Updater State says REBOOT_REQUIRED.... --> Switching to RebootCheckActivity.java");
             startActivity(new Intent(this,RebootCheckActivity.class));
             finish();
+        } else if (updaterState == UpdaterState.SLOT_SWITCH_REQUIRED) {
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Updater State says SLOT_SWITCH_REQUIRED.... --> Switching to RebootCheckActivity.java");
+            startActivity(new Intent(this,RebootCheckActivity.class));
+            finish();
         }
+
+
 
     }
 
