@@ -53,6 +53,7 @@ public class OTAPackageAvailableActivity extends Activity {
 
     private Button mUpdateYesButton;
     private Button mUpdateNoButton;
+    private Button mViewConfigButton;
     private TextView mTextViewInfo;
 
     @Override
@@ -69,6 +70,7 @@ public class OTAPackageAvailableActivity extends Activity {
         // Get the UI Elements IDs.
         mUpdateYesButton = findViewById(R.id.mOTAPackageAvailableYesButton);
         mUpdateNoButton = findViewById(R.id.mOTAPackageAvailableNoButton);
+        mViewConfigButton = findViewById(R.id.mOTAPackageAvailableViewConfigButton);
         mTextViewInfo = findViewById(R.id.mOTAPackageAvailableMainTitle);
 
         /**
@@ -84,8 +86,7 @@ public class OTAPackageAvailableActivity extends Activity {
              *
              * <===
              */
-            String debugInfo = buildDebugInfo(selected);
-            mTextViewInfo.setText("Available Update : " + debugInfo);
+            mTextViewInfo.setText("Available Update : " + selected.getName());
 
         } else {
             mTextViewInfo.setText("No config was set!!");
@@ -315,13 +316,13 @@ public class OTAPackageAvailableActivity extends Activity {
      * This is a helper function "build debug info" about the config file name and display the RAW JSON.
      */
 
-    private String buildDebugInfo(UpdateConfig config) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Available Update:\n");
-        sb.append("URL: ").append(config.getUrl()).append("\n\n");
-
-        sb.append("JSON Content:\n").append(config.getRawJson());
-        return sb.toString();
+    private void OnViewConfigClick(View view) {
+        UpdateConfig config = SelectedUpdateConfigHolder.getSelectedConfig();
+        new AlertDialog.Builder(this)
+                .setTitle(config.getName())
+                .setMessage(config.getRawJson())
+                .setPositiveButton(android.R.string.cancel,(dialog, id) -> dialog.dismiss())
+                .show();
     }
 
 }
