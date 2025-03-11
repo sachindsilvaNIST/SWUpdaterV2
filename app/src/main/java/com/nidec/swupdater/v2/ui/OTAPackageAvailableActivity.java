@@ -2,6 +2,7 @@ package com.nidec.swupdater.v2.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 
 import android.content.Intent;
 
@@ -51,6 +52,7 @@ public class OTAPackageAvailableActivity extends Activity {
 
     private UpdateManager mUpdateManager;
 
+    private ProgressDialog mSpinnerDialog;
     private Button mUpdateYesButton;
     private Button mUpdateNoButton;
     private Button mViewConfigButton;
@@ -60,6 +62,14 @@ public class OTAPackageAvailableActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ota_package_available);
+
+
+        /**
+         * Loading Spinner before actual activity state(s) begin... for few seconds...
+         *
+         */
+        showingLoadingSpinner("Checking for updates...");
+        new Handler().postDelayed(() -> hideLoadingSpinner(),500);
 
 
         // Retrieve the shared UpdateManager Instance...
@@ -151,6 +161,32 @@ public class OTAPackageAvailableActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    /**
+     * Defining Loading Spinner function
+     */
+    private void showingLoadingSpinner(String message) {
+        if(mSpinnerDialog == null) {
+            mSpinnerDialog = new ProgressDialog(this);
+            mSpinnerDialog.setIndeterminate(true);
+            mSpinnerDialog.setCancelable(false);
+        }
+        mSpinnerDialog.setMessage(message);
+        mSpinnerDialog.show();
+    }
+
+
+    /**
+     * Hiding Loading Spinner after few seconds
+     */
+
+    private void hideLoadingSpinner() {
+        if(mSpinnerDialog != null && mSpinnerDialog.isShowing()) {
+            mSpinnerDialog.dismiss();
+        }
+    }
+
+
 
     /**
      * DEFINING ALL CALLBACKS
