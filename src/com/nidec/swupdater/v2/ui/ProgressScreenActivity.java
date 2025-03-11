@@ -188,6 +188,12 @@ public class ProgressScreenActivity extends Activity {
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
             mProgressBar.setProgress(percent);
             mProgressScreenPercentDisplay.setText(percent + "%");
+            if(percent == 99) {
+                percent = percent + 1;
+                int currentUpdateState = mUpdateManager.getUpdaterState();
+                mProgressScreenPercentDisplay.setText(percent + "%");
+                checkIfComplete(currentUpdateState);
+            }
             if(percent == 100) {
                 int currentUpdateState = mUpdateManager.getUpdaterState();
                 mProgressScreenPercentDisplay.setText("Processing. Please wait...");
