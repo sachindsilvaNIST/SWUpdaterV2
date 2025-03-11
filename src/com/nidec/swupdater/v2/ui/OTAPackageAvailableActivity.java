@@ -31,7 +31,7 @@ import com.nidec.swupdater.v2.util.UpdateEngineProperties;
 import com.nidec.swupdater.v2.util.UpdateEngineStatuses;
 import com.nidec.swupdater.v2.util.SelectedUpdateConfigHolder;
 
-
+import java.util.List;
 
 
 /**
@@ -97,8 +97,9 @@ public class OTAPackageAvailableActivity extends Activity {
          */
 
         mUpdateYesButton.setOnClickListener((View v) -> {
+            checkForNewUpdate();
             Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"OK Button was pressed....");
-            yesButtonWasClicked();
+
         });
 
         /**
@@ -331,6 +332,39 @@ public class OTAPackageAvailableActivity extends Activity {
                 .setMessage(config.getRawJson())
                 .setPositiveButton(android.R.string.cancel,(dialog, id) -> dialog.dismiss())
                 .show();
+    }
+
+    /**
+     * MAIN LOGIC :
+     *
+     * 1. Using UpdateConfigs.getUpdateConfigs(this) to list available .json OTA configs from USB
+     * 2. If none is new => SystemUpToDateActivity.java
+     * 3. If there is new OTA => Move to "OTAPackageAvailableActivity.java"
+     */
+
+    private void checkForNewUpdate() {
+        Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "CHECKING USB PENDRIVE FOR NEW OTA UPDATES>...");
+
+        /**
+         * Load JSON Update Configs and get the list of possible updates from USB.
+         */
+        List<UpdateConfig> configs = UpdateConfigs.getUpdateConfigs(this);
+
+
+        if(configs == null || configs.isEmpty()) {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "NO .JSON CONFIG FOUND!!! NO UPDATE ---> Moving to SystemUpToDateActivity...");
+            goToSystemUpToDateActivity();
+            return;
+        } else {
+            yesButtonWasClicked();
+        }
+
+    }
+
+    private void goToSystemUpToDateActivity() {
+        Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "NO CONFIGS FOUND!!! ==> Switching to SystemUpToDateActivity.java");
+        startActivity(new Intent(this, SystemUpToDateActivity.class));
+        finish();
     }
 
 }
