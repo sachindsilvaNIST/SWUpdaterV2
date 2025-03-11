@@ -70,10 +70,6 @@ public class SystemUpToDateActivity extends Activity {
             } else if(currentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
                 requiresReboot();
             }
-
-
-
-            finish();
         });
 
     }
