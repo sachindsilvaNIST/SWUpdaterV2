@@ -49,7 +49,6 @@
         android:id="@+id/mOTAPackageAvailableViewConfigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onViewConfigClick"
         android:layout_marginTop="100dp"
         android:text="View Config"
         />

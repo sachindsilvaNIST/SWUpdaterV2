@@ -109,6 +109,17 @@ public class OTAPackageAvailableActivity extends Activity {
             noButtonWasClicked();
         });
 
+        /**
+         * If "VIEW CONFIG" button was pressed ==> DISPLAY JSON CONFIG --> DEBUG PURPOSE...
+         */
+        mViewConfigButton.setOnClickListener((View v) -> {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "VIEW CONFIG Button was pressed...");
+            OnViewConfigClick();
+        });
+
+
+
+
         mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
         mUpdateManager.setOnEngineCompleteCallback(this::onEnginePayloadApplicationComplete);
         mUpdateManager.setOnEngineStatusUpdateCallback(this::onEngineStatusUpdate);
@@ -133,10 +144,6 @@ public class OTAPackageAvailableActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mUpdateManager.unbind();
-
-        mUpdateManager.setOnEngineCompleteCallback(null);
-        mUpdateManager.setOnEngineStatusUpdateCallback(null);
-        mUpdateManager.setOnEngineCompleteCallback(null);
     }
 
     @Override
@@ -157,6 +164,7 @@ public class OTAPackageAvailableActivity extends Activity {
 
     private void onEnginePayloadApplicationComplete(int errorCode) {
         Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "onEnginePayloadApplicationComplete() => " + errorCode);
+        Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "ENGINE PAYLOAD CODE NAME " + UpdateEngineErrorCodes.getCodeName(errorCode));
     }
 
     private void onEngineStatusUpdate(int status) {
@@ -316,7 +324,7 @@ public class OTAPackageAvailableActivity extends Activity {
      * This is a helper function "build debug info" about the config file name and display the RAW JSON.
      */
 
-    private void OnViewConfigClick(View view) {
+    private void OnViewConfigClick() {
         UpdateConfig config = SelectedUpdateConfigHolder.getSelectedConfig();
         new AlertDialog.Builder(this)
                 .setTitle(config.getName())
