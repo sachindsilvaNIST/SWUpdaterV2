@@ -123,7 +123,6 @@ public class ProgressScreenActivity extends Activity {
 
         // Remove callbacks to prevent memory leaks
         mUpdateManager.setOnStateChangeCallback(null);
-        mUpdateManager.setOnProgressUpdateCallback(null);
     }
 
 

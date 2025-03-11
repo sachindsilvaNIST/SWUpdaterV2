@@ -100,6 +100,11 @@ public class OTAPackageAvailableActivity extends Activity {
             noButtonWasClicked();
         });
 
+        mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
+        mUpdateManager.setOnEngineCompleteCallback(this::onEnginePayloadApplicationComplete);
+        mUpdateManager.setOnEngineStatusUpdateCallback(this::onEngineStatusUpdate);
+        mUpdateManager.setOnProgressUpdateCallback(this::onProgressUpdate);
+
     }
 
 
@@ -119,12 +124,62 @@ public class OTAPackageAvailableActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mUpdateManager.unbind();
+
+        mUpdateManager.setOnEngineCompleteCallback(null);
+        mUpdateManager.setOnEngineStatusUpdateCallback(null);
+        mUpdateManager.setOnEngineCompleteCallback(null);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    /**
+     * DEFINING ALL CALLBACKS
+     */
+
+    private void onUpdaterStateChange(int newState) {
+        Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "onUpdateStateChange => " + UpdaterState.getStateText(newState));
+
+        runOnUiThread(() -> handleState(newState));
+
+    }
+
+    private void onEnginePayloadApplicationComplete(int errorCode) {
+        Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "onEnginePayloadApplicationComplete() => " + errorCode);
+    }
+
+    private void onEngineStatusUpdate(int status) {
+        Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "onEngineStatusUpdate() => " + status);
+    }
+
+    private void onProgressUpdate(double progress) {
+        int progressRate = (int) (progress * 100);
+        Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "onProgressUpdate() => " + progressRate + "%");
+    }
+
+
+    private void handleState(int updaterState) {
+
+        // If signaled by `REBOOT_REQUIRED`,or engine-complete callback,,
+
+        if(updaterState == UpdaterState.REBOOT_REQUIRED) {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "Updater State says REBOOT_REQUIRED.... --> Switching to RebootCheckActivity.java");
+            startActivity(new Intent(this,RebootCheckActivity.class));
+            finish();
+        } else if (updaterState == UpdaterState.SLOT_SWITCH_REQUIRED) {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "Updater State says SLOT_SWITCH_REQUIRED.... --> Switching to RebootCheckActivity.java");
+            startActivity(new Intent(this,RebootCheckActivity.class));
+            finish();
+        } else if (updaterState == UpdaterState.ERROR) {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "Updater State says ERROR.... --> Switching to SystemUpToDateActivity.java");
+            startActivity(new Intent(this,SystemUpToDateActivity.class));
+            finish();
+        }
+
+    }
+
 
 
 
@@ -188,5 +243,12 @@ public class OTAPackageAvailableActivity extends Activity {
             Log.e(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "FAILED TO APPLY THE UPDATE!!!" + config.getName(),e);
         }
     }
+
+
+
+
+
+
+
 
 }
