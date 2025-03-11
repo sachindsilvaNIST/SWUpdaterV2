@@ -30,7 +30,7 @@ public class UpdateConfig implements Parcelable{
     public static final int AB_INSTALL_TYPE_STREAMING = 1;
 
 
-    public static final Creator<UpdateConfig> CREATOR = new Creator<UpdateConfig>() {
+    public static final Parcelable.Creator<UpdateConfig> CREATOR = new Parcelable.Creator<UpdateConfig>() {
         @Override
         public UpdateConfig createFromParcel(Parcel source) {
             return new UpdateConfig(source);
@@ -105,7 +105,7 @@ public class UpdateConfig implements Parcelable{
                         p.getString("filename"),
                         p.getLong("offset"),
                         p.getLong("size")
-                        ));
+                ));
             }
         }
 
@@ -130,7 +130,7 @@ public class UpdateConfig implements Parcelable{
 
 
     /**
-     * These strings represenst types in JSON Config files
+     * These strings represents types in JSON Config files
      */
 
     private static final String AB_INSTALL_TYPE_NON_STREAMING_JSON = "NON_STREAMING";
