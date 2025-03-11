@@ -65,9 +65,7 @@ public class SystemUpToDateActivity extends Activity {
             String currentEngineStatusToText = UpdaterState.getStateText(currentEngineStatus);
 
             if(currentEngineStatus == UpdaterState.ERROR) {
-                if(currentEngineStatus != UpdateEngine.UpdateStatusConstants.ERROR) {
                     switchingToIDLEState();
-                }
             } else if(currentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
                 requiresReboot();
             }
