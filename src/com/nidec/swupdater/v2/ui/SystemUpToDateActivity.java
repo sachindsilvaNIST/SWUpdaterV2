@@ -65,9 +65,11 @@ public class SystemUpToDateActivity extends Activity {
             String currentEngineStatusToText = UpdaterState.getStateText(currentEngineStatus);
 
             if(currentEngineStatus == UpdaterState.ERROR) {
-                    switchingToIDLEState();
+                forceSwitchingToIDLEState();
             } else if(currentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
                 requiresReboot();
+            } else if (currentEngineStatus == UpdaterState.IDLE) {
+                switchingToIDLEState();
             }
         });
 
@@ -109,7 +111,7 @@ public class SystemUpToDateActivity extends Activity {
         return;
     }
 
-    private void switchingToIDLEState() {
+    private void forceSwitchingToIDLEState() {
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, " Update Engine says No ERROR switched to IDLE !! --> Switching to `OTAPackageCheckerActivity.java`");
         // Re-check for OTA Package Updates.
         // This will redirect again to `OTAPackageCheckerActivity.java` page.
@@ -119,6 +121,13 @@ public class SystemUpToDateActivity extends Activity {
         return;
     }
 
-
+    private void switchingToIDLEState() {
+        Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, " Update Engine says IDLE !! --> Switching to `OTAPackageCheckerActivity.java`");
+        // Re-check for OTA Package Updates.
+        // This will redirect again to `OTAPackageCheckerActivity.java` page.
+        startActivity(new Intent(this,OTAPackageCheckerActivity.class));
+        finish();
+        return;
+    }
 
 }
