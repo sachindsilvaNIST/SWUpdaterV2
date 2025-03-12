@@ -65,11 +65,11 @@ public class SystemUpToDateActivity extends Activity {
             String currentEngineStatusToText = UpdaterState.getStateText(currentEngineStatus);
 
             if(currentEngineStatus == UpdaterState.ERROR) {
+                Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "UPDATE ENGINE STATUS says ERROR!!!");
                 forceSwitchingToIDLEState();
             } else if(currentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) {
+                Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "UPDATE ENGINE STATUS says UPDATED_NEED_REBOOT...");
                 requiresReboot();
-            } else if (currentEngineStatus == UpdaterState.IDLE) {
-                switchingToIDLEState();
             }
         });
 
