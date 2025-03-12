@@ -413,7 +413,6 @@ public class OTAPackageAvailableActivity extends Activity {
             goToSystemUpToDateActivity();
             return;
         } else {
-            showInitiatingUpdateLoadingSpinner();
             yesButtonWasClicked();
         }
 
