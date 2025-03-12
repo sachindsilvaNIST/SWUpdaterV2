@@ -190,11 +190,13 @@ public class OTAPackageCheckerActivity extends Activity {
 
 
     private void goToSystemUpToDateActivity() {
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "NO CONFIG FOUND!!!  --> Switching to SystemUpToDateActivity.java");
         startActivity(new Intent(this, SystemUpToDateActivity.class));
         finish();
     }
 
     private void goToOTAPackageAvailableActivity() {
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CONFIG AVAILABLE...--> Switching to OTAPackageAvailableActivity.java");
         startActivity(new Intent(this, OTAPackageAvailableActivity.class));
         finish();
     }
