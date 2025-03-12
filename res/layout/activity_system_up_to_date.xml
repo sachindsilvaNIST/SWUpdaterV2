@@ -4,29 +4,104 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp">
+    android:gravity="center_horizontal"
+    android:background="@android:color/white"
+    android:padding="24dp">
 
-    <!--    MainActivity App Header -->
+<!--    MAIN TITLE AND LABEL -->
+
     <TextView
         android:id="@+id/mSystemUpToDateMainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_system_up_to_date_title"
-        android:textSize="24sp"
-        android:layout_marginTop="50dp"
-        android:textStyle="italic"
+        android:text="The System is up to date"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:layout_marginTop="90dp"
+        android:layout_marginBottom="7dp"
         />
 
-    <!--    Recheck Button -->
+<!--    SUBTITLE OR OTHER INFO TEXTS -->
+    <TextView
+        android:id="@+id/textViewSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your device is already on the latest version!"
+        android:textSize="16sp"
+        android:textColor="#666"
+        android:layout_marginBottom="32dp"
+        />
+
+<!--    "RECHECK" BUTTON -->
     <Button
         android:id="@+id/mSystemUpToDateReCheckButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Recheck"
-
+        android:text="Verify Again"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/rounded_button_bg"
+        android:shadowRadius="@android:integer/config_longAnimTime"
         />
 
 
+
+
 </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical"-->
+<!--    android:gravity="center"-->
+<!--    android:padding="16dp">-->
+
+<!--    &lt;!&ndash;    MainActivity App Header &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/mSystemUpToDateMainTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/activity_system_up_to_date_title"-->
+<!--        android:textSize="24sp"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:textStyle="italic"-->
+<!--        />-->
+
+<!--    &lt;!&ndash;    Recheck Button &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/mSystemUpToDateReCheckButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:text="Recheck"-->
+
+<!--        />-->
+
+
+<!--</LinearLayout>-->
