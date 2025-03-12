@@ -69,7 +69,7 @@ public class OTAPackageAvailableActivity extends Activity {
          *
          */
         showingLoadingSpinner("Checking for updates...");
-        new Handler().postDelayed(() -> hideLoadingSpinner(),500);
+        new Handler().postDelayed(() -> hideLoadingSpinner(),2000);
 
 
         // Retrieve the shared UpdateManager Instance...
@@ -117,6 +117,8 @@ public class OTAPackageAvailableActivity extends Activity {
          */
         mUpdateNoButton.setOnClickListener((View v) -> {
             Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"CANCEL Button was pressed....");
+
+            showCancelingSpinnerMessage();
             noButtonWasClicked();
         });
 
@@ -186,6 +188,27 @@ public class OTAPackageAvailableActivity extends Activity {
         }
     }
 
+    /**
+     * When "CANCEL" button was pressed, display the loading spinner with message for 1 seconds.
+     */
+    private void showCancelingSpinnerMessage() {
+        showingLoadingSpinner("Cancelling the update...");
+        new Handler().postDelayed(() -> {
+            hideLoadingSpinner();
+        },1000);
+    }
+
+
+    /**
+     * When "YES" Button under Apply Update AlertDialog Section was triggered, display "Applying update..." loading spinner message for 2 seconds.
+     */
+
+    private void showInitiatingUpdateLoadingSpinner() {
+        showingLoadingSpinner("Initiating update...");
+        new Handler().postDelayed(() -> {
+            hideLoadingSpinner();
+        },2000);
+    }
 
 
     /**
@@ -392,6 +415,7 @@ public class OTAPackageAvailableActivity extends Activity {
             goToSystemUpToDateActivity();
             return;
         } else {
+            showInitiatingUpdateLoadingSpinner();
             yesButtonWasClicked();
         }
 

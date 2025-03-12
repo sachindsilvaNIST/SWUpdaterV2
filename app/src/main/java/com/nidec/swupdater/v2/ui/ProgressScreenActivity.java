@@ -8,6 +8,7 @@ package com.nidec.swupdater.v2.ui;
  */
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 
 import android.content.Intent;
 
@@ -43,6 +44,8 @@ public class ProgressScreenActivity extends Activity {
 
 
     private UpdateManager mUpdateManager;
+
+    private ProgressDialog mSpinnerDialog;
 
 
     @Override
@@ -132,6 +135,47 @@ public class ProgressScreenActivity extends Activity {
     }
 
     /**
+     * Defining Loading Spinner function.
+     */
+
+    private void showingLoadingSpinner(String message) {
+        if(mSpinnerDialog == null) {
+            mSpinnerDialog = new ProgressDialog(this);
+            mSpinnerDialog.setIndeterminate(true);
+            mSpinnerDialog.setCancelable(false);
+        }
+        mSpinnerDialog.setMessage(message);
+        mSpinnerDialog.show();
+    }
+
+
+    /**
+     * Hiding the Loading Spinner after few seconds.
+     */
+
+    private void hideLoadingSpinner() {
+        if(mSpinnerDialog != null && mSpinnerDialog.isShowing()) {
+            mSpinnerDialog.dismiss();
+        }
+    }
+
+
+    /**
+     * Display the Loading Spinner, once the OTA Update is complete and the update engine initiates for "REBOOT_REQUIRED" FLAG
+     */
+    private void showApplyingUpdateLoadingSpinner() {
+        showingLoadingSpinner("Applying updates...");
+        new Handler().postDelayed(() -> {
+            hideLoadingSpinner();
+        },3000);
+    }
+
+
+
+
+
+
+    /**
      * This function ensures that we don't show "IDLE", if the UpdateEngine has already completed the download process,
      * and at "REBOOT_REQUIRED" or some other state(s)...
      *
@@ -214,6 +258,7 @@ public class ProgressScreenActivity extends Activity {
         // On 100% progress, signaled by `REBOOT_REQUIRED`,or engine-complete callback.
 
         if(updaterState == UpdaterState.REBOOT_REQUIRED) {
+            showApplyingUpdateLoadingSpinner();
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Updater State says REBOOT_REQUIRED.... --> Switching to RebootCheckActivity.java");
             startActivity(new Intent(this,RebootCheckActivity.class));
             finish();
