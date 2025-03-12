@@ -117,8 +117,6 @@ public class OTAPackageAvailableActivity extends Activity {
          */
         mUpdateNoButton.setOnClickListener((View v) -> {
             Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"CANCEL Button was pressed....");
-
-            showCancelingSpinnerMessage();
             noButtonWasClicked();
         });
 
