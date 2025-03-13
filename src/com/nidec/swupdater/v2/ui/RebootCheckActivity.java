@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.UpdateEngine;
 
+import android.os.storage.StorageManager;
 import android.util.Log;
 
 import android.widget.TextView;
@@ -119,6 +120,45 @@ public class RebootCheckActivity extends Activity {
         runOnUiThread(() -> handleState(newState));
     }
 
+    /**
+     * Defining a function that handles and disconnects the USB Drive
+     *
+     * METHOD : Through Shell Command
+     */
+
+
+    private void forciblyUnmountUSBVolume(String volumePath) {
+        try {
+            Process process = Runtime.getRuntime().exec(new String[] {"umount", volumePath});
+            int resultCode = process.waitFor();
+
+            if(resultCode == 0) {
+                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "USB VOLUME HAS BE UNMOUNTED SUCCESSFULLY.. ==> " + volumePath);
+            } else {
+                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "FAILED TO UNMOUNT VOLUME AT " + volumePath);
+                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "RESULT CODE ===> " + resultCode);
+            }
+        } catch (Exception e) {
+            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "EXCEPTION OCCURED WHILE UNMOUNTING USB VOLUME : " + volumePath,e);
+        }
+    }
+
+
+
+//    private void forciblyUnmountUSBVolume(Context context, String volumeID) {
+//        try {
+//            StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+//            Method unmountMethod = StorageManager.class.getDeclaredMethod("unmount", String.class);
+//            unmountMethod.setAccessible(true);
+//            unmountMethod.invoke(mStorageManager, volumeID);
+//            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNMOUNT WAS INVOKED FOR VOLUMEID ==> " + volumeID);
+//        } catch (Exception e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "REFLECTION BASED UNMOUNT ERROR OCCURRED!!! ==> " + e.getMessage(), e);
+//        }
+//    }
+
+
+
 
     /**
      * This function will be called once we're bound.
@@ -140,6 +180,9 @@ public class RebootCheckActivity extends Activity {
         mTextViewUpdaterState.setText(stateText + "/" + state);
 
         if(state == UpdaterState.REBOOT_REQUIRED){
+            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNMOUNTING USB PENDRIVE...");
+            forciblyUnmountUSBVolume("/mnt/media_rw/9CB2-B731");
+
             Log.d(TAG_REBOOT_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
             startActivity(new Intent(this, UpdateCompletionActivity.class));
             finish();
