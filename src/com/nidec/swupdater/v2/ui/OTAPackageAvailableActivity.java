@@ -7,12 +7,15 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 
+
 import android.content.Intent;
+import android.content.res.ColorStateList;
 
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UpdateEngine;
+import android.os.Build;
 
 import android.util.Log;
 
@@ -111,12 +114,22 @@ public class OTAPackageAvailableActivity extends Activity {
         mUpdateNoButton = findViewById(R.id.mOTAPackageAvailableNoButton);
         mViewConfigButton = findViewById(R.id.mOTAPackageAvailableViewConfigButton);
 
+        /**
+         * Custom tinting the ImageView icon with custom color
+         */
+        tintImageView(mImageViewUpdateIcon, "#3A7BD5");
+
+
 
         /**
          * Setting the "Yes", "No" and "View Config" buttons background to rounded...
          */
-        customStyleButton(mUpdateYesButton, "#3A7BD5");
-        customStyleButton(mUpdateNoButton,"#3A7BD5");
+
+        // "Yes" => Nidec green (#009B4A)
+        customStyleButton(mUpdateYesButton, "#009B4A");
+
+        // "No" => Red (#F44336)
+        customStyleButton(mUpdateNoButton,"#F44336");
         customStyleButton(mViewConfigButton,"#009B4A");
 
 
@@ -307,6 +320,23 @@ public class OTAPackageAvailableActivity extends Activity {
 
     }
 
+
+    /**
+     * Defining custom tint color for ImageView Icon.
+     */
+
+    private void tintImageView(ImageView imageView, String colorInHex) {
+        int colorInt = Color.parseColor(colorInHex);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setImageTintList(ColorStateList.valueOf(colorInt));
+        }
+    }
+
+
+
+
+
     /**
      * Defining custom style button background
      * BUTTONS : "Yes", "No", "View Config"
@@ -336,7 +366,6 @@ public class OTAPackageAvailableActivity extends Activity {
         button.setBackground(roundedBg);
 
     }
-
 
 
 
