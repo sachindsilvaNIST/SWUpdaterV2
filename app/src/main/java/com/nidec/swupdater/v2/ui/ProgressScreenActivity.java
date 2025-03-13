@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -42,6 +43,9 @@ import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
 public class ProgressScreenActivity extends Activity {
     private static final String TAG_PROGRESS_SCREEN_ACTIVITY = "ProgressScreenActivity";
 
+
+    // ImageView : Download Icon
+    private ImageView mImageViewDownloadIcon;
 
     // TextView for MainTitle
     private TextView mTextViewProgressTitle;
@@ -73,12 +77,19 @@ public class ProgressScreenActivity extends Activity {
         /**
          * Retrieving IDs of UI Elements...
          */
-
+        mImageViewDownloadIcon = findViewById(R.id.imageViewDownloadIcon);
         mTextViewProgressTitle = findViewById(R.id.textViewProgressTitle);
         mTextViewProgressSubtitle = findViewById(R.id.textViewProgressSubtitle);
         mProgressBar = findViewById(R.id.progressBar);
         mCancelDownloadButton = findViewById(R.id.buttonCancelDownload);
         mProgressScreenPercentDisplay = findViewById(R.id.TextViewProgressScreenPercentDisplay);
+
+
+        /**
+         * Custom tinting the ImageView icon with custom color
+         */
+        tintImageView(mImageViewDownloadIcon,"#3A7BD5");
+
 
         /**
          * Tinting Loading Spinner's color to bluish tone.
@@ -195,6 +206,20 @@ public class ProgressScreenActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+
+    /**
+     * Defining custom tint color for ImageView Icon.
+     */
+
+    private void tintImageView(ImageView imageView, String colorInHex) {
+        int colorInt = Color.parseColor(colorInHex);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setImageTintList(ColorStateList.valueOf(colorInt));
+        }
     }
 
     /**
