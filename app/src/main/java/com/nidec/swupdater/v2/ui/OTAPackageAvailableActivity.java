@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+
 import android.content.Intent;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UpdateEngine;
@@ -16,6 +20,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.nidec.swupdater.v2.R;
 
@@ -53,10 +58,29 @@ public class OTAPackageAvailableActivity extends Activity {
     private UpdateManager mUpdateManager;
 
     private ProgressDialog mSpinnerDialog;
+
+//    Update Icon
+    private ImageView mImageViewUpdateIcon;
+
+//    Main Title
+    private TextView mTextViewOTAPackageAvailableMainTitle;
+
+//    Sub Title
+    private TextView mTextViewOTAPackageAvailableSubtitle;
+
+//    "Yes" Button
     private Button mUpdateYesButton;
+
+//    "No" Button
     private Button mUpdateNoButton;
+
+//    "View Config" Button
     private Button mViewConfigButton;
-    private TextView mTextViewInfo;
+
+//   ===> DEBUGGING PURPOSE : SRD 2025-03-13
+//    private TextView mTextViewInfo;
+//   <=== DEBUGGING PURPOSE : SRD 2025-03-13
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +93,7 @@ public class OTAPackageAvailableActivity extends Activity {
          *
          */
         showingLoadingSpinner("Checking for updates...");
-        new Handler().postDelayed(() -> hideLoadingSpinner(),2000);
+        new Handler().postDelayed(() -> hideLoadingSpinner(),1000);
 
 
         // Retrieve the shared UpdateManager Instance...
@@ -78,10 +102,30 @@ public class OTAPackageAvailableActivity extends Activity {
 
 
         // Get the UI Elements IDs.
+
+
+        mImageViewUpdateIcon = findViewById(R.id.imageViewUpdateIcon);
+        mTextViewOTAPackageAvailableMainTitle = findViewById(R.id.textViewOTAPackageAvailableMainTitle);
+        mTextViewOTAPackageAvailableSubtitle = findViewById(R.id.textViewOTAPackageAvailableSubtitle);
         mUpdateYesButton = findViewById(R.id.mOTAPackageAvailableYesButton);
         mUpdateNoButton = findViewById(R.id.mOTAPackageAvailableNoButton);
         mViewConfigButton = findViewById(R.id.mOTAPackageAvailableViewConfigButton);
-        mTextViewInfo = findViewById(R.id.mOTAPackageAvailableMainTitle);
+
+
+        /**
+         * Setting the "Yes", "No" and "View Config" buttons background to rounded...
+         */
+        customStyleButton(mUpdateYesButton, "#3A7BD5");
+        customStyleButton(mUpdateNoButton,"#3A7BD5");
+        customStyleButton(mViewConfigButton,"#009B4A");
+
+
+
+
+//   ===> DEBUGGING PURPOSE : SRD 2025-03-13
+//        mTextViewInfo = findViewById(R.id.mOTAPackageAvailableMainTitle);
+//   <=== DEBUGGING PURPOSE : SRD 2025-03-13
+
 
         /**
          * ===> DEBUG PURPOSE
@@ -96,10 +140,19 @@ public class OTAPackageAvailableActivity extends Activity {
              *
              * <===
              */
-            mTextViewInfo.setText("Available Update : " + selected.getName());
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "Available Update : " + selected.getName());
+
+//   ===> DEBUGGING PURPOSE : SRD 2025-03-13
+//            mTextViewInfo.setText("Available Update : " + selected.getName());
+//   <=== DEBUGGING PURPOSE : SRD 2025-03-13
 
         } else {
-            mTextViewInfo.setText("No config was set!!");
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY, "No config was set!!");
+
+//   ===> DEBUGGING PURPOSE : SRD 2025-03-13
+//            mTextViewInfo.setText("No config was set!!");
+//   <=== DEBUGGING PURPOSE : SRD 2025-03-13
+
         }
 
         /**
@@ -107,16 +160,15 @@ public class OTAPackageAvailableActivity extends Activity {
          */
 
         mUpdateYesButton.setOnClickListener((View v) -> {
-            checkForNewUpdate();
             Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"OK Button was pressed....");
-
+            checkForNewUpdate();
         });
 
         /**
          * If "CANCEL(NO)" button was pressed ==> GoTo "SystemUpToDateActivity.java --> DEBUG PURPOSE...
          */
         mUpdateNoButton.setOnClickListener((View v) -> {
-            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"CANCEL Button was pressed....");
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"NO Button was pressed....");
             noButtonWasClicked();
         });
 
@@ -252,6 +304,36 @@ public class OTAPackageAvailableActivity extends Activity {
             startActivity(new Intent(this,SystemUpToDateActivity.class));
             finish();
         }
+
+    }
+
+    /**
+     * Defining custom style button background
+     * BUTTONS : "Yes", "No", "View Config"
+     */
+
+
+    private void customStyleButton(Button button, String colorInHex){
+
+        GradientDrawable roundedBg = new GradientDrawable();
+        roundedBg.setShape(GradientDrawable.RECTANGLE);
+
+        /**
+         * Setting the custom color passed through `colorInHex` parameter
+         */
+        roundedBg.setColor(Color.parseColor(colorInHex));
+
+        /**
+         * Converting 10dp to actual pixels for the corner radius.
+         */
+        float cornerRadiusDp = 10f;
+        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+        roundedBg.setCornerRadius(cornerRadiusToPixels);
+
+        /**
+         * Applying the above modifications to Custom Buttons `button` parameter.
+         */
+        button.setBackground(roundedBg);
 
     }
 
@@ -413,6 +495,7 @@ public class OTAPackageAvailableActivity extends Activity {
             goToSystemUpToDateActivity();
             return;
         } else {
+            Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"CONFIG FOUND!! Heading to yesButtonWasClicked() function...");
             yesButtonWasClicked();
         }
 
