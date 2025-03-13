@@ -41,7 +41,7 @@ public class DownloadStateCheckActivity extends Activity {
 
 
     /**
-     * Creating local UpdateManager intance...
+     * Creating local UpdateManager instance...
      */
     private UpdateManager mUpdateManager;
 
