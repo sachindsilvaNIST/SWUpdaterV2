@@ -1,12 +1,14 @@
 package com.nidec.swupdater.v2.ui;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.app.AlertDialog;
 
 import android.content.Intent;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.UpdateEngine;
 
@@ -73,6 +75,12 @@ public class SystemUpToDateActivity extends Activity {
         mSubtitleText = findViewById(R.id.textViewSubtitle);
         mLastCheckedText = findViewById(R.id.textViewLastChecked);
         mReCheckButton = findViewById(R.id.mSystemUpToDateReCheckButton);
+
+        /**
+         * Custom tinting the ImageView icon with custom color
+         */
+
+        tintImageView(mCheckermarkImage,"#3A7BD5");
 
 
         /**
@@ -154,6 +162,20 @@ public class SystemUpToDateActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    /**
+     * Defining custom tint color for ImageView Icon.
+     */
+
+    private void tintImageView(ImageView imageView, String colorInHex) {
+        int colorInt = Color.parseColor(colorInHex);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setImageTintList(ColorStateList.valueOf(colorInt));
+        }
+    }
+
+
 
     /**
      * Defining function to check the current system time..
