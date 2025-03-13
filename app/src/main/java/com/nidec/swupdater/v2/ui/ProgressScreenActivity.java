@@ -10,8 +10,14 @@ package com.nidec.swupdater.v2.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 
+
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+
 import android.content.Intent;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UpdateEngine;
@@ -37,9 +43,19 @@ public class ProgressScreenActivity extends Activity {
     private static final String TAG_PROGRESS_SCREEN_ACTIVITY = "ProgressScreenActivity";
 
 
+    // TextView for MainTitle
+    private TextView mTextViewProgressTitle;
+
+    //TextView for Subtitle
+    private TextView mTextViewProgressSubtitle;
+
+    // Progress Bar : Loading Spinner
     private ProgressBar mProgressBar;
+
+    // "Cancel Update" Button.
     private Button mCancelDownloadButton;
 
+    // TextView to display the Download Progress in percentage %...
     private TextView mProgressScreenPercentDisplay;
 
 
@@ -53,10 +69,54 @@ public class ProgressScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress_screen);
 
+
+        /**
+         * Retrieving IDs of UI Elements...
+         */
+
+        mTextViewProgressTitle = findViewById(R.id.textViewProgressTitle);
+        mTextViewProgressSubtitle = findViewById(R.id.textViewProgressSubtitle);
         mProgressBar = findViewById(R.id.progressBar);
         mCancelDownloadButton = findViewById(R.id.buttonCancelDownload);
         mProgressScreenPercentDisplay = findViewById(R.id.TextViewProgressScreenPercentDisplay);
 
+        /**
+         * Tinting Loading Spinner's color to bluish tone.
+         *
+         */
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mProgressBar.setIndeterminateTintList(
+                    ColorStateList.valueOf(Color.parseColor("#3A7BD5"))
+            );
+        }
+
+
+        /**
+         * Setting the "Cancel Update" button background to rounded...
+         *
+         */
+        GradientDrawable roundedBg = new GradientDrawable();
+        roundedBg.setShape(GradientDrawable.RECTANGLE);
+
+        /**
+         * Setting button's background color to bluish tone.
+         *
+         */
+        roundedBg.setColor(Color.parseColor("#3A7BD5"));
+
+        /**
+         * Converting 10dp to actual pixels for the corner radius.
+         */
+        float cornerRadiusDp = 10f;
+        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+        roundedBg.setCornerRadius(cornerRadiusToPixels);
+
+        /**
+         * Applying the above modification to "Cancel Update" Button.
+         */
+
+        mCancelDownloadButton.setBackground(roundedBg);
 
         // Retrieve the shared UpdateManager Instance..
         mUpdateManager = UpdateManagerHolder.getInstance();
@@ -82,10 +142,13 @@ public class ProgressScreenActivity extends Activity {
 
         mCancelDownloadButton.setOnClickListener((View v) -> {
 
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "USER HAD PRESSED `Cancel Update` Button!!!!");
+
             // If the user cancels the OTA Update.
 
             try {
                 mUpdateManager.cancelRunningUpdate();
+                Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "OTA UPDATE GOT PAUSED AND UDPATE ENGINE WAS SET TO IDLE....");
 
             } catch (UpdaterState.InvalidTransitionException e) {
                 Log.e(TAG_PROGRESS_SCREEN_ACTIVITY, "FAILED TO CANCEL THE UPDATE... : ",e);
