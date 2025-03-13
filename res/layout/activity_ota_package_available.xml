@@ -5,53 +5,212 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp">
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    android:background="@android:color/white"
+    >
 
-    <!--    MainActivity App Header -->
-    <TextView
-        android:id="@+id/mOTAPackageAvailableMainTitle"
+
+<!--    TOP ICON : To Represent "Update Available"  -->
+    <ImageView
+        android:id="@+id/imageViewUpdateIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_ota_package_available_title"
+        android:src="@android:drawable/ic_popup_sync"
+        android:background="@null"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="50dp"
+        />
+
+<!--    MAIN TITLE : "New Software Update Available" -->
+    <TextView
+        android:id="@+id/textViewOTAPackageAvailableMainTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Software Update Available"
         android:textSize="24sp"
-        android:textStyle="italic" />
+        android:textColor="#333"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        />
 
 
+<!--    SUBTITLE : Other Information -->
     <TextView
-        android:id="@+id/mOTAPackageAvailableSubTitle"
+        android:id="@+id/textViewOTAPackageAvailableSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Do you want to proceed to update software?"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-
-    <!--    APPLY Button -->
-    <Button
-        android:id="@+id/mOTAPackageAvailableYesButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Yes"
+        android:text="An update is available. Would you like to proceed?"
+        android:textSize="13sp"
+        android:textColor="#555"
+        android:layout_marginBottom="24dp"
+        android:visibility="visible"
         />
 
-    <!--    APPLY Button -->
-    <Button
-        android:id="@+id/mOTAPackageAvailableNoButton"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="No"
-        />
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:padding="24sp"
+        android:paddingBottom="10dp"
+        >
+
+        <!--    Button : "YES" to download the update. -->
+
+        <Button
+            android:id="@+id/mOTAPackageAvailableYesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:background="@null"
+            android:layout_marginBottom="1dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            />
+
+        <!--    Button : "NO" to download the update. -->
+
+        <Button
+            android:id="@+id/mOTAPackageAvailableNoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:background="@null"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="40dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            />
+
+    </LinearLayout>
+
+
+    <!--    FOR DEBUGGING PURPOSE Button : "VIEW CONFIG" to download the update. -->
+
     <Button
         android:id="@+id/mOTAPackageAvailableViewConfigButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:text="View Config"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="#ffffff"
+        android:background="@null"
+        android:layout_marginBottom="0dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         />
 
-
 </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+
+<!--<LinearLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical"-->
+<!--    android:gravity="center"-->
+<!--    android:padding="16dp">-->
+
+<!--    &lt;!&ndash;    MainActivity App Header &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/mOTAPackageAvailableMainTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/activity_ota_package_available_title"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textStyle="italic" />-->
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/mOTAPackageAvailableSubTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:text="Do you want to proceed to update software?"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="bold" />-->
+
+
+<!--    &lt;!&ndash;    APPLY Button &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/mOTAPackageAvailableYesButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="60dp"-->
+<!--        android:text="Yes"-->
+<!--        />-->
+
+<!--    &lt;!&ndash;    APPLY Button &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/mOTAPackageAvailableNoButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:text="No"-->
+<!--        />-->
+<!--    <Button-->
+<!--        android:id="@+id/mOTAPackageAvailableViewConfigButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="100dp"-->
+<!--        android:text="View Config"-->
+<!--        />-->
+
+
+<!--</LinearLayout>-->
