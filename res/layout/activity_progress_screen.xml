@@ -1,43 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp">
+    android:gravity="center_horizontal"
+    android:background="@android:color/white"
+    android:padding="24dp"
+    >
 
-    <TextView
-        android:id="@+id/TextViewProgressScreen"
+<!--    TOP ICON : DOWNLOAD -->
+
+    <ImageView
+        android:id="@+id/imageViewDownloadIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Downloading...."
-        android:textSize="16sp"
+        android:src="@android:drawable/stat_sys_download"
+        android:background="@null"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="90dp"
         />
 
+<!--    MAIN TITLE  : "Downloading Update..." -->
+    <TextView
+        android:id="@+id/textViewProgressTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Downloading Update"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:layout_marginBottom="8dp"
+        />
+
+    <!--    PROGRESS BAR : Loading Spinner -->
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:min="0"
         android:max="100"
+        android:layout_marginBottom="16dp"
+        android:indeterminate="true"
         />
+
+
+<!--    SUBTITLE : Short line -->
+    <TextView
+        android:id="@+id/textViewProgressSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please wait. Your system is updating..."
+        android:textSize="12sp"
+        android:textColor="#666"
+        android:layout_marginBottom="24dp"
+        />
+
+
+<!--    PROGRESS BAR : DISPLAYING DOWNLOAD PROGRESS IN PERCENT -->
+
     <TextView
         android:id="@+id/TextViewProgressScreenPercentDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading..."
-        android:textSize="16sp"
+        android:text="Initiating..."
+        android:textSize="15sp"
+        android:textColor="#666"
+        android:layout_marginBottom="24dp"
         />
+
+<!--    CANCEL BUTTON -->
 
     <Button
         android:id="@+id/buttonCancelDownload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="Cancel Update"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="#ffffff"
+        android:layout_marginBottom="20dp"
+        android:background="@null"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         />
-
 </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+
+<!--<LinearLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical"-->
+<!--    android:gravity="center"-->
+<!--    android:padding="16dp">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/TextViewProgressScreen"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Downloading...."-->
+<!--        android:textSize="16sp"-->
+<!--        />-->
+
+<!--    <ProgressBar-->
+<!--        android:id="@+id/progressBar"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:min="0"-->
+<!--        android:max="100"-->
+<!--        />-->
+<!--    <TextView-->
+<!--        android:id="@+id/TextViewProgressScreenPercentDisplay"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Loading..."-->
+<!--        android:textSize="16sp"-->
+<!--        />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/buttonCancelDownload"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="Cancel Update"-->
+<!--        />-->
+
+<!--</LinearLayout>-->
