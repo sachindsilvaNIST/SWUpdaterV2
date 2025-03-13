@@ -185,7 +185,7 @@ public class RebootCheckActivity extends Activity {
         if(state == UpdaterState.REBOOT_REQUIRED){
             Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNMOUNTING USB PENDRIVE...");
 //            forciblyUnmountUSBVolume("/mnt/media_rw/9CB2-B731");
-            ejectUSBVolume("/mnt/media_rw/9CB2-B731");
+//            ejectUSBVolume("/mnt/media_rw/9CB2-B731");
 
             Log.d(TAG_REBOOT_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
             startActivity(new Intent(this, UpdateCompletionActivity.class));
