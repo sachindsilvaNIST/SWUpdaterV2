@@ -10,6 +10,7 @@ package com.nidec.swupdater.v2.ui;
 import android.app.Activity;
 
 import android.content.Intent;
+import android.content.Context;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,9 @@ import com.nidec.swupdater.v2.R;
 import com.nidec.swupdater.v2.UpdateManager;
 import com.nidec.swupdater.v2.UpdaterState;
 import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class RebootCheckActivity extends Activity {
 
@@ -128,21 +132,21 @@ public class RebootCheckActivity extends Activity {
      */
 
 
-    private void forciblyUnmountUSBVolume(String volumePath) {
-        try {
-            Process process = Runtime.getRuntime().exec(new String[] {"umount", volumePath});
-            int resultCode = process.waitFor();
-
-            if(resultCode == 0) {
-                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "USB VOLUME HAS BE UNMOUNTED SUCCESSFULLY.. ==> " + volumePath);
-            } else {
-                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "FAILED TO UNMOUNT VOLUME AT " + volumePath);
-                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "RESULT CODE ===> " + resultCode);
-            }
-        } catch (Exception e) {
-            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "EXCEPTION OCCURED WHILE UNMOUNTING USB VOLUME : " + volumePath,e);
-        }
-    }
+//    private void forciblyUnmountUSBVolume(String volumePath) {
+//        try {
+//            Process process = Runtime.getRuntime().exec(new String[] {"umount", volumePath});
+//            int resultCode = process.waitFor();
+//
+//            if(resultCode == 0) {
+//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "USB VOLUME HAS BE UNMOUNTED SUCCESSFULLY.. ==> " + volumePath);
+//            } else {
+//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "FAILED TO UNMOUNT VOLUME AT " + volumePath);
+//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "RESULT CODE ===> " + resultCode);
+//            }
+//        } catch (Exception e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "EXCEPTION OCCURED WHILE UNMOUNTING USB VOLUME : " + volumePath,e);
+//        }
+//    }
 
     /**
      * Defining a function that handles and ejects the USB Volume
@@ -150,14 +154,51 @@ public class RebootCheckActivity extends Activity {
      * METHOD : ACTION_MEDIA_EJECT.
      */
 
-    private void ejectUSBVolume(String volumePath) {
+//    private void ejectUSBVolume(String volumePath) {
+//
+//        Intent ejectIntent = new Intent(Intent.ACTION_MEDIA_EJECT);
+//        ejectIntent.setData(Uri.parse("file://" + volumePath));
+//
+//        sendBroadcast(ejectIntent);
+//        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "REQUESTED EJECT OF USB VOLUME : " + volumePath);
+//    }
 
-        Intent ejectIntent = new Intent(Intent.ACTION_MEDIA_EJECT);
-        ejectIntent.setData(Uri.parse("file://" + volumePath));
 
-        sendBroadcast(ejectIntent);
-        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "REQUESTED EJECT OF USB VOLUME : " + volumePath);
+
+
+    /**
+     * Defining a function that handles and unmounts the USB Drive
+     *
+     * METHOD : unmount(String volId) from StorageManager.java
+     */
+
+    private void forciblyUnmountUSB(Context context, String volumeId) {
+        try {
+
+            // Obtaining standard StorageManager Instance
+            StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+
+            Method unmountMethod = mStorageManager.getClass().getDeclaredMethod("unmount", String.class);
+            unmountMethod.setAccessible(true);
+
+            // Calling unmount method with given volumeID
+            unmountMethod.invoke(mStorageManager, volumeId);
+
+            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "USB PENDRIVE HAS BEEN SUCCESSFULLY UNMOUNTED...." + volumeId);
+
+
+        } catch (NoSuchMethodException e) {
+            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "NoSuchMethodException: possibly the unmount(String) doesn't exist ==> " + e);
+        } catch (InvocationTargetException e) {
+            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "InvocationTargetException unmounting volume " + volumeId, e);
+        } catch (IllegalAccessException e) {
+            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "IllegalAccessException: On unmounting volume " + volumeId, e);
+        } catch (Exception e) {
+            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "Exception: On forcibly unmounting volume " + volumeId, e);
+        }
     }
+
+
 
 
 
@@ -184,8 +225,10 @@ public class RebootCheckActivity extends Activity {
 
         if(state == UpdaterState.REBOOT_REQUIRED){
             Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNMOUNTING USB PENDRIVE...");
-//            forciblyUnmountUSBVolume("/mnt/media_rw/9CB2-B731");
-//            ejectUSBVolume("/mnt/media_rw/9CB2-B731");
+
+            forciblyUnmountUSB(this, "public:8,2");
+
+
 
             Log.d(TAG_REBOOT_CHECK_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
             startActivity(new Intent(this, UpdateCompletionActivity.class));
