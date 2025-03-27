@@ -176,7 +176,7 @@ public class RebootCheckActivity extends Activity {
         try {
 
             // Obtaining standard StorageManager Instance
-            StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+            StorageManager mStorageManager = getSystemService(StorageManager.class);
 
             Method unmountMethod = mStorageManager.getClass().getDeclaredMethod("unmount", String.class);
             unmountMethod.setAccessible(true);
