@@ -3,6 +3,7 @@ allow priv_app update_engine:binder { call };
 allow priv_app ota_package_file:dir rw_dir_perms;
 allow priv_app ota_package_file:file create_file_perms;
 allow priv_app hal_graphics_allocator_default_tmpfs:file { read write };
-
+allow priv_app mount_service:binder call;
+allow priv_app mount_service:service_manager find;
 
 get_prop(priv_app, vendor_default_prop)
