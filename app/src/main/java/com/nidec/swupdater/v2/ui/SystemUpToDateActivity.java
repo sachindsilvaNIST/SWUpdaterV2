@@ -32,6 +32,7 @@ import com.nidec.swupdater.v2.UpdateManager;
 import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
 
 // To Show the last checked date and time...
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -57,6 +58,8 @@ public class SystemUpToDateActivity extends Activity {
     private TextView mLastCheckedText;
     private Button mReCheckButton;
 
+    private Button mSystemUpToDateUSBDisconnectButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class SystemUpToDateActivity extends Activity {
         mSubtitleText = findViewById(R.id.textViewSubtitle);
         mLastCheckedText = findViewById(R.id.textViewLastChecked);
         mReCheckButton = findViewById(R.id.mSystemUpToDateReCheckButton);
+        mSystemUpToDateUSBDisconnectButton = findViewById(R.id.mSystemUpToDateUSBDisconnectButton);
 
         /**
          * Custom tinting the ImageView icon with custom color
@@ -117,7 +121,16 @@ public class SystemUpToDateActivity extends Activity {
         String currentTime = getCurrentTimeString();
         mLastCheckedText.setText("Last checked: " + currentTime);
 
+        /**
+         * When "Disconnect USB" Button was pressed
+         */
 
+        mSystemUpToDateUSBDisconnectButton.setOnClickListener(v -> {
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "DISCONNECT USB Button was pressed...");
+
+            unMountUSBPendriveWithShellCMD("public:8,2");
+
+        });
 
 
 
@@ -222,6 +235,34 @@ public class SystemUpToDateActivity extends Activity {
         startActivity(new Intent(this,OTAPackageCheckerActivity.class));
         finish();
         return;
+    }
+
+
+    /**
+     * Defining a function that handles and unmounts the USB Drive
+     *
+     * METHOD : Using Shell command "sm" method
+     */
+
+    private void unMountUSBPendriveWithShellCMD(String volumeID) {
+        try {
+            Process processID = Runtime.getRuntime().exec(new String[] {
+                    "sm", "unmount", volumeID
+            });
+
+            int resultCode = processID.waitFor();
+            if(resultCode == 0) {
+                Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "The USB Pendrive has been successfully unmounted....!" + volumeID);
+            } else {
+                Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "UNMOUNT WAS FAILED!!, RESULT CODE = " + resultCode);
+            }
+
+
+        } catch (IOException e) {
+            Log.e(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "IOException running sm unmount", e);
+        } catch (InterruptedException e) {
+            Log.e(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "InterruptedException waiting for sm unmount", e);
+        }
     }
 
     private void switchingToIDLEState() {

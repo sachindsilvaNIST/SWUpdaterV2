@@ -27,6 +27,7 @@ import com.nidec.swupdater.v2.UpdateManager;
 import com.nidec.swupdater.v2.UpdaterState;
 import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -172,34 +173,59 @@ public class RebootCheckActivity extends Activity {
      * METHOD : unmount(String volId) from StorageManager.java
      */
 
-    private void forciblyUnmountUSB(Context context, String volumeId) {
-        try {
+//    private void forciblyUnmountUSB(Context context, String volumeId) {
+//        try {
+//
+//            // Obtaining standard StorageManager Instance
+//            StorageManager mStorageManager = getSystemService(StorageManager.class);
+//
+//            Method unmountMethod = mStorageManager.getClass().getDeclaredMethod("unmount", String.class);
+//            unmountMethod.setAccessible(true);
+//
+//            // Calling unmount method with given volumeID
+//            unmountMethod.invoke(mStorageManager, volumeId);
+//
+//            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "USB PENDRIVE HAS BEEN SUCCESSFULLY UNMOUNTED...." + volumeId);
+//
+//
+//        } catch (NoSuchMethodException e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "NoSuchMethodException: possibly the unmount(String) doesn't exist ==> " + e);
+//        } catch (InvocationTargetException e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "InvocationTargetException unmounting volume " + volumeId, e);
+//        } catch (IllegalAccessException e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "IllegalAccessException: On unmounting volume " + volumeId, e);
+//        } catch (Exception e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "Exception: On forcibly unmounting volume " + volumeId, e);
+//        }
+//    }
 
-            // Obtaining standard StorageManager Instance
-            StorageManager mStorageManager = getSystemService(StorageManager.class);
 
-            Method unmountMethod = mStorageManager.getClass().getDeclaredMethod("unmount", String.class);
-            unmountMethod.setAccessible(true);
+    /**
+     * Defining a function that handles and unmounts the USB Drive
+     *
+     * METHOD : Using Shell command "sm" method
+     */
 
-            // Calling unmount method with given volumeID
-            unmountMethod.invoke(mStorageManager, volumeId);
-
-            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "USB PENDRIVE HAS BEEN SUCCESSFULLY UNMOUNTED...." + volumeId);
-
-
-        } catch (NoSuchMethodException e) {
-            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "NoSuchMethodException: possibly the unmount(String) doesn't exist ==> " + e);
-        } catch (InvocationTargetException e) {
-            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "InvocationTargetException unmounting volume " + volumeId, e);
-        } catch (IllegalAccessException e) {
-            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "IllegalAccessException: On unmounting volume " + volumeId, e);
-        } catch (Exception e) {
-            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "Exception: On forcibly unmounting volume " + volumeId, e);
-        }
-    }
-
-
-
+//    private void unMountUSBPendriveWithShellCMD(String volumeID) {
+//        try {
+//            Process processID = Runtime.getRuntime().exec(new String[] {
+//                    "sm", "unmount", volumeID
+//            });
+//
+//            int resultCode = processID.waitFor();
+//            if(resultCode == 0) {
+//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "The USB Pendrive has been successfully unmounted....!" + volumeID);
+//            } else {
+//                Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNMOUNT WAS FAILED!!, RESULT CODE = " + resultCode);
+//            }
+//
+//
+//        } catch (IOException e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "IOException running sm unmount", e);
+//        } catch (InterruptedException e) {
+//            Log.e(TAG_REBOOT_CHECK_ACTIVITY, "InterruptedException waiting for sm unmount", e);
+//        }
+//    }
 
 
 
@@ -226,7 +252,7 @@ public class RebootCheckActivity extends Activity {
         if(state == UpdaterState.REBOOT_REQUIRED){
             Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNMOUNTING USB PENDRIVE...");
 
-            forciblyUnmountUSB(this, "public:8,2");
+//            forciblyUnmountUSB(this, "public:8,2");
 
 
 
