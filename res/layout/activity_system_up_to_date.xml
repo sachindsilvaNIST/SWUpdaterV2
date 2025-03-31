@@ -54,23 +54,52 @@
         android:layout_marginBottom="24dp"
         />
 
-<!--    "RECHECK" BUTTON -->
-    <Button
-        android:id="@+id/mSystemUpToDateReCheckButton"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Verify Again"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:layout_marginBottom="20dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:textColor="#ffffff"
-        android:background="@null"
-        android:shadowRadius="@android:integer/config_longAnimTime"
-        />
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:background="@android:color/white"
+
+        >
+
+        <!--    "RECHECK" BUTTON -->
+        <Button
+            android:id="@+id/mSystemUpToDateReCheckButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verify Again"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:layout_marginBottom="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="#ffffff"
+            android:background="@null"
+            android:shadowRadius="@android:integer/config_longAnimTime"
+            android:layout_marginRight="20dp"
+            />
+        <!--    "USB DISCONNECT BUTTON" BUTTON -->
+        <Button
+            android:id="@+id/mSystemUpToDateUSBDisconnectButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Disconnect USB"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:layout_marginBottom="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="#ffffff"
+            android:background="@null"
+            android:shadowRadius="@android:integer/config_longAnimTime"
+            />
+    </LinearLayout>
 
 
 
