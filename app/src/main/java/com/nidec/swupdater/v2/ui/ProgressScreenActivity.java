@@ -110,7 +110,7 @@ public class ProgressScreenActivity extends Activity {
          *  Creating a pressed effect for "Cancel Update" Button
          */
 
-        setUpButtonWithPressedEffect(mCancelDownloadButton, "#3A7BD5", "2C63AA", 10f);
+        setUpButtonWithPressedEffect(mCancelDownloadButton, "#3A7BD5", "#2C63AA", 10f);
 
 //        /**
 //         * Setting the "Cancel Update" button background to rounded...
@@ -447,24 +447,6 @@ public class ProgressScreenActivity extends Activity {
             }
         });
     }
-
-    /**
-     * Defining a function to disable "Cancel Update" button and change its default color to gray.
-     */
-
-    private void disableCancelUpdateButton() {
-        mCancelDownloadButton.setEnabled(false);
-        GradientDrawable disabledBackground = new GradientDrawable();
-        disabledBackground.setShape(GradientDrawable.RECTANGLE);
-        disabledBackground.setColor(Color.parseColor("#808080"));
-        float cornerRadiusToPixels = 10f * getResources().getDisplayMetrics().density;
-        disabledBackground.setCornerRadius(cornerRadiusToPixels);
-
-        mCancelDownloadButton.setBackground(disabledBackground);
-    }
-
-
-
 
 
 
