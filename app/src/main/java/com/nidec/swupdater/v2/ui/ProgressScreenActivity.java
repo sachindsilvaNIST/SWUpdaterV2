@@ -449,7 +449,7 @@ public class ProgressScreenActivity extends Activity {
         mCancelDownloadButton.setEnabled(false);
         GradientDrawable disabledBackground = new GradientDrawable();
         disabledBackground.setShape(GradientDrawable.RECTANGLE);
-        disabledBackground.setColor(Color.parseColor("#B0B0B0"));
+        disabledBackground.setColor(Color.parseColor("#808080"));
         float cornerRadiusToPixels = 10f * getResources().getDisplayMetrics().density;
         disabledBackground.setCornerRadius(cornerRadiusToPixels);
 
