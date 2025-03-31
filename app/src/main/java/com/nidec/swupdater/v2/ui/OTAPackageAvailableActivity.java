@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 
+import android.graphics.drawable.StateListDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
@@ -125,12 +126,32 @@ public class OTAPackageAvailableActivity extends Activity {
          * Setting the "Yes", "No" and "View Config" buttons background to rounded...
          */
 
+
+        /**
+         * Create a pressed effect for "Yes" Button => Nidec green (#009B4A)
+         */
+
+        setUpButtonWithPressedEffect(mUpdateYesButton, "#009B4A", "#00793C", 10f);
+
+        /**
+         * Create a pressed effect for "No" Button => Red (#F44336)
+         */
+
+        setUpButtonWithPressedEffect(mUpdateNoButton, "#F44336", "#D32F2F", 10f);
+
+        /**
+        * DEBUGGING PURPOSE ONLY ==> Create a pressed effect for "View Config" Button => Nidec green (#009B4A)
+        */
+
+        setUpButtonWithPressedEffect(mViewConfigButton, "#009B4A", "#00793C", 10f);
+
         // "Yes" => Nidec green (#009B4A)
-        customStyleButton(mUpdateYesButton, "#009B4A");
+//        customStyleButton(mUpdateYesButton, "#009B4A");
+
 
         // "No" => Red (#F44336)
-        customStyleButton(mUpdateNoButton,"#F44336");
-        customStyleButton(mViewConfigButton,"#009B4A");
+//        customStyleButton(mUpdateNoButton,"#F44336");
+//        customStyleButton(mViewConfigButton,"#009B4A");
 
 
 
@@ -331,6 +352,54 @@ public class OTAPackageAvailableActivity extends Activity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageView.setImageTintList(ColorStateList.valueOf(colorInt));
         }
+    }
+
+    /**
+     * Creating a button background that shows the pressed effect along with rounded corners
+     */
+
+    private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
+        /**
+         * Converting 10dp to actual pixels for the corner radius.
+         *
+         * */
+
+        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+
+        /**
+         * Normal state of button before press effect
+         */
+        GradientDrawable normalDrawable = new GradientDrawable();
+        normalDrawable.setShape(GradientDrawable.RECTANGLE);
+        normalDrawable.setCornerRadius(cornerRadiusToPixels);
+        normalDrawable.setColor(Color.parseColor(normalColor));
+
+        /**
+         * Pressed state of button after press effect
+         */
+
+        GradientDrawable pressedDrawable = new GradientDrawable();
+        pressedDrawable.setShape(GradientDrawable.RECTANGLE);
+        pressedDrawable.setCornerRadius(cornerRadiusToPixels);
+        pressedDrawable.setColor(Color.parseColor(pressedColor));
+
+        /**
+         * State list drawable for pressed effect...
+         */
+        StateListDrawable states = new StateListDrawable();
+
+        // Pressed state (when android:state_pressed = true)
+        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+
+        // Default state
+        states.addState(new int[]{}, normalDrawable);
+
+        /**
+         * Add the above effects to the button.
+         */
+
+        mButton.setBackground(states);
+
     }
 
 
