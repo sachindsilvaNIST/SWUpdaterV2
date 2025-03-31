@@ -27,6 +27,8 @@ import android.os.UpdateEngine;
 import android.util.Log;
 
 import android.view.View;
+import android.view.animation.LinearInterpolator;
+
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -267,53 +269,10 @@ public class ProgressScreenActivity extends Activity {
         },3000);
     }
 
+
     /**
      * Creating a button background that shows the pressed effect along with rounded corners
      */
-
-//    private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
-//        /**
-//         * Converting 10dp to actual pixels for the corner radius.
-//         *
-//         * */
-//
-//        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
-//
-//        /**
-//         * Normal state of button before press effect
-//         */
-//        GradientDrawable normalDrawable = new GradientDrawable();
-//        normalDrawable.setShape(GradientDrawable.RECTANGLE);
-//        normalDrawable.setCornerRadius(cornerRadiusToPixels);
-//        normalDrawable.setColor(Color.parseColor(normalColor));
-//
-//        /**
-//         * Pressed state of button after press effect
-//         */
-//
-//        GradientDrawable pressedDrawable = new GradientDrawable();
-//        pressedDrawable.setShape(GradientDrawable.RECTANGLE);
-//        pressedDrawable.setCornerRadius(cornerRadiusToPixels);
-//        pressedDrawable.setColor(Color.parseColor(pressedColor));
-//
-//        /**
-//         * State list drawable for pressed effect...
-//         */
-//        StateListDrawable states = new StateListDrawable();
-//
-//        // Pressed state (when android:state_pressed = true)
-//        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
-//
-//        // Default state
-//        states.addState(new int[]{}, normalDrawable);
-//
-//        /**
-//         * Add the above effects to the button.
-//         */
-//
-//        mButton.setBackground(states);
-//
-//    }
 
     private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
         /**
@@ -370,6 +329,49 @@ public class ProgressScreenActivity extends Activity {
 
 
     }
+//    private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
+//        /**
+//         * Converting 10dp to actual pixels for the corner radius.
+//         *
+//         * */
+//
+//        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+//
+//        /**
+//         * Normal state of button before press effect
+//         */
+//        GradientDrawable normalDrawable = new GradientDrawable();
+//        normalDrawable.setShape(GradientDrawable.RECTANGLE);
+//        normalDrawable.setCornerRadius(cornerRadiusToPixels);
+//        normalDrawable.setColor(Color.parseColor(normalColor));
+//
+//        /**
+//         * Pressed state of button after press effect
+//         */
+//
+//        GradientDrawable pressedDrawable = new GradientDrawable();
+//        pressedDrawable.setShape(GradientDrawable.RECTANGLE);
+//        pressedDrawable.setCornerRadius(cornerRadiusToPixels);
+//        pressedDrawable.setColor(Color.parseColor(pressedColor));
+//
+//        /**
+//         * State list drawable for pressed effect...
+//         */
+//        StateListDrawable states = new StateListDrawable();
+//
+//        // Pressed state (when android:state_pressed = true)
+//        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+//
+//        // Default state
+//        states.addState(new int[]{}, normalDrawable);
+//
+//        /**
+//         * Add the above effects to the button.
+//         */
+//
+//        mButton.setBackground(states);
+//
+//    }
 
 
 
@@ -428,25 +430,91 @@ public class ProgressScreenActivity extends Activity {
      * This function will be called on every download progress update (0.0 to 1.0).
      */
 
+//    private void onProgressChanged(double progress) {
+//        runOnUiThread(() -> {
+//            int percent = (int) (100 * progress);
+//            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
+//            mProgressBar.setProgress(percent);
+//            mProgressScreenPercentDisplay.setText(percent + "%");
+//            if(percent == 99) {
+//                percent = percent + 1;
+//                int currentUpdateState = mUpdateManager.getUpdaterState();
+//                mProgressScreenPercentDisplay.setText(percent + "%");
+//                checkIfComplete(currentUpdateState);
+//            }
+//            if(percent == 100) {
+//                int currentUpdateState = mUpdateManager.getUpdaterState();
+//                mProgressScreenPercentDisplay.setText("Processing. Please wait...");
+//                checkIfComplete(currentUpdateState);
+//            }
+//        });
+//    }
+
     private void onProgressChanged(double progress) {
         runOnUiThread(() -> {
             int percent = (int) (100 * progress);
-            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
             mProgressBar.setProgress(percent);
-            mProgressScreenPercentDisplay.setText(percent + "%");
-            if(percent == 99) {
-                percent = percent + 1;
-                int currentUpdateState = mUpdateManager.getUpdaterState();
+
+            if(percent < 99) {
+                // Show the progress rate in normal percentage format
                 mProgressScreenPercentDisplay.setText(percent + "%");
-                checkIfComplete(currentUpdateState);
+            } else if(percent >= 99 && percent < 100) {
+                // At 99%, show "Loading, finalizing..." instead of a numeric value.
+                mProgressScreenPercentDisplay.setText("Finalizing, please wait...");
+
+                /**
+                 * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
+                 */
+                if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
+                    mTextViewProgressSubtitle.animate()
+                            .alpha(0)
+                            .setDuration(500)
+                            .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
+                }
+
+                // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
+
+                disableCancelUpdateButton();
+
+                // Start a subtle rotation animation on the download icon, if not already started...
+                if(!isFinalizingAnimationStarted) {
+                    isFinalizingAnimationStarted = true;
+                    mImageViewDownloadIcon.animate()
+                            .rotationBy(360)
+                            .setInterpolator(new LinearInterpolator())
+                            .setDuration(2000)
+                            .start();
+                }
+
+            } else {
+                /**
+                 * When the progress rate hits 100%, show "Updating... Please wait
+                 */
+                mProgressScreenPercentDisplay.setText("Updating... Please wait");
             }
-            if(percent == 100) {
-                int currentUpdateState = mUpdateManager.getUpdaterState();
-                mProgressScreenPercentDisplay.setText("Processing. Please wait...");
-                checkIfComplete(currentUpdateState);
-            }
+
+
         });
     }
+
+    /**
+     * Defining a function to disable "Cancel Update" button and change its default color to gray.
+     */
+
+    private void disableCancelUpdateButton() {
+        mCancelDownloadButton.setEnabled(false);
+        GradientDrawable disabledBackground = new GradientDrawable();
+        disabledBackground.setShape(GradientDrawable.RECTANGLE);
+        disabledBackground.setColor(Color.parseColor("#B0B0B0"));
+        float cornerRadiusToPixels = 10f * getResources().getDisplayMetrics().density;
+        disabledBackground.setCornerRadius(cornerRadiusToPixels);
+
+        mCancelDownloadButton.setBackground(disabledBackground);
+    }
+
+
+
 
 
 
