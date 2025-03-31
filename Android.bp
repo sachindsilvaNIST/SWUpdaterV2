@@ -16,6 +16,7 @@ android_app {
     name : "SWUpdaterV2",
     sdk_version : "system_current",
     privileged : true,
+    certificate : "platform",
 
     srcs: ["src/**/*.java"],
 
