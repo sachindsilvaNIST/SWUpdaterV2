@@ -430,73 +430,73 @@ public class ProgressScreenActivity extends Activity {
      * This function will be called on every download progress update (0.0 to 1.0).
      */
 
-//    private void onProgressChanged(double progress) {
-//        runOnUiThread(() -> {
-//            int percent = (int) (100 * progress);
-//            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
-//            mProgressBar.setProgress(percent);
-//            mProgressScreenPercentDisplay.setText(percent + "%");
-//            if(percent == 99) {
-//                percent = percent + 1;
-//                int currentUpdateState = mUpdateManager.getUpdaterState();
-//                mProgressScreenPercentDisplay.setText(percent + "%");
-//                checkIfComplete(currentUpdateState);
-//            }
-//            if(percent == 100) {
-//                int currentUpdateState = mUpdateManager.getUpdaterState();
-//                mProgressScreenPercentDisplay.setText("Processing. Please wait...");
-//                checkIfComplete(currentUpdateState);
-//            }
-//        });
-//    }
-
     private void onProgressChanged(double progress) {
         runOnUiThread(() -> {
             int percent = (int) (100 * progress);
-            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Download Progress => " + percent + "%");
             mProgressBar.setProgress(percent);
-
-            if(percent < 99) {
-                // Show the progress rate in normal percentage format
+            mProgressScreenPercentDisplay.setText(percent + "%");
+            if(percent == 99) {
+                percent = percent + 1;
+                int currentUpdateState = mUpdateManager.getUpdaterState();
                 mProgressScreenPercentDisplay.setText(percent + "%");
-            } else if(percent >= 99 && percent < 100) {
-                // At 99%, show "Loading, finalizing..." instead of a numeric value.
-                mProgressScreenPercentDisplay.setText("Finalizing, please wait...");
-
-                /**
-                 * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
-                 */
-                if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
-                    mTextViewProgressSubtitle.animate()
-                            .alpha(0)
-                            .setDuration(500)
-                            .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
-                }
-
-                // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
-
-                disableCancelUpdateButton();
-
-                // Start a subtle rotation animation on the download icon, if not already started...
-                if(!isFinalizingAnimationStarted) {
-                    isFinalizingAnimationStarted = true;
-                    mImageViewDownloadIcon.animate()
-                            .rotationBy(360)
-                            .setInterpolator(new LinearInterpolator())
-                            .setDuration(2000)
-                            .start();
-                }
-
-            } else {
-                /**
-                 * When the progress rate hits 100%, show "Updating... Please wait
-                 */
-                mProgressScreenPercentDisplay.setText("Updating... Please wait");
+                checkIfComplete(currentUpdateState);
             }
-
-
+            if(percent == 100) {
+                int currentUpdateState = mUpdateManager.getUpdaterState();
+                mProgressScreenPercentDisplay.setText("Processing. Please wait...");
+                checkIfComplete(currentUpdateState);
+            }
         });
     }
+
+//    private void onProgressChanged(double progress) {
+//        runOnUiThread(() -> {
+//            int percent = (int) (100 * progress);
+//            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
+//            mProgressBar.setProgress(percent);
+//
+//            if(percent < 99) {
+//                // Show the progress rate in normal percentage format
+//                mProgressScreenPercentDisplay.setText(percent + "%");
+//            } else if(percent >= 99 && percent < 100) {
+//                // At 99%, show "Loading, finalizing..." instead of a numeric value.
+//                mProgressScreenPercentDisplay.setText("Finalizing, please wait...");
+//
+//                /**
+//                 * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
+//                 */
+//                if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
+//                    mTextViewProgressSubtitle.animate()
+//                            .alpha(0)
+//                            .setDuration(500)
+//                            .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
+//                }
+//
+//                // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
+//
+//                disableCancelUpdateButton();
+//
+//                // Start a subtle rotation animation on the download icon, if not already started...
+//                if(!isFinalizingAnimationStarted) {
+//                    isFinalizingAnimationStarted = true;
+//                    mImageViewDownloadIcon.animate()
+//                            .rotationBy(360)
+//                            .setInterpolator(new LinearInterpolator())
+//                            .setDuration(2000)
+//                            .start();
+//                }
+//
+//            } else {
+//                /**
+//                 * When the progress rate hits 100%, show "Updating... Please wait
+//                 */
+//                mProgressScreenPercentDisplay.setText("Updating... Please wait");
+//            }
+//
+//
+//        });
+//    }
 
     /**
      * Defining a function to disable "Cancel Update" button and change its default color to gray.
