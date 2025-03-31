@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 
+import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.media.Image;
 import android.os.Bundle;
@@ -374,33 +375,89 @@ public class OTAPackageAvailableActivity extends Activity {
         normalDrawable.setCornerRadius(cornerRadiusToPixels);
         normalDrawable.setColor(Color.parseColor(normalColor));
 
-        /**
-         * Pressed state of button after press effect
-         */
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // For API 21+ version, smooth button feedback
+            ColorStateList rippleColor = ColorStateList.valueOf(Color.parseColor(pressedColor));
 
-        GradientDrawable pressedDrawable = new GradientDrawable();
-        pressedDrawable.setShape(GradientDrawable.RECTANGLE);
-        pressedDrawable.setCornerRadius(cornerRadiusToPixels);
-        pressedDrawable.setColor(Color.parseColor(pressedColor));
+            // RippleDrawable will use the normalDrawable as its content.
+            RippleDrawable rippleDrawable = new RippleDrawable(rippleColor, normalDrawable, null);
+            mButton.setBackground(rippleDrawable);
+        } else {
 
-        /**
-         * State list drawable for pressed effect...
-         */
-        StateListDrawable states = new StateListDrawable();
+            // For older APIs, StateListDrawable will be used as Button Effect.
+            /**
+             * Pressed state of button after press effect
+             */
 
-        // Pressed state (when android:state_pressed = true)
-        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+            GradientDrawable pressedDrawable = new GradientDrawable();
+            pressedDrawable.setShape(GradientDrawable.RECTANGLE);
+            pressedDrawable.setCornerRadius(cornerRadiusToPixels);
+            pressedDrawable.setColor(Color.parseColor(pressedColor));
 
-        // Default state
-        states.addState(new int[]{}, normalDrawable);
+            /**
+             * State list drawable for pressed effect...
+             */
+            StateListDrawable states = new StateListDrawable();
 
-        /**
-         * Add the above effects to the button.
-         */
+            // Pressed state (when android:state_pressed = true)
+            states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
 
-        mButton.setBackground(states);
+            // Default state
+            states.addState(new int[]{}, normalDrawable);
+
+            /**
+             * Add the above effects to the button.
+             */
+
+            mButton.setBackground(states);
+        }
+
 
     }
+
+//    private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
+//        /**
+//         * Converting 10dp to actual pixels for the corner radius.
+//         *
+//         * */
+//
+//        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+//
+//        /**
+//         * Normal state of button before press effect
+//         */
+//        GradientDrawable normalDrawable = new GradientDrawable();
+//        normalDrawable.setShape(GradientDrawable.RECTANGLE);
+//        normalDrawable.setCornerRadius(cornerRadiusToPixels);
+//        normalDrawable.setColor(Color.parseColor(normalColor));
+//
+//        /**
+//         * Pressed state of button after press effect
+//         */
+//
+//        GradientDrawable pressedDrawable = new GradientDrawable();
+//        pressedDrawable.setShape(GradientDrawable.RECTANGLE);
+//        pressedDrawable.setCornerRadius(cornerRadiusToPixels);
+//        pressedDrawable.setColor(Color.parseColor(pressedColor));
+//
+//        /**
+//         * State list drawable for pressed effect...
+//         */
+//        StateListDrawable states = new StateListDrawable();
+//
+//        // Pressed state (when android:state_pressed = true)
+//        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+//
+//        // Default state
+//        states.addState(new int[]{}, normalDrawable);
+//
+//        /**
+//         * Add the above effects to the button.
+//         */
+//
+//        mButton.setBackground(states);
+//
+//    }
 
 
 
