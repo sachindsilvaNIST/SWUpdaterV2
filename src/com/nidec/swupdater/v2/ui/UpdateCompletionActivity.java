@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 
 import android.content.Intent;
 
@@ -64,35 +65,40 @@ public class UpdateCompletionActivity extends Activity {
 
         tintImageView(mImageViewUpdateCompletion,"#3A7BD5");
 
-
-
         /**
-         * Setting the background theme for "Close" Button.
+         * Create a pressed effect for the buttons.
          */
 
-        GradientDrawable roundedBg = new GradientDrawable();
-        roundedBg.setShape(GradientDrawable.RECTANGLE);
+        setUpButtonWithPressedEffect(mButtonCloseApp,"#3A7BD5", "#2C63AA",10f );
 
-        /**
-         * Setting button's background color to bluish tone.
-         *
-         */
-        roundedBg.setColor(Color.parseColor("#3A7BD5"));
 
-        /**
-         * Converting 10dp to actual pixels for the corner radius.
-         */
-
-        float cornerRadiusDp = 10f;
-        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
-
-        roundedBg.setCornerRadius(cornerRadiusToPixels);
-
-        /**
-         * Applying the above modification to CLOSE Button.
-         */
-
-        mButtonCloseApp.setBackground(roundedBg);
+//        /**
+//         * Setting the background theme for "Close" Button.
+//         */
+//
+//        GradientDrawable roundedBg = new GradientDrawable();
+//        roundedBg.setShape(GradientDrawable.RECTANGLE);
+//
+//        /**
+//         * Setting button's background color to bluish tone.
+//         *
+//         */
+//        roundedBg.setColor(Color.parseColor("#3A7BD5"));
+//
+//        /**
+//         * Converting 10dp to actual pixels for the corner radius.
+//         */
+//
+//        float cornerRadiusDp = 10f;
+//        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+//
+//        roundedBg.setCornerRadius(cornerRadiusToPixels);
+//
+//        /**
+//         * Applying the above modification to CLOSE Button.
+//         */
+//
+//        mButtonCloseApp.setBackground(roundedBg);
 
 
         /**
@@ -113,7 +119,6 @@ public class UpdateCompletionActivity extends Activity {
 
 
 
-
     }
 
     /**
@@ -127,6 +132,58 @@ public class UpdateCompletionActivity extends Activity {
             imageView.setImageTintList(ColorStateList.valueOf(colorInt));
         }
     }
+
+
+
+    /**
+     * Creating a button background that shows the pressed effect along with rounded corners
+     */
+
+     private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
+         /**
+          * Converting 10dp to actual pixels for the corner radius.
+          *
+          * */
+
+         float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+
+
+         /**
+          * Normal state of button before press effect
+          */
+
+         GradientDrawable normalDrawable = new GradientDrawable();
+         normalDrawable.setShape(GradientDrawable.RECTANGLE);
+         normalDrawable.setCornerRadius(cornerRadiusToPixels);
+         normalDrawable.setColor(Color.parseColor(normalColor));
+
+         /**
+          * Pressed state of button after press effect
+          */
+
+         GradientDrawable pressedDrawable = new GradientDrawable();
+         pressedDrawable.setShape(GradientDrawable.RECTANGLE);
+         pressedDrawable.setCornerRadius(cornerRadiusToPixels);
+         pressedDrawable.setCornerRadius(Color.parseColor(pressedColor));
+
+         /**
+          * State List drawable for pressed effect...
+          */
+         StateListDrawable states = new StateListDrawable();
+
+         // Pressed state (when android:state_pressed = true)
+         states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+
+         // Default state
+         states.addState(new int[]{}, normalDrawable);
+
+         /**
+          * Add the above effects to the button
+          */
+
+         mButton.setBackground(states);
+
+     }
 
 
 
