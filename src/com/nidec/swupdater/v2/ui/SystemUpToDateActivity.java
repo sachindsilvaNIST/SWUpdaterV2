@@ -253,7 +253,7 @@ public class SystemUpToDateActivity extends Activity {
     private void unMountUSBPendriveWithShellCMD(String volumeID) {
         try {
             Process processID = Runtime.getRuntime().exec(new String[] {
-                    "su", "0", "sm", "unmount", volumeID
+                    "sm", "unmount", volumeID
             });
 
             int resultCode = processID.waitFor();
