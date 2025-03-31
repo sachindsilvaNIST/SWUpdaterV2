@@ -115,6 +115,12 @@ public class SystemUpToDateActivity extends Activity {
 
 
         /**
+         * Applying the above modification to "Disconnect USB" Button
+         */
+        mSystemUpToDateUSBDisconnectButton.setBackground(roundedBg);
+
+
+        /**
          * Set the "Last Checked" data and time to current system time.
          */
 
