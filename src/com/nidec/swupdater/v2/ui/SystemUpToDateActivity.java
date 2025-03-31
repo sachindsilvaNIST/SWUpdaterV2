@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.app.AlertDialog;
 
 import android.content.Intent;
@@ -88,36 +89,44 @@ public class SystemUpToDateActivity extends Activity {
 
 
         /**
-         * Setting the button background to rounded on the recheck button...
-         *
-         */
-        GradientDrawable roundedBg = new GradientDrawable();
-        roundedBg.setShape(GradientDrawable.RECTANGLE);
-
-        /**
-         * Setting button's background color to bluish tone.
-         *
-         */
-        roundedBg.setColor(Color.parseColor("#3A7BD5"));
-
-        /**
-         * Converting 10dp to actual pixels for the corner radius.
+         * Create a pressed effect for the buttons
          */
 
-        float cornerRadiusDp = 10f;
-        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
-        roundedBg.setCornerRadius(cornerRadiusToPixels);
-
-        /**
-         * Applying the above modification to RECHECK Button.
-         */
-        mReCheckButton.setBackground(roundedBg);
+        setUpButtonWithPressedEffect(mReCheckButton, "#3A7BD5", "#2C63AA",10f);
+        setUpButtonWithPressedEffect(mSystemUpToDateUSBDisconnectButton,"#3A7BD5", "#2C63AA",10f);
 
 
-        /**
-         * Applying the above modification to "Disconnect USB" Button
-         */
-        mSystemUpToDateUSBDisconnectButton.setBackground(roundedBg);
+//        /**
+//         * Setting the button background to rounded on the recheck button...
+//         *
+//         */
+//        GradientDrawable roundedBg = new GradientDrawable();
+//        roundedBg.setShape(GradientDrawable.RECTANGLE);
+//
+//        /**
+//         * Setting button's background color to bluish tone.
+//         *
+//         */
+//        roundedBg.setColor(Color.parseColor("#3A7BD5"));
+//
+//        /**
+//         * Converting 10dp to actual pixels for the corner radius.
+//         */
+//
+//        float cornerRadiusDp = 10f;
+//        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+//        roundedBg.setCornerRadius(cornerRadiusToPixels);
+//
+//        /**
+//         * Applying the above modification to RECHECK Button.
+//         */
+//        mReCheckButton.setBackground(roundedBg);
+//
+//
+//        /**
+//         * Applying the above modification to "Disconnect USB" Button
+//         */
+//        mSystemUpToDateUSBDisconnectButton.setBackground(roundedBg);
 
 
         /**
@@ -192,6 +201,55 @@ public class SystemUpToDateActivity extends Activity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageView.setImageTintList(ColorStateList.valueOf(colorInt));
         }
+    }
+
+
+    /**
+     * Creating a button background that shows the pressed effect along with rounded corners
+     */
+
+    private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
+        /**
+         * Converting 10dp to actual pixels for the corner radius.
+         *
+         * */
+
+        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+
+        /**
+         * Normal state of button before press effect
+         */
+        GradientDrawable normalDrawable = new GradientDrawable();
+        normalDrawable.setShape(GradientDrawable.RECTANGLE);
+        normalDrawable.setCornerRadius(cornerRadiusToPixels);
+        normalDrawable.setColor(Color.parseColor(normalColor));
+
+        /**
+         * Pressed state of button after press effect
+         */
+
+        GradientDrawable pressedDrawable = new GradientDrawable();
+        pressedDrawable.setShape(GradientDrawable.RECTANGLE);
+        pressedDrawable.setCornerRadius(cornerRadiusToPixels);
+        pressedDrawable.setColor(Color.parseColor(pressedColor));
+
+        /**
+         * State list drawable for pressed effect...
+         */
+        StateListDrawable states = new StateListDrawable();
+
+        // Pressed state (when android:state_pressed = true)
+        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+
+        // Default state
+        states.addState(new int[]{}, normalDrawable);
+
+        /**
+         * Add the above effects to the button.
+         */
+
+        mButton.setBackground(states);
+
     }
 
 
