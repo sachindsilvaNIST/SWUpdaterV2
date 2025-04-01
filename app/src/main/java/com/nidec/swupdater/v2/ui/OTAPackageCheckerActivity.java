@@ -11,6 +11,7 @@ package com.nidec.swupdater.v2.ui;
  */
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 
 import android.content.Intent;
 
@@ -41,6 +42,9 @@ public class OTAPackageCheckerActivity extends Activity {
     private static final String TAG_OTA_PACKAGE_CHECKER_ACTIVITY = "OTAPackageCheckerActivity";
 
     private UpdateManager mUpdateManager;
+
+    // Indeterminate Loading Spinner until the Update Engine Status Code = IDLE.
+    private ProgressDialog mWaitingSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +144,20 @@ public class OTAPackageCheckerActivity extends Activity {
             // Found a new update => move to OTAPackageAvailableActivity
             // We possibly store "newConfig" somewhere if we want to pass it along.
 
-            goToOTAPackageAvailableActivity();
+            int engineStatusNow = mUpdateManager.getEngineStatus();
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => ENGINE STATUS CODE => " + engineStatusNow);
+
+            if(!isStableEngineStatus(engineStatusNow)) {
+                Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => Showing Waiting Spinner....");
+                showWaitingSpinner("Processing the update setup... Please wait");
+            } else {
+                Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => Hiding Waiting Spinner....");
+                hideWaitingSpinner();
+
+                // If the Update Engine Status Code is no longer = 11, launch `OTAPackageAvailableActivity.java`
+                goToOTAPackageAvailableActivity();
+            }
+
         } else {
             // Means we found .JSON, but not "NEW" or INVALID or IDENTICAL.
             Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "FOUND CONFIGS, BUT NONE IS NEW.. => System Up-to date...");
@@ -148,6 +165,49 @@ public class OTAPackageCheckerActivity extends Activity {
         }
 
     }
+
+    /**
+     * Defining the `isStableEngineStatus()` to check whether Current Engine Status is IDLE, UPDATED_NEED_REBOOT or ERROR State.
+     * If the status code hits = 11, show the loading spinner, until the engine updates to IDLE / UPDATED_NEED_REBOOT or ERROR State.
+     */
+
+    private boolean isStableEngineStatus(int status) {
+        if(status != 11) {
+            return true;
+        }
+        return false;
+
+    }
+
+    /**
+     * Showing the indeterminate loading spinner
+     */
+    private void showWaitingSpinner(String message) {
+        if(mWaitingSpinner == null) {
+            mWaitingSpinner = new ProgressDialog(this);
+            mWaitingSpinner.setIndeterminate(true);
+            mWaitingSpinner.setCancelable(false);
+        }
+
+        mWaitingSpinner.setMessage(message);
+        if(!mWaitingSpinner.isShowing()) {
+            mWaitingSpinner.show();
+        }
+
+    }
+
+    /**
+     * Hide the loading spinner if engine status was updated to IDLE / UPDATED_NEED_REBOOT / ERROR or other states.
+     */
+
+    private void hideWaitingSpinner() {
+        if(mWaitingSpinner != null && mWaitingSpinner.isShowing()) {
+            mWaitingSpinner.dismiss();
+        }
+    }
+
+
+
 
     /**
      *
