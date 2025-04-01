@@ -190,18 +190,6 @@ public class ProgressScreenActivity extends Activity {
                     .setNegativeButton(android.R.string.cancel,null)
                     .show();
 
-
-
-
-            /**
-             *  If user presses "Cancel Update" button, then go back to "OTAPackageCheckerActivity.java"
-             *
-             */
-
-            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "USER has pressed `Cancel Update` BUTTON, SWITCHING --> OTAPackageCheckerActivity.java");
-
-            startActivity(new Intent(this, OTAPackageCheckerActivity.class));
-            finish();
         });
     }
 
@@ -503,7 +491,6 @@ public class ProgressScreenActivity extends Activity {
         });
     }
 
-
     /**
      * Handling "FINALIZING" state when the progress rate hits 99%.
       */
@@ -639,6 +626,16 @@ public class ProgressScreenActivity extends Activity {
         } catch (UpdaterState.InvalidTransitionException e) {
             Log.e(TAG_PROGRESS_SCREEN_ACTIVITY, "FAILED TO CANCEL THE UPDATE... : ",e);
         }
+
+        /**
+         *  If user presses "Cancel Update" --> "OK" button, then go back to "OTAPackageCheckerActivity.java"
+         *
+         */
+
+        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "USER has pressed `Cancel Update` BUTTON, SWITCHING --> OTAPackageCheckerActivity.java");
+
+        startActivity(new Intent(this, OTAPackageCheckerActivity.class));
+        finish();
     }
 
 
