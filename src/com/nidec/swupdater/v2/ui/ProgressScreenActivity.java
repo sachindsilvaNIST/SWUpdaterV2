@@ -10,6 +10,8 @@ package com.nidec.swupdater.v2.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.AlertDialog;
+
 
 
 import android.content.res.ColorStateList;
@@ -172,15 +174,24 @@ public class ProgressScreenActivity extends Activity {
 
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "USER HAD PRESSED `Cancel Update` Button!!!!");
 
-            // If the user cancels the OTA Update.
+            // If the user cancels the OTA Update, Display a Confirmation Box (Yes / No) whether user wants to cancel the update.
 
-            try {
-                mUpdateManager.cancelRunningUpdate();
-                Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "OTA UPDATE GOT PAUSED AND UDPATE ENGINE WAS SET TO IDLE....");
+            new AlertDialog.Builder(this)
+                    .setTitle("User Request to Terminate Update")
+                    .setMessage("Do you really want to cancel this update?\n")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
 
-            } catch (UpdaterState.InvalidTransitionException e) {
-                Log.e(TAG_PROGRESS_SCREEN_ACTIVITY, "FAILED TO CANCEL THE UPDATE... : ",e);
-            }
+                        /**
+                         * Cancelling the Update Engine
+                         */
+                        handleUpdateEngineCancelButton();
+                    })
+                    .setNegativeButton(android.R.string.cancel,null)
+                    .show();
+
+
+
 
             /**
              *  If user presses "Cancel Update" button, then go back to "OTAPackageCheckerActivity.java"
@@ -500,7 +511,7 @@ public class ProgressScreenActivity extends Activity {
         if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
             mTextViewProgressSubtitle.animate()
                     .alpha(0)
-                    .setDuration(1000)
+                    .setDuration(3000)
                     .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
         }
 
@@ -608,6 +619,19 @@ public class ProgressScreenActivity extends Activity {
     }
 
 
+    /**
+     * Handle "Cancel Update" Button --> Initiating Update Engine = CANCEL
+     */
+
+    private void handleUpdateEngineCancelButton() {
+        try {
+            mUpdateManager.cancelRunningUpdate();
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "OTA UPDATE GOT PAUSED AND UDPATE ENGINE WAS SET TO IDLE....");
+
+        } catch (UpdaterState.InvalidTransitionException e) {
+            Log.e(TAG_PROGRESS_SCREEN_ACTIVITY, "FAILED TO CANCEL THE UPDATE... : ",e);
+        }
+    }
 
 
 
