@@ -27,9 +27,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.UpdateEngine;
 
+import android.transition.Transition;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
+
 import android.util.Log;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
 import android.widget.Button;
@@ -500,15 +505,21 @@ public class ProgressScreenActivity extends Activity {
         mProgressScreenPercentDisplay.setText("Updating...");
         mProgressBar.setProgress(99);
 
+
         /**
-         * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
+         * Adding smooth Fade out transition for subtitle(Set to Invisible state)
          */
-        if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
-            mTextViewProgressSubtitle.animate()
-                    .alpha(0)
-                    .setDuration(2000)
-                    .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
-        }
+        smoothlyHideProgressSubtitle();
+
+//        /**
+//         * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
+//         */
+//        if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
+//            mTextViewProgressSubtitle.animate()
+//                    .alpha(0)
+//                    .setDuration(2000)
+//                    .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
+//        }
 
         // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
         disableCancelUpdateButton();
@@ -522,6 +533,34 @@ public class ProgressScreenActivity extends Activity {
                     .setDuration(2000)
                     .start();
                 }
+    }
+
+    /**
+     * Smooth Fade out transition of ProgressScreen Subtitle
+     */
+    private void smoothlyHideProgressSubtitle() {
+        // If the subtitle is already hidden, do nothing and return the function.
+        if(mTextViewProgressSubtitle.getVisibility() != View.VISIBLE) {
+            return;
+        }
+
+        mTextViewProgressSubtitle.animate()
+                .alpha(0f)
+                .setDuration(500)
+                .withEndAction(() -> {
+
+                    // After ProgressScreen Subtitle Fade out, Smooth Transition of "ProgressScreenDisplay" and "Cancel Update" Button.
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        ViewGroup parent = (ViewGroup) mTextViewProgressSubtitle.getParent();
+                        Transition transition = new AutoTransition();
+                        transition.setDuration(400);
+                        TransitionManager.beginDelayedTransition(parent, transition);
+
+                    }
+                    mTextViewProgressSubtitle.setVisibility(View.GONE);
+                });
+
     }
 
 
