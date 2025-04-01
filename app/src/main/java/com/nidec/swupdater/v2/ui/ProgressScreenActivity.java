@@ -287,7 +287,7 @@ public class ProgressScreenActivity extends Activity {
         showingLoadingSpinner("Applying updates...");
         new Handler().postDelayed(() -> {
             hideLoadingSpinner();
-        },3000);
+        },2000);
     }
 
 
@@ -483,6 +483,11 @@ public class ProgressScreenActivity extends Activity {
              */
             mProgressBar.setProgress(percent);
             if(percent < 99) {
+                if(mCurrentEngineStatus == 6) { // "UPDATED_NEED_REBOOT"
+                    mProgressBar.setProgress(100);
+                    mProgressScreenPercentDisplay.setText("100%");
+                    return;
+                }
                 // Show the progress rate in normal percentage format
                 mProgressScreenPercentDisplay.setText(percent + "%");
             } else if(percent >= 99 && percent < 100) {
@@ -514,7 +519,7 @@ public class ProgressScreenActivity extends Activity {
         if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
             mTextViewProgressSubtitle.animate()
                     .alpha(0)
-                    .setDuration(3000)
+                    .setDuration(2000)
                     .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
         }
 
@@ -651,7 +656,10 @@ public class ProgressScreenActivity extends Activity {
         // On 100% progress, signaled by `REBOOT_REQUIRED`,or engine-complete callback.
 
         if(updaterState == UpdaterState.REBOOT_REQUIRED) {
-            showApplyingUpdateLoadingSpinner();
+            // Commented by Sachin.R.Dsilva 2025-04-01, for bug fixes and improvement phase operation. WILL BE UNCOMMENTED LATER
+//            showApplyingUpdateLoadingSpinner();
+            mProgressBar.setProgress(100);
+            mProgressScreenPercentDisplay.setText("100%");
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Updater State says REBOOT_REQUIRED.... --> Switching to RebootCheckActivity.java");
             startActivity(new Intent(this,RebootCheckActivity.class));
             finish();
