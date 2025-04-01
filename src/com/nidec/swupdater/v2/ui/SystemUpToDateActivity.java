@@ -74,6 +74,9 @@ public class SystemUpToDateActivity extends Activity {
 
         mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
 
+        // Setting Update Engine Status Callback to detect the Engine STATUSCODE
+        mUpdateManager.setOnEngineStatusUpdateCallback(this::onEngineStatusUpdate);
+
         // Get the `ReCheck` Button UI Element ID
         mCheckermarkImage = findViewById(R.id.imageViewCheckMark);
         mTitleText = findViewById(R.id.mSystemUpToDateMainTitle);
@@ -131,6 +134,9 @@ public class SystemUpToDateActivity extends Activity {
 
 
             int currentEngineStatus = mUpdateManager.getEngineStatus();
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "ENGINE STATUS CODE => " + currentEngineStatus);
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "ENGINE STATUS IN PLAINTEXT => " + UpdateEngineStatuses.getStatusText(currentEngineStatus));
+
             String currentEngineStatusToText = UpdaterState.getStateText(currentEngineStatus);
 
             if(currentEngineStatus == UpdaterState.ERROR) {
@@ -141,6 +147,8 @@ public class SystemUpToDateActivity extends Activity {
                 requiresReboot();
             } else if(currentEngineStatus == UpdaterState.IDLE) {
                 switchingToIDLEState();
+            } else {
+                Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY,"WARNING!!! ENGINE IS IN UNEXPECTED STATE => " + currentEngineStatus);
             }
         });
 
@@ -150,6 +158,17 @@ public class SystemUpToDateActivity extends Activity {
     protected void onResume() {
         super.onResume();
         mUpdateManager.bind();
+
+        /**
+         * Checking the Update Engine Status if status = 1 or not
+         *
+         */
+        int engineStatusNow = mUpdateManager.getEngineStatus();
+        Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onResume() => ENGINE STATUS CODE => " + engineStatusNow);
+        if(engineStatusNow == 11) {
+            handleRollbackState();
+        }
+
     }
 
     @Override
@@ -252,6 +271,28 @@ public class SystemUpToDateActivity extends Activity {
     }
 
 
+    /**
+     * Handling callback for `onEngineStatusUpdate()` to detect RAW Engine Status
+     */
+
+    private void onEngineStatusUpdate(int status) {
+        Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onEngineStatusUpdate() => STATUS CODE " + status);
+        Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onEngineStatusUpdate() => STATUS IN TEXT " + UpdateEngineStatuses.getStatusText(status));
+
+        if(status == 11) {
+            // Forcibly setting the Update Engine to IDLE
+            handleRollbackState();
+        }
+    }
+
+    /**
+     * Forcibly setting the update engine state to IDLE for status = 11
+     */
+
+    private void handleRollbackState() {
+        Log.w(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "Detected ENGINE STATUS CODE = 11. SETTING TO IDLE now...");
+        mUpdateManager.setUpdaterStateSilent(UpdaterState.IDLE);
+    }
 
 
 
@@ -266,6 +307,9 @@ public class SystemUpToDateActivity extends Activity {
 
     }
 
+    /**
+     * If the engine says "UPDATED_NEED_REBOOT", transit to `RebootCheckActivity`
+     */
 
     private void requiresReboot() {
         // mUpdateManager.setUpdaterStateSilent(UpdaterState.REBOOT_REQUIRED);
@@ -275,6 +319,9 @@ public class SystemUpToDateActivity extends Activity {
         return;
     }
 
+    /**
+     * If engine was in `ERROR` or want to forcibly re-check => go IDLE => OTAPackageCheckerActivity
+     */
     private void forceSwitchingToIDLEState() {
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, " Update Engine says No ERROR switched to IDLE !! --> Switching to `OTAPackageCheckerActivity.java`");
         // Re-check for OTA Package Updates.
@@ -313,6 +360,9 @@ public class SystemUpToDateActivity extends Activity {
         }
     }
 
+    /**
+     * If engine is IDLE => switch to `OTAPackageCheckerActivity` for new update check.
+     */
     private void switchingToIDLEState() {
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, " Update Engine says IDLE !! --> Switching to `OTAPackageCheckerActivity.java`");
         // Re-check for OTA Package Updates.
