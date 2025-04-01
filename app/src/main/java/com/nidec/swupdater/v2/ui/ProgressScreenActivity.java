@@ -5,6 +5,7 @@ package com.nidec.swupdater.v2.ui;
  * 1. Show the progress (percentage) of download the OTA Package.
  * 2. If download finishes successfully, or the UpdateEngine signals "Requires Reboot", go to "UpdateCompletionActivity"
  * 3. If user presses "Cancel", then go back to "OTAPackageCheckerActivity" / "UpdateCompletionActivity"
+ * 4. When the Progress Rate hits 99%, FINALIZE the Engine Update - SUCCESS.
  */
 
 import android.app.Activity;
@@ -41,6 +42,7 @@ import com.nidec.swupdater.v2.util.UpdateConfigs;
 import com.nidec.swupdater.v2.UpdateConfig;
 
 import com.nidec.swupdater.v2.ui.UpdateManagerHolder;
+import com.nidec.swupdater.v2.util.UpdateEngineStatuses;
 
 
 public class ProgressScreenActivity extends Activity {
@@ -69,6 +71,9 @@ public class ProgressScreenActivity extends Activity {
     private UpdateManager mUpdateManager;
 
     private ProgressDialog mSpinnerDialog;
+
+    // Storing the current engine status to detect the "FINALIZING"
+    private int mCurrentEngineStatus = UpdateEngine.UpdateStatusConstants.IDLE;
 
     // A flag to ensure finalizing animation is started only once.
     private boolean isFinalizingAnimationStarted = false;
@@ -148,6 +153,7 @@ public class ProgressScreenActivity extends Activity {
          */
 
         mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
+        mUpdateManager.setOnEngineStatusUpdateCallback(this::onEngineStatusUpdate);
         mUpdateManager.setOnProgressUpdateCallback(this::onProgressChanged);
 
 
@@ -211,6 +217,7 @@ public class ProgressScreenActivity extends Activity {
 
         // Remove callbacks to prevent memory leaks
         mUpdateManager.setOnStateChangeCallback(null);
+        mUpdateManager.setOnEngineStatusUpdateCallback(null);
     }
 
 
@@ -218,6 +225,9 @@ public class ProgressScreenActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
+
 
 
 
@@ -425,10 +435,140 @@ public class ProgressScreenActivity extends Activity {
 
     }
 
+    /**
+     * Callback for RAW Update Engine Status Change
+     * Function : onEngineStatusUpdate()
+     */
+
+    private void onEngineStatusUpdate(int status) {
+        mCurrentEngineStatus = status;
+        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "onEngineStatusUpdate IN PLAINTEXT ==> " + UpdateEngineStatuses.getStatusText(status));
+        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "onEngineStatusUpdate IN CODE ==> " + status);
+    }
+
 
     /**
      * This function will be called on every download progress update (0.0 to 1.0).
      */
+
+    private void onProgressChanged(double progress) {
+        runOnUiThread(() -> {
+            int percent = (int) (100 * progress);
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
+
+
+            /**
+             * If the Current Engine Status = FINALIZING, override the `mProgressScreenPercentDisplay.setText()` to retain at 99%.
+             */
+
+            if(mCurrentEngineStatus == UpdateEngine.UpdateStatusConstants.FINALIZING) {
+                handleFinalizingState();
+                return;
+            }
+
+            /**
+             * Handle the Progress Rate State for the percent <= 99%
+             */
+            mProgressBar.setProgress(percent);
+            if(percent < 99) {
+                // Show the progress rate in normal percentage format
+                mProgressScreenPercentDisplay.setText(percent + "%");
+            } else if(percent >= 99 && percent < 100) {
+                // Treating this progress rate part as "FINALIZING"
+                handleFinalizingState();
+            } else {
+                // Progress Rate will be 100%
+                mProgressScreenPercentDisplay.setText("Installing... Please wait");
+            }
+
+        });
+    }
+
+
+    /**
+     * Handling "FINALIZING" state when the progress rate hits 99%.
+      */
+
+    private void handleFinalizingState() {
+        Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Initiating ===> handleFinalizingState() Function....");
+        mProgressScreenPercentDisplay.setText("Updating...");
+        mProgressBar.setProgress(99);
+
+        /**
+         * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
+         */
+        if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
+            mTextViewProgressSubtitle.animate()
+                    .alpha(0)
+                    .setDuration(1000)
+                    .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
+        }
+
+        // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
+        disableCancelUpdateButton();
+
+        // Start a subtle rotation animation on the download icon, if not already started...
+        if(!isFinalizingAnimationStarted) {
+            isFinalizingAnimationStarted = true;
+            mImageViewDownloadIcon.animate()
+                    .rotationBy(360)
+                    .setInterpolator(new LinearInterpolator())
+                    .setDuration(2000)
+                    .start();
+                }
+    }
+
+
+
+
+//    private void onProgressChanged(double progress) {
+//        runOnUiThread(() -> {
+//            int percent = (int) (100 * progress);
+//            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
+//            mProgressBar.setProgress(percent);
+//
+//            if(percent < 99) {
+//                // Show the progress rate in normal percentage format
+//                mProgressScreenPercentDisplay.setText(percent + "%");
+//            } else if(percent >= 99 && percent < 100) {
+//                // At 99%, show "Loading, finalizing..." instead of a numeric value.
+//                mProgressScreenPercentDisplay.setText("Finalizing, please wait...");
+//
+//                /**
+//                 * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
+//                 */
+//                if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
+//                    mTextViewProgressSubtitle.animate()
+//                            .alpha(0)
+//                            .setDuration(500)
+//                            .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
+//                }
+//
+//                // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
+//
+//                disableCancelUpdateButton();
+//
+//                // Start a subtle rotation animation on the download icon, if not already started...
+//                if(!isFinalizingAnimationStarted) {
+//                    isFinalizingAnimationStarted = true;
+//                    mImageViewDownloadIcon.animate()
+//                            .rotationBy(360)
+//                            .setInterpolator(new LinearInterpolator())
+//                            .setDuration(2000)
+//                            .start();
+//                }
+//
+//            } else {
+//                /**
+//                 * When the progress rate hits 100%, show "Updating... Please wait
+//                 */
+//                mProgressScreenPercentDisplay.setText("Updating... Please wait");
+//            }
+//
+//
+//        });
+//    }
+
 
 //    private void onProgressChanged(double progress) {
 //        runOnUiThread(() -> {
@@ -450,53 +590,7 @@ public class ProgressScreenActivity extends Activity {
 //        });
 //    }
 
-    private void onProgressChanged(double progress) {
-        runOnUiThread(() -> {
-            int percent = (int) (100 * progress);
-            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
-            mProgressBar.setProgress(percent);
 
-            if(percent < 99) {
-                // Show the progress rate in normal percentage format
-                mProgressScreenPercentDisplay.setText(percent + "%");
-            } else if(percent >= 99 && percent < 100) {
-                // At 99%, show "Loading, finalizing..." instead of a numeric value.
-                mProgressScreenPercentDisplay.setText("Finalizing, please wait...");
-
-                /**
-                 * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
-                 */
-                if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
-                    mTextViewProgressSubtitle.animate()
-                            .alpha(0)
-                            .setDuration(500)
-                            .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
-                }
-
-                // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
-
-                disableCancelUpdateButton();
-
-                // Start a subtle rotation animation on the download icon, if not already started...
-                if(!isFinalizingAnimationStarted) {
-                    isFinalizingAnimationStarted = true;
-                    mImageViewDownloadIcon.animate()
-                            .rotationBy(360)
-                            .setInterpolator(new LinearInterpolator())
-                            .setDuration(2000)
-                            .start();
-                }
-
-            } else {
-                /**
-                 * When the progress rate hits 100%, show "Updating... Please wait
-                 */
-                mProgressScreenPercentDisplay.setText("Updating... Please wait");
-            }
-
-
-        });
-    }
 
     /**
      * Defining a function to disable "Cancel Update" button and change its default color to gray.
