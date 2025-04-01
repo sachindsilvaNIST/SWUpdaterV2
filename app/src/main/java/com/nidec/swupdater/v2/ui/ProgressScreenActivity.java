@@ -466,6 +466,7 @@ public class ProgressScreenActivity extends Activity {
         runOnUiThread(() -> {
             int percent = (int) (100 * progress);
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
+            Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Engine Status => " + mCurrentEngineStatus);
 
 
             /**
@@ -489,7 +490,9 @@ public class ProgressScreenActivity extends Activity {
                 handleFinalizingState();
             } else {
                 // Progress Rate will be 100%
+                Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "HIT 100%... Current Engine Status => " + mCurrentEngineStatus);
                 mProgressScreenPercentDisplay.setText("Installing... Please wait");
+
             }
 
         });
