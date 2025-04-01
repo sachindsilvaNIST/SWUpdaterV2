@@ -1,12 +1,16 @@
 package com.nidec.swupdater.v2.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+
 import android.content.res.ColorStateList;
+
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.RippleDrawable;
-import android.app.AlertDialog;
+
 
 import android.content.Intent;
 
@@ -62,6 +66,9 @@ public class SystemUpToDateActivity extends Activity {
 
     private Button mSystemUpToDateUSBDisconnectButton;
 
+
+    // Indeterminate loading spinner instance
+    private ProgressDialog mWaitingSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,8 +154,10 @@ public class SystemUpToDateActivity extends Activity {
                 requiresReboot();
             } else if(currentEngineStatus == UpdaterState.IDLE) {
                 switchingToIDLEState();
-            } else {
-                Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY,"WARNING!!! ENGINE IS IN UNEXPECTED STATE => " + currentEngineStatus);
+            } else if(currentEngineStatus == 11){
+                // Show the loading spinner until the update engine status becomes IDLE.
+                Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY,"ENGINE IS IN UNEXPECTED STATE => " + currentEngineStatus);
+                showWaitingSpinner("Processing the update setup... Please wait");
             }
         });
 
@@ -165,8 +174,12 @@ public class SystemUpToDateActivity extends Activity {
          */
         int engineStatusNow = mUpdateManager.getEngineStatus();
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onResume() => ENGINE STATUS CODE => " + engineStatusNow);
-        if(engineStatusNow == 11) {
-            handleRollbackState();
+
+        // If engine is not IDLE / UPDATED_NEED_REBOOT / ERROR => show the loading spinner
+        if(!isStableEngineStatus(engineStatusNow)) {
+            showWaitingSpinner("Processing the update setup... Please wait");
+        } else {
+            hideWaitingSpinner();
         }
 
     }
@@ -279,19 +292,11 @@ public class SystemUpToDateActivity extends Activity {
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onEngineStatusUpdate() => STATUS CODE " + status);
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onEngineStatusUpdate() => STATUS IN TEXT " + UpdateEngineStatuses.getStatusText(status));
 
-        if(status == 11) {
-            // Forcibly setting the Update Engine to IDLE
-            handleRollbackState();
+        if(isStableEngineStatus(status)) {
+            hideWaitingSpinner();
+        } else {
+            showWaitingSpinner("Processing the update setup... Please wait");
         }
-    }
-
-    /**
-     * Forcibly setting the update engine state to IDLE for status = 11
-     */
-
-    private void handleRollbackState() {
-        Log.w(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "Detected ENGINE STATUS CODE = 11. SETTING TO IDLE now...");
-        mUpdateManager.setUpdaterStateSilent(UpdaterState.IDLE);
     }
 
 
@@ -306,6 +311,49 @@ public class SystemUpToDateActivity extends Activity {
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "CurrentEngineStatus in codeName = " + currentEngineStatusToText);
 
     }
+
+    /**
+     * Defining the `isStableEngineStatus()` to check whether Current Engine Status is IDLE, UPDATED_NEED_REBOOT or ERROR State.
+     * If the status code hits = 11, show the loading spinner, until the engine updates to IDLE / UPDATED_NEED_REBOOT or ERROR State.
+     */
+
+    private boolean isStableEngineStatus(int status) {
+        if(status == UpdateEngine.UpdateStatusConstants.IDLE || status == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT || status == UpdaterState.ERROR) {
+            return true;
+        }
+        return false;
+
+    }
+
+
+    /**
+     * Showing the indeterminate loading spinner
+     */
+    private void showWaitingSpinner(String message) {
+        if(mWaitingSpinner == null) {
+            mWaitingSpinner = new ProgressDialog(this);
+            mWaitingSpinner.setIndeterminate(true);
+            mWaitingSpinner.setCancelable(false);
+        }
+
+        mWaitingSpinner.setMessage(message);
+        if(!mWaitingSpinner.isShowing()) {
+            mWaitingSpinner.show();
+        }
+
+    }
+
+    /**
+     * Hide the loading spinner if engine status was updated to IDLE / UPDATED_NEED_REBOOT / ERROR or other states.
+     */
+
+    private void hideWaitingSpinner() {
+        if(mWaitingSpinner != null && mWaitingSpinner.isShowing()) {
+            mWaitingSpinner.dismiss();
+        }
+    }
+
+
 
     /**
      * If the engine says "UPDATED_NEED_REBOOT", transit to `RebootCheckActivity`
