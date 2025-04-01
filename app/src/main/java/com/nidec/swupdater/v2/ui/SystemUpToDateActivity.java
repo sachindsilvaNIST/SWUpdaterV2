@@ -177,8 +177,11 @@ public class SystemUpToDateActivity extends Activity {
 
         // If engine is not IDLE / UPDATED_NEED_REBOOT / ERROR => show the loading spinner
         if(!isStableEngineStatus(engineStatusNow)) {
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onResume() => Showing Waiting Spinner....");
+
             showWaitingSpinner("Processing the update setup... Please wait");
         } else {
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onResume() => Hiding Waiting Spinner....");
             hideWaitingSpinner();
         }
 
@@ -293,8 +296,10 @@ public class SystemUpToDateActivity extends Activity {
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onEngineStatusUpdate() => STATUS IN TEXT " + UpdateEngineStatuses.getStatusText(status));
 
         if(isStableEngineStatus(status)) {
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onEngineStatusUpdate() => Hiding Waiting Spinner....");
             hideWaitingSpinner();
         } else {
+            Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY, "onEngineStatusUpdate() => Showing Waiting Spinner....");
             showWaitingSpinner("Processing the update setup... Please wait");
         }
     }
