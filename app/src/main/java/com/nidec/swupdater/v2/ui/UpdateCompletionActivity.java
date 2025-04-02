@@ -1,16 +1,17 @@
 package com.nidec.swupdater.v2.ui;
-/**
- * Action : If the update is successfully applied, ask for reboot, show a screen that says "Update was successful. Please Reboot."
- *
- */
+
 
 
 import android.app.Activity;
+
 import android.content.res.ColorStateList;
+
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
+
 
 import android.content.Intent;
 
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import android.widget.Button;
 import android.widget.TextView;
@@ -34,7 +36,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
+/**
+ * Action : If the update is successfully applied, ask for reboot, show a screen that says "Update was successful. Please Reboot."
+ *
+ *  "Update Completed Successfully!"
+ *  "Please reboot your device to complete the update.
+ *
+ *  Date and Time Format --> Updated on : <date/time>
+ */
 
 
 public class UpdateCompletionActivity extends Activity {
@@ -69,6 +78,32 @@ public class UpdateCompletionActivity extends Activity {
         /**
          * Create a pressed effect for the buttons.
          */
+
+        /**
+         * Congratulatory message to the user that the update was successful, please reboot
+         */
+        mTextViewUpdateCompletionMainText.setText("Update Completed Successfully!");
+        mTextViewUpdateCompletionMainText.setTextSize(22);
+        mTextViewUpdateCompletionMainText.setTextColor(Color.BLACK);
+        mTextViewUpdateCompletionMainText.setTypeface(null, Typeface.BOLD);
+
+
+        /**
+         * Update completion date and time along with the instructions
+         */
+
+        String currentTime = getCurrentTimeString();
+        mTextViewUpdateCompletionSubText.setText("Please reboot your device to complete the update.\n Updated on : " + currentTime);
+        mTextViewUpdateCompletionSubText.setTextSize(16);
+        mTextViewUpdateCompletionSubText.setTextColor(Color.DKGRAY);
+
+
+        /**
+         * Subtle pulse animation on the checkmark icon to draw attention.
+         */
+
+        startPulseAnimation(mImageViewUpdateCompletion);
+
 
 //        setUpButtonWithPressedEffect(mButtonCloseApp,"#3A7BD5", "#2C63AA",10f );
 
@@ -116,10 +151,6 @@ public class UpdateCompletionActivity extends Activity {
 //
 //        });
 
-
-
-
-
     }
 
     /**
@@ -133,6 +164,52 @@ public class UpdateCompletionActivity extends Activity {
             imageView.setImageTintList(ColorStateList.valueOf(colorInt));
         }
     }
+
+
+    /**
+     * Current System Time
+     */
+
+    private String getCurrentTimeString() {
+
+        SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return mSimpleDateFormat.format(new Date());
+    }
+
+
+    /**
+     * Defining the pulse animation function
+     */
+
+    private void startPulseAnimation(final ImageView imageView) {
+        // Scaling down to 90% and back to 100% - repetitive for subtle pulse effect
+
+        imageView.animate()
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .setDuration(600)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setInterpolator(new AccelerateDecelerateInterpolator())
+                                .setDuration(600)
+                                .withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Repeating the animation continuously.
+                                        startPulseAnimation(imageView);
+                                    }
+                                })
+                                .start();
+                    }
+                })
+                .start();
+    }
+
 
 
 
@@ -196,105 +273,7 @@ public class UpdateCompletionActivity extends Activity {
 
     }
 
-//     private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
-//         /**
-//          * Converting 10dp to actual pixels for the corner radius.
-//          *
-//          * */
-//
-//         float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
-//
-//
-//         /**
-//          * Normal state of button before press effect
-//          */
-//
-//         GradientDrawable normalDrawable = new GradientDrawable();
-//         normalDrawable.setShape(GradientDrawable.RECTANGLE);
-//         normalDrawable.setCornerRadius(cornerRadiusToPixels);
-//         normalDrawable.setColor(Color.parseColor(normalColor));
-//
-//         /**
-//          * Pressed state of button after press effect
-//          */
-//
-//         GradientDrawable pressedDrawable = new GradientDrawable();
-//         pressedDrawable.setShape(GradientDrawable.RECTANGLE);
-//         pressedDrawable.setCornerRadius(cornerRadiusToPixels);
-//         pressedDrawable.setCornerRadius(Color.parseColor(pressedColor));
-//
-//         /**
-//          * State List drawable for pressed effect...
-//          */
-//         StateListDrawable states = new StateListDrawable();
-//
-//         // Pressed state (when android:state_pressed = true)
-//         states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
-//
-//         // Default state
-//         states.addState(new int[]{}, normalDrawable);
-//
-//         /**
-//          * Add the above effects to the button
-//          */
-//
-//         mButton.setBackground(states);
-//
-//     }
-
-
-
-
-
-
-
 
 }
 
 
-
-
-
-
-
-
-
-
-
-//
-//import android.app.Activity;
-//import android.app.AlertDialog;
-//
-//import android.content.Intent;
-//
-//import android.os.Bundle;
-//
-//import android.util.Log;
-//
-//import android.view.View;
-//
-//import android.widget.Button;
-//import android.widget.TextView;
-//
-//import com.nidec.swupdater.v2.R;
-////import com.nidec.swupdater.v2.util.UpdateConfigs;
-////import com.nidec.swupdater.v2.UpdateConfig;
-//
-
-//
-//public class UpdateCompletionActivity extends Activity {
-//
-//    private static final String TAG_UPDATE_COMPLETION_ACTIVITY = "UpdateCompletionActivity";
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_update_completion);
-//
-//        // Display the message to the user indicating that the update process was completed..
-//        // Requires Reboot...
-//        // CODE DEVELOPMENT STATUS : 100% SUCCESS
-//
-//    }
-//
-//}
