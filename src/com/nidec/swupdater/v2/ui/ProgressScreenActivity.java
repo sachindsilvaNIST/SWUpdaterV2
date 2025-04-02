@@ -76,6 +76,9 @@ public class ProgressScreenActivity extends Activity {
     // "Cancel Update" Button.
     private Button mCancelDownloadButton;
 
+    // "OK" Button when "Cancel Update" shows the confirmation dialog box
+    private Button okButton;
+
     // TextView to display the Download Progress in percentage %...
     private TextView mProgressScreenPercentDisplay;
 
@@ -105,6 +108,7 @@ public class ProgressScreenActivity extends Activity {
         mProgressBar = findViewById(R.id.progressBar);
         mCancelDownloadButton = findViewById(R.id.buttonCancelDownload);
         mProgressScreenPercentDisplay = findViewById(R.id.TextViewProgressScreenPercentDisplay);
+        okButton = new Button(this);
 
 
         /**
@@ -130,6 +134,11 @@ public class ProgressScreenActivity extends Activity {
          */
 
         setUpButtonWithPressedEffect(mCancelDownloadButton, "#3A7BD5", "#2C63AA", 10f);
+
+        /**
+         * Apply the ripple animation for "OK" Button (When pressed)
+         */
+        setUpButtonWithPressedEffect(okButton, "#3A7BD5", "#2C63AA", 8f);
 
 //        /**
 //         * Setting the "Cancel Update" button background to rounded...
@@ -672,7 +681,11 @@ public class ProgressScreenActivity extends Activity {
          */
 
         int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
-        int parentLayoutPadding = (int) (20 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingTop = (int) (20 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingBottom = (int) (20 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingLeft = (int) (24 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingRight = (int) (24 * getResources().getDisplayMetrics().density);
+
         GradientDrawable containerBackground = new GradientDrawable();
         containerBackground.setColor(Color.WHITE);
         // Set the rounded corners
@@ -681,7 +694,7 @@ public class ProgressScreenActivity extends Activity {
         // Creating parent layout
         LinearLayout parentLayout = new LinearLayout(this);
         parentLayout.setOrientation(LinearLayout.VERTICAL);
-        parentLayout.setPadding(parentLayoutPadding, parentLayoutPadding, parentLayoutPadding, parentLayoutPadding);
+        parentLayout.setPadding(parentLayoutPaddingLeft, parentLayoutPaddingTop, parentLayoutPaddingRight, parentLayoutPaddingBottom);
         parentLayout.setBackground(containerBackground);
 
 
@@ -748,12 +761,6 @@ public class ProgressScreenActivity extends Activity {
         /**
          * Confirmation Dialog - "OK" Button --> Initiate Update Engine Cancel Process.
          */
-        Button okButton = new Button(this);
-
-        /**
-         * Apply the ripple animation for "OK" Button (When pressed)
-         */
-        setUpButtonWithPressedEffect(okButton, "#3A7BD5", "#2C63AA", 8f);
 
         okButton.setText("OK");
         okButton.setTextColor(Color.WHITE);
