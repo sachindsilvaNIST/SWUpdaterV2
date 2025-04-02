@@ -46,6 +46,10 @@ public class OTAPackageCheckerActivity extends Activity {
     // Indeterminate Loading Spinner until the Update Engine Status Code = IDLE.
     private ProgressDialog mWaitingSpinner;
 
+
+    // Avoid Scanning for New updates (checkForNewUpdate()) multiple times in the same session.
+    private boolean whetherScannedForNewUpdates = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,7 @@ public class OTAPackageCheckerActivity extends Activity {
 
 
         mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
+        mUpdateManager.setOnEngineStatusUpdateCallback(this::onEngineStatusUpdate);
 
     }
 
@@ -68,8 +73,23 @@ public class OTAPackageCheckerActivity extends Activity {
         // Bind the update engine
         mUpdateManager.bind();
 
-        // Check immediately for new OTA Updates.
-        checkForNewUpdate();
+        // Immediately check the update engine status
+        int currentEngineStatus = mUpdateManager.getEngineStatus();
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => currentEngineStatus CODE = " + currentEngineStatus);
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => currentEngineStatus IN TEXT = " + UpdateEngineStatuses.getStatusText(currentEngineStatus));
+
+        /**
+         *  If Update Engine is stable, Hide the Loading Spinner
+         *  If unstable (i.e, if status code = 11), Show the Loading Spinner until the status code = 0 (IDLE)
+         */
+
+        if(isStableEngineStatus(currentEngineStatus)) {
+            hideWaitingSpinner();
+            // Check immediately for new OTA Updates.
+            checkForNewUpdate();
+        } else {
+            showWaitingSpinner("Processing the update setup... Please wait");
+        }
     }
 
 
@@ -92,6 +112,26 @@ public class OTAPackageCheckerActivity extends Activity {
 
         runOnUiThread(() -> handleState(newState));
     }
+
+    /**
+     *  If Current Engine Status is stable (IDLE, REBOOT_REQUIRED, ERROR) etc, Hide the Loading Spinner and continue the flow.
+     *  If Unstable (Status Code = 11), Render the Loading Spinner until Status Code set to IDLE.
+     *
+     */
+    private void onEngineStatusUpdate(int status) {
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onEngineStatusUpdate() => CURRENT STATUS CODE = " + status);
+        Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onEngineStatusUpdate() => CURRENT STATUS IN TEXT = " + UpdateEngineStatuses.getStatusText(status));
+
+        if(isStableEngineStatus(status)) {
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onEngineStatusUpdate() => HIDING Waiting Spinner....");
+            hideWaitingSpinner();
+            checkForNewUpdate();
+        } else {
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onEngineStatusUpdate() => SHOWING Waiting Spinner....");
+            showWaitingSpinner("Processing the update setup... Please wait");
+        }
+    }
+
 
 
     private void handleState(int state) {
@@ -120,7 +160,16 @@ public class OTAPackageCheckerActivity extends Activity {
      */
 
     private void checkForNewUpdate() {
+
+        if(whetherScannedForNewUpdates) {
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "whetherScannedForNewUpdates is already TRUE, Already scanned for new updates....");
+            return;
+        }
+
+        // Setting the switch to "TRUE" if the scanning (once) was triggered.
+        whetherScannedForNewUpdates = true;
         Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "CHECKING USB PENDRIVE FOR NEW OTA UPDATES>...");
+
 
         /**
          * Load JSON Update Configs and get the list of possible updates from USB.
@@ -144,19 +193,9 @@ public class OTAPackageCheckerActivity extends Activity {
             // Found a new update => move to OTAPackageAvailableActivity
             // We possibly store "newConfig" somewhere if we want to pass it along.
 
-            int engineStatusNow = mUpdateManager.getEngineStatus();
-            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => ENGINE STATUS CODE => " + engineStatusNow);
 
-            if(!isStableEngineStatus(engineStatusNow)) {
-                Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => Showing Waiting Spinner....");
-                showWaitingSpinner("Processing the update setup... Please wait");
-            } else {
-                Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "onResume() => Hiding Waiting Spinner....");
-                hideWaitingSpinner();
-
-                // If the Update Engine Status Code is no longer = 11, launch `OTAPackageAvailableActivity.java`
-                goToOTAPackageAvailableActivity();
-            }
+            Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "NEW CONFIG FOUND!! => Moving to OTAPackageAvailableActivity");
+            goToOTAPackageAvailableActivity();
 
         } else {
             // Means we found .JSON, but not "NEW" or INVALID or IDENTICAL.
@@ -172,11 +211,11 @@ public class OTAPackageCheckerActivity extends Activity {
      */
 
     private boolean isStableEngineStatus(int status) {
+
         if(status != 11) {
             return true;
         }
         return false;
-
     }
 
     /**
