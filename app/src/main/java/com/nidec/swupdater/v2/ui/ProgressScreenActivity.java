@@ -458,7 +458,6 @@ public class ProgressScreenActivity extends Activity {
     private void onProgressChanged(double progress) {
         runOnUiThread(() -> {
             int percent = (int) (100 * progress);
-
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Engine Status => " + mCurrentEngineStatus);
 
@@ -499,7 +498,7 @@ public class ProgressScreenActivity extends Activity {
 
     /**
      * Handling "FINALIZING" state when the progress rate hits 99%.
-      */
+     */
 
     private void handleFinalizingState() {
         Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Initiating ===> handleFinalizingState() Function....");
@@ -533,7 +532,7 @@ public class ProgressScreenActivity extends Activity {
                     .setInterpolator(new LinearInterpolator())
                     .setDuration(2000)
                     .start();
-                }
+        }
     }
 
     /**
