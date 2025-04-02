@@ -667,12 +667,31 @@ public class ProgressScreenActivity extends Activity {
 
     private void showModernCancelConfirmationDialog() {
 
+        /**
+         * Creating Rounded Container Background
+         */
+
+        int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
+        GradientDrawable containerBackground = new GradientDrawable();
+        containerBackground.setColor(Color.WHITE);
+        // Set the rounded corners
+        containerBackground.setCornerRadius(20 * getResources().getDisplayMetrics().density);
+
         // Creating parent layout
         LinearLayout parentLayout = new LinearLayout(this);
         parentLayout.setOrientation(LinearLayout.VERTICAL);
-        int padding = (int) (16 * getResources().getDisplayMetrics().density);
-        parentLayout.setPadding(padding, padding, padding, padding);
-        parentLayout.setBackgroundColor(Color.WHITE);
+        parentLayout.setPadding(containerPadding, containerPadding, containerPadding, containerPadding);
+        parentLayout.setBackground(containerBackground);
+
+
+
+
+//        // Creating parent layout
+//        LinearLayout parentLayout = new LinearLayout(this);
+//        parentLayout.setOrientation(LinearLayout.VERTICAL);
+//        int padding = (int) (16 * getResources().getDisplayMetrics().density);
+//        parentLayout.setPadding(padding, padding, padding, padding);
+//        parentLayout.setBackgroundColor(Color.WHITE);
 
         /**
          * Confirmation Dialog - Title
@@ -682,7 +701,8 @@ public class ProgressScreenActivity extends Activity {
         titleView.setTextSize(20);
         titleView.setTextColor(Color.BLACK);
         titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setPadding(0, 0, 0, padding/2);
+        titleView.setPadding(0, 0, 0, containerPadding / 2);
+        titleView.setGravity(Gravity.CENTER);
         parentLayout.addView(titleView);
 
         /**
@@ -692,7 +712,8 @@ public class ProgressScreenActivity extends Activity {
         messageView.setText("Do you really want to cancel this update?");
         messageView.setTextSize(16);
         messageView.setTextColor(Color.DKGRAY);
-        messageView.setPadding(0, 0, 0, padding);
+        messageView.setGravity(Gravity.CENTER);
+        messageView.setPadding(0, 0, 0, containerPadding);
         parentLayout.addView(messageView);
 
         /**
@@ -701,7 +722,7 @@ public class ProgressScreenActivity extends Activity {
         LinearLayout buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.END);
-        buttonLayout.setPadding(0, padding / 2,0, 0);
+        buttonLayout.setPadding(0, containerPadding / 2,0, 0);
 
         /**
          * Confirmation Dialog - "Cancel" Button --> Dismiss the Dialog
@@ -710,16 +731,36 @@ public class ProgressScreenActivity extends Activity {
         cancelButton.setText("Cancel");
         cancelButton.setTextColor(Color.parseColor("#3A7BD5"));
         cancelButton.setBackground(createRoundedDrawable("#FFFFFF", 8));
-        cancelButton.setPadding(padding, padding /2, padding, padding /2);
+        cancelButton.setPadding(containerPadding, containerPadding /2, containerPadding, containerPadding /2);
+        // Setting the margin
+        LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        int marginRight = (int) (8 * getResources().getDisplayMetrics().density);
+        cancelParams.setMargins(0, 0, marginRight, 0);
+        cancelButton.setLayoutParams(cancelParams);
+
+
+
+
+
 
         /**
          * Confirmation Dialog - "OK" Button --> Initiate Update Engine Cancel Process.
          */
         Button okButton = new Button(this);
+
+        /**
+         * Apply the ripple animation for "OK" Button (When pressed)
+         */
+        setUpButtonWithPressedEffect(okButton, "#3A7BD5", "#2C63AA", 8f);
+
         okButton.setText("OK");
         okButton.setTextColor(Color.WHITE);
         okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
-        okButton.setPadding(padding, padding / 2, padding, padding / 2);
+        okButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
+        LinearLayout.LayoutParams okParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        okButton.setLayoutParams(okParams);
+
         okButton.setOnClickListener(v -> {
 
             // Cancel the update running and navigate back.
