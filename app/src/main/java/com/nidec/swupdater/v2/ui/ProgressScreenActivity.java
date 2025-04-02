@@ -458,6 +458,9 @@ public class ProgressScreenActivity extends Activity {
     private void onProgressChanged(double progress) {
         runOnUiThread(() -> {
             int percent = (int) (100 * progress);
+            if(percent == 0) {
+                mProgressScreenPercentDisplay.setText("Processing...");
+            }
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "CURRENT DOWNLOAD PROGRESS RATE => " + percent + "%");
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Current Engine Status => " + mCurrentEngineStatus);
 
