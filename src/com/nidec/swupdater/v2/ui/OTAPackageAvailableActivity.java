@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+
 
 
 import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.media.Image;
@@ -21,11 +24,14 @@ import android.os.Build;
 
 import android.util.Log;
 
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.nidec.swupdater.v2.R;
 
@@ -81,6 +87,15 @@ public class OTAPackageAvailableActivity extends Activity {
 
 //    "View Config" Button
     private Button mViewConfigButton;
+
+
+    /**
+     * Defining an Instance for AlertDialog for Building AlertDialog with custom view.
+     */
+
+    private AlertDialog dialog;
+
+
 
 //   ===> DEBUGGING PURPOSE : SRD 2025-03-13
 //    private TextView mTextViewInfo;
@@ -196,6 +211,10 @@ public class OTAPackageAvailableActivity extends Activity {
 
         mUpdateYesButton.setOnClickListener((View v) -> {
             Log.d(TAG_OTA_PACKAGE_AVAILABLE_ACTIVITY,"OK Button was pressed....");
+
+            /**
+             * Check for new updates
+             */
             checkForNewUpdate();
         });
 
@@ -415,52 +434,185 @@ public class OTAPackageAvailableActivity extends Activity {
 
     }
 
-//    private void setUpButtonWithPressedEffect(Button mButton, String normalColor, String pressedColor, float cornerRadiusDp) {
-//        /**
-//         * Converting 10dp to actual pixels for the corner radius.
-//         *
-//         * */
-//
-//        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
-//
-//        /**
-//         * Normal state of button before press effect
-//         */
-//        GradientDrawable normalDrawable = new GradientDrawable();
-//        normalDrawable.setShape(GradientDrawable.RECTANGLE);
-//        normalDrawable.setCornerRadius(cornerRadiusToPixels);
-//        normalDrawable.setColor(Color.parseColor(normalColor));
-//
-//        /**
-//         * Pressed state of button after press effect
-//         */
-//
-//        GradientDrawable pressedDrawable = new GradientDrawable();
-//        pressedDrawable.setShape(GradientDrawable.RECTANGLE);
-//        pressedDrawable.setCornerRadius(cornerRadiusToPixels);
-//        pressedDrawable.setColor(Color.parseColor(pressedColor));
-//
-//        /**
-//         * State list drawable for pressed effect...
-//         */
-//        StateListDrawable states = new StateListDrawable();
-//
-//        // Pressed state (when android:state_pressed = true)
-//        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
-//
-//        // Default state
-//        states.addState(new int[]{}, normalDrawable);
-//
-//        /**
-//         * Add the above effects to the button.
-//         */
-//
-//        mButton.setBackground(states);
-//
-//    }
+    /**
+     *  Displaying custom confirmation dialog for apply update state.
+     */
+
+    private void showModernApplyConfirmationDialog() {
+
+        // Default container's padding, parentLayout paddings, color, cornerRadius
+        int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingTop = (int) (20 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingBottom = (int) (20 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingLeft = (int) (24 * getResources().getDisplayMetrics().density);
+        int parentLayoutPaddingRight = (int) (24 * getResources().getDisplayMetrics().density);
+        GradientDrawable containerBackground = new GradientDrawable();
+        containerBackground.setColor(Color.WHITE);
+        containerBackground.setCornerRadius(80 * getResources().getDisplayMetrics().density);
 
 
+        // Parent container with rounded corners.
+        LinearLayout parentLayout = new LinearLayout(this);
+        parentLayout.setOrientation(LinearLayout.VERTICAL);
+        parentLayout.setPadding(parentLayoutPaddingLeft, parentLayoutPaddingTop, parentLayoutPaddingRight, parentLayoutPaddingBottom);
+        parentLayout.setBackground(containerBackground);
 
+        /**
+         * An Update Icon at the top layout
+         */
+
+        ImageView iconView = new ImageView(this);
+        iconView.setImageResource(android.R.drawable.ic_popup_sync);
+        iconView.setColorFilter(Color.parseColor("#3A7BD5"));
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(
+                (int) (48 * getResources().getDisplayMetrics().density),
+                (int) (48 * getResources().getDisplayMetrics().density)
+        );
+        iconParams.gravity = Gravity.CENTER;
+        iconView.setLayoutParams(iconParams);
+        parentLayout.addView(iconView);
+
+
+        /**
+         * Confirmation Dialog - Title
+         */
+
+        TextView titleView = new TextView(this);
+        titleView.setText("Apply Software Update");
+        titleView.setTextSize(20);
+        titleView.setTextColor(Color.BLACK);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setPadding(0, containerPadding / 2,0, containerPadding / 2);
+        parentLayout.addView(titleView);
+
+        /**
+         * Confirmation Dialog - Message
+         */
+
+        UpdateConfig selected = SelectedUpdateConfigHolder.getSelectedConfig();
+        String message = "Do you really want to apply this update?\n";
+
+        TextView messageView = new TextView(this);
+        messageView.setText(message);
+        messageView.setTextSize(16);
+        messageView.setTextColor(Color.DKGRAY);
+        messageView.setPadding(0, 0, 0, containerPadding);
+        parentLayout.addView(messageView);
+
+        /**
+         * Additional info.
+         */
+
+        TextView infoView = new TextView(this);
+        infoView.setText("The update is digitally signed and secure.");
+        infoView.setTextSize(5);
+        infoView.setTextColor(Color.GRAY);
+        infoView.setPadding(0,0,0,containerPadding);
+        parentLayout.addView(infoView);
+
+
+        /**
+         * Confirmation Dialog - Horizontal LinearLayout for Buttons.
+         */
+
+        LinearLayout buttonLayout = new LinearLayout(this);
+        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonLayout.setGravity(Gravity.END);
+
+
+        /**
+         * Confirmation Dialog - "Cancel" Button --> Dismiss the Dialog
+         */
+
+        Button cancelButton = new Button(this);
+        cancelButton.setText("Cancel");
+        cancelButton.setTextColor(Color.parseColor("#3A7BD5"));
+        cancelButton.setBackground(createRoundedDrawable("#FFFFFF", 8));
+        cancelButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
+        // Setting the margin
+        LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        int marginRightForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginTopForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginBottomForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        cancelParams.setMargins(0, marginTopForCancelButton, marginRightForCancelButton, marginBottomForCancelButton);
+        cancelButton.setLayoutParams(cancelParams);
+
+        /**
+         * Confirmation Dialog - "OK" Button --> Initiate Update Engine Cancel Process.
+         */
+
+        Button okButton = new Button(this);
+        okButton.setText("Apply");
+        okButton.setTextColor(Color.WHITE);
+        okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
+        okButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
+        LinearLayout.LayoutParams okParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        int marginTopForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginBottomForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+        okParams.setMargins(0,marginTopForOKButton,0,marginBottomForOKButton);
+
+
+        /**
+         * Defining the Event Listener for "APPLY" Button (Confirmation Dialog)
+         */
+
+        okButton.setLayoutParams(okParams);
+
+        okButton.setOnClickListener(v -> {
+            // Dismiss dialog box and apply update.
+            dialog.dismiss();
+            uiResetWidgets();
+            uiResetEngineText();
+            applySelectedUpdate(selected);
+        });
+
+        /**
+         * Adding buttons to the button layout
+         */
+
+        buttonLayout.addView(cancelButton);
+        buttonLayout.addView(okButton);
+        parentLayout.addView(buttonLayout);
+
+        /**
+         * Building AlertDialog with custom view.
+         */
+
+        dialog = new AlertDialog.Builder(this)
+                .setView(parentLayout)
+                .create();
+
+        if(dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(null);
+        }
+        dialog.show();
+
+        /**
+         * Setting the Event Listener for "Cancel" Button, when pressed dismiss dialog.
+         */
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+
+    }
+
+
+    /**
+     *  Function to create a custom rounded corner radius for Buttons.
+     *  Function  : createRoundedDrawable()
+     */
+
+
+    private GradientDrawable createRoundedDrawable(String colorHex, int cornerRadiusDp) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.RECTANGLE);
+
+        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+        drawable.setCornerRadius(cornerRadiusToPixels);
+        drawable.setColor(Color.parseColor(colorHex));
+        return drawable;
+    }
 
 
     /**
@@ -511,28 +663,29 @@ public class OTAPackageAvailableActivity extends Activity {
         /**
          * Display the confirmation dialog..
          */
+        showModernApplyConfirmationDialog();
 
-        new AlertDialog.Builder(this)
-                .setTitle("Apply Software Update")
-                .setMessage("Do you really want apply this update?\n" + selected.getName())
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.ok,(dialog, which) -> {
-
-                    /**
-                     * Replication from SWUpdaterV1 - SRD
-                     */
-                    uiResetWidgets();
-                    uiResetEngineText();
-
-                    /**
-                     * Apply the update..
-                     */
-                    applySelectedUpdate(selected);
-
-
-                })
-                .setNegativeButton(android.R.string.cancel,null)
-                .show();
+//        new AlertDialog.Builder(this)
+//                .setTitle("Apply Software Update")
+//                .setMessage("Do you really want apply this update?\n" + selected.getName())
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setPositiveButton(android.R.string.ok,(dialog, which) -> {
+//
+//                    /**
+//                     * Replication from SWUpdaterV1 - SRD
+//                     */
+//                    uiResetWidgets();
+//                    uiResetEngineText();
+//
+//                    /**
+//                     * Apply the update..
+//                     */
+//                    applySelectedUpdate(selected);
+//
+//
+//                })
+//                .setNegativeButton(android.R.string.cancel,null)
+//                .show();
 
 //        new AlertDialog.Builder(this)
 //                .setTitle("Apply Software Update")
