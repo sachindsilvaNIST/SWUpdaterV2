@@ -13,9 +13,12 @@ import android.app.ProgressDialog;
 import android.app.AlertDialog;
 
 
-
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -34,6 +37,7 @@ import android.transition.TransitionManager;
 import android.util.Log;
 
 import android.view.View;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
@@ -41,6 +45,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.nidec.swupdater.v2.R;
 import com.nidec.swupdater.v2.UpdaterState;
@@ -179,21 +184,28 @@ public class ProgressScreenActivity extends Activity {
 
             Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "USER HAD PRESSED `Cancel Update` Button!!!!");
 
+            /**
+             * When "Cancel Update" was pressed, show the Custom Confirmation Dialog box.
+             */
+
+            showModernCancelConfirmationDialog();
+
+
             // If the user cancels the OTA Update, Display a Confirmation Box (Yes / No) whether user wants to cancel the update.
 
-            new AlertDialog.Builder(this)
-                    .setTitle("User Request to Terminate Update")
-                    .setMessage("Do you really want to cancel this update?\n")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-
-                        /**
-                         * Cancelling the Update Engine
-                         */
-                        handleUpdateEngineCancelButton();
-                    })
-                    .setNegativeButton(android.R.string.cancel,null)
-                    .show();
+//            new AlertDialog.Builder(this)
+//                    .setTitle("User Request to Terminate Update")
+//                    .setMessage("Do you really want to cancel this update?\n")
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+//
+//                        /**
+//                         * Cancelling the Update Engine
+//                         */
+//                        handleUpdateEngineCancelButton();
+//                    })
+//                    .setNegativeButton(android.R.string.cancel,null)
+//                    .show();
 
         });
     }
@@ -476,7 +488,7 @@ public class ProgressScreenActivity extends Activity {
              */
             mProgressBar.setProgress(percent);
             if(percent < 99) {
-                if(mCurrentEngineStatus == 6) { // "UPDATED_NEED_REBOOT"
+                if(mCurrentEngineStatus == UpdateEngine.UpdateStatusConstants.UPDATED_NEED_REBOOT) { // "UPDATED_NEED_REBOOT"
                     mProgressBar.setProgress(100);
                     mProgressScreenPercentDisplay.setText("100%");
                     return;
@@ -503,7 +515,8 @@ public class ProgressScreenActivity extends Activity {
     private void handleFinalizingState() {
         Log.d(TAG_PROGRESS_SCREEN_ACTIVITY, "Initiating ===> handleFinalizingState() Function....");
         mProgressScreenPercentDisplay.setText("Updating...");
-        mProgressBar.setProgress(99);
+//        mProgressBar.setProgress(99);
+        mProgressBar.setProgress(100); // DEBUG TEST
 
 
         /**
@@ -511,15 +524,6 @@ public class ProgressScreenActivity extends Activity {
          */
         smoothlyHideProgressSubtitle();
 
-//        /**
-//         * Fade out and hide the subtitle --> "Please wait. Your system is updating..." if visible.
-//         */
-//        if(mTextViewProgressSubtitle.getVisibility() == View.VISIBLE) {
-//            mTextViewProgressSubtitle.animate()
-//                    .alpha(0)
-//                    .setDuration(2000)
-//                    .withEndAction(() -> mTextViewProgressSubtitle.setVisibility(View.GONE));
-//        }
 
         // Disable "Cancel Update" Button when progress rate is at 99% and set color to gray.
         disableCancelUpdateButton();
@@ -651,6 +655,126 @@ public class ProgressScreenActivity extends Activity {
 
         mCancelDownloadButton.setBackground(disabledBackground);
     }
+
+
+    /**
+     * -------------------------------------
+     * CUSTOM CONFIRMATION DIALOG BOX
+     *
+     * Display custom confirmation dialog box when user presses "Cancel Update" Button.
+     *
+     */
+
+    private void showModernCancelConfirmationDialog() {
+
+        // Creating parent layout
+        LinearLayout parentLayout = new LinearLayout(this);
+        parentLayout.setOrientation(LinearLayout.VERTICAL);
+        int padding = (int) (16 * getResources().getDisplayMetrics().density);
+        parentLayout.setPadding(padding, padding, padding, padding);
+        parentLayout.setBackgroundColor(Color.WHITE);
+
+        /**
+         * Confirmation Dialog - Title
+         */
+        TextView titleView = new TextView(this);
+        titleView.setText("Terminate Update");
+        titleView.setTextSize(20);
+        titleView.setTextColor(Color.BLACK);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setPadding(0, 0, 0, padding/2);
+        parentLayout.addView(titleView);
+
+        /**
+         * Confirmation Dialog - Message
+         */
+        TextView messageView = new TextView(this);
+        messageView.setText("Do you really want to cancel this update?");
+        messageView.setTextSize(16);
+        messageView.setTextColor(Color.DKGRAY);
+        messageView.setPadding(0, 0, 0, padding);
+        parentLayout.addView(messageView);
+
+        /**
+         * Confirmation Dialog - Horizontal LinearLayout for Buttons.
+         */
+        LinearLayout buttonLayout = new LinearLayout(this);
+        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonLayout.setGravity(Gravity.END);
+        buttonLayout.setPadding(0, padding / 2,0, 0);
+
+        /**
+         * Confirmation Dialog - "Cancel" Button --> Dismiss the Dialog
+         */
+        Button cancelButton = new Button(this);
+        cancelButton.setText("Cancel");
+        cancelButton.setTextColor(Color.parseColor("#3A7BD5"));
+        cancelButton.setBackground(createRoundedDrawable("#FFFFFF", 8));
+        cancelButton.setPadding(padding, padding /2, padding, padding /2);
+
+        /**
+         * Confirmation Dialog - "OK" Button --> Initiate Update Engine Cancel Process.
+         */
+        Button okButton = new Button(this);
+        okButton.setText("OK");
+        okButton.setTextColor(Color.WHITE);
+        okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
+        okButton.setPadding(padding, padding / 2, padding, padding / 2);
+        okButton.setOnClickListener(v -> {
+
+            // Cancel the update running and navigate back.
+            handleUpdateEngineCancelButton();
+        });
+
+        /**
+         * Adding buttons to the button layout
+         */
+
+        buttonLayout.addView(cancelButton);
+        buttonLayout.addView(okButton);
+
+        parentLayout.addView(buttonLayout);
+
+        /**
+         * Building AlertDialog with custom view.
+         */
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(parentLayout)
+                .create();
+
+
+        /**
+         * Remove default background for modern look
+         */
+        if(dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(null);
+        }
+        dialog.show();
+
+        /**
+         * Setting the Event Listener for "Cancel" Button, when pressed dismiss dialog.
+         */
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+
+    }
+
+    /**
+     *  Function to create a custom rounded corner radius for Buttons.
+     *  Function  : createRoundedDrawable()
+     */
+
+    private GradientDrawable createRoundedDrawable(String colorHex, int cornerRadiusDp) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.RECTANGLE);
+
+        float cornerRadiusToPixels = cornerRadiusDp * getResources().getDisplayMetrics().density;
+        drawable.setCornerRadius(cornerRadiusToPixels);
+        drawable.setColor(Color.parseColor(colorHex));
+        return drawable;
+    }
+
+
 
 
     /**
