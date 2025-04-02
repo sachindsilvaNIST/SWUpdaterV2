@@ -45,7 +45,7 @@ public class UpdateCompletionActivity extends Activity {
     private TextView mTextViewUpdateCompletionMainText;
     private TextView mTextViewUpdateCompletionSubText;
 
-    private Button mButtonCloseApp;
+//    private Button mButtonCloseApp;
 
 
     @Override
@@ -58,7 +58,7 @@ public class UpdateCompletionActivity extends Activity {
         mImageViewUpdateCompletion = findViewById(R.id.imageViewComplete);
         mTextViewUpdateCompletionMainText = findViewById(R.id.textViewUpdateCompletionMainText);
         mTextViewUpdateCompletionSubText = findViewById(R.id.textViewUpdateCompletionSubText);
-        mButtonCloseApp = findViewById(R.id.buttonCloseApp);
+//        mButtonCloseApp = findViewById(R.id.buttonCloseApp);
 
         /**
          * Custom tinting the ImageView icon with custom color
@@ -70,7 +70,7 @@ public class UpdateCompletionActivity extends Activity {
          * Create a pressed effect for the buttons.
          */
 
-        setUpButtonWithPressedEffect(mButtonCloseApp,"#3A7BD5", "#2C63AA",10f );
+//        setUpButtonWithPressedEffect(mButtonCloseApp,"#3A7BD5", "#2C63AA",10f );
 
 
 //        /**
@@ -106,15 +106,15 @@ public class UpdateCompletionActivity extends Activity {
          * Adding Event Listener for "CLOSE" Button.
          */
 
-        mButtonCloseApp.setOnClickListener(v -> {
-            Log.d(TAG_UPDATE_COMPLETION_ACTIVITY, "CLOSE THE APP Button was pressed to REBOOT...");
-
-            /**
-             * Shutting the App Process.
-             */
-            finishAffinity();
-
-        });
+//        mButtonCloseApp.setOnClickListener(v -> {
+//            Log.d(TAG_UPDATE_COMPLETION_ACTIVITY, "CLOSE THE APP Button was pressed to REBOOT...");
+//
+//            /**
+//             * Shutting the App Process.
+//             */
+//            finishAffinity();
+//
+//        });
 
 
 
