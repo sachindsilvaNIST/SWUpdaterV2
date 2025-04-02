@@ -675,7 +675,7 @@ public class ProgressScreenActivity extends Activity {
         GradientDrawable containerBackground = new GradientDrawable();
         containerBackground.setColor(Color.WHITE);
         // Set the rounded corners
-        containerBackground.setCornerRadius(20 * getResources().getDisplayMetrics().density);
+        containerBackground.setCornerRadius(40 * getResources().getDisplayMetrics().density);
 
         // Creating parent layout
         LinearLayout parentLayout = new LinearLayout(this);
@@ -702,7 +702,6 @@ public class ProgressScreenActivity extends Activity {
         titleView.setTextColor(Color.BLACK);
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setPadding(0, 0, 0, containerPadding / 2);
-        titleView.setGravity(Gravity.CENTER);
         parentLayout.addView(titleView);
 
         /**
@@ -712,7 +711,6 @@ public class ProgressScreenActivity extends Activity {
         messageView.setText("Do you really want to cancel this update?");
         messageView.setTextSize(16);
         messageView.setTextColor(Color.DKGRAY);
-        messageView.setGravity(Gravity.CENTER);
         messageView.setPadding(0, 0, 0, containerPadding);
         parentLayout.addView(messageView);
 
@@ -722,7 +720,7 @@ public class ProgressScreenActivity extends Activity {
         LinearLayout buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.END);
-        buttonLayout.setPadding(0, containerPadding / 2,0, 0);
+//        buttonLayout.setPadding(0, containerPadding / 2,0, 0);
 
         /**
          * Confirmation Dialog - "Cancel" Button --> Dismiss the Dialog
@@ -735,8 +733,10 @@ public class ProgressScreenActivity extends Activity {
         // Setting the margin
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        int marginRight = (int) (8 * getResources().getDisplayMetrics().density);
-        cancelParams.setMargins(0, 0, marginRight, 0);
+        int marginRightForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginTopForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginBottomForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        cancelParams.setMargins(0, marginTopForCancelButton, marginRightForCancelButton, marginBottomForCancelButton);
         cancelButton.setLayoutParams(cancelParams);
 
 
@@ -759,6 +759,10 @@ public class ProgressScreenActivity extends Activity {
         okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
         okButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
         LinearLayout.LayoutParams okParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int marginTopForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginBottomForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+        okParams.setMargins(0,marginTopForOKButton,0,marginBottomForOKButton);
+
         okButton.setLayoutParams(okParams);
 
         okButton.setOnClickListener(v -> {
