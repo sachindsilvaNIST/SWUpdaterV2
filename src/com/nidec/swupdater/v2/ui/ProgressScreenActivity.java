@@ -672,15 +672,16 @@ public class ProgressScreenActivity extends Activity {
          */
 
         int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
+        int parentLayoutPadding = (int) (20 * getResources().getDisplayMetrics().density);
         GradientDrawable containerBackground = new GradientDrawable();
         containerBackground.setColor(Color.WHITE);
         // Set the rounded corners
-        containerBackground.setCornerRadius(40 * getResources().getDisplayMetrics().density);
+        containerBackground.setCornerRadius(80 * getResources().getDisplayMetrics().density);
 
         // Creating parent layout
         LinearLayout parentLayout = new LinearLayout(this);
         parentLayout.setOrientation(LinearLayout.VERTICAL);
-        parentLayout.setPadding(containerPadding, containerPadding, containerPadding, containerPadding);
+        parentLayout.setPadding(parentLayoutPadding, parentLayoutPadding, parentLayoutPadding, parentLayoutPadding);
         parentLayout.setBackground(containerBackground);
 
 
