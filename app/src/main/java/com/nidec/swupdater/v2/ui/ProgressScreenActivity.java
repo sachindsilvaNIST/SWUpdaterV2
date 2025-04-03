@@ -667,7 +667,7 @@ public class ProgressScreenActivity extends Activity {
 
 
     /**
-     * -------------------------------------
+     * --------------- NEW VERSION - 1 -----------------------
      * CUSTOM CONFIRMATION DIALOG BOX
      *
      * Display custom confirmation dialog box when user presses "Cancel Update" Button.
@@ -677,140 +677,281 @@ public class ProgressScreenActivity extends Activity {
     private void showModernCancelConfirmationDialog() {
 
         /**
-         * Creating Rounded Container Background
+         * Padding values in pixels
          */
-
-        int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingTop = (int) (20 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingBottom = (int) (20 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingLeft = (int) (24 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingRight = (int) (24 * getResources().getDisplayMetrics().density);
-
-        GradientDrawable containerBackground = new GradientDrawable();
-        containerBackground.setColor(Color.WHITE);
-        // Set the rounded corners
-        containerBackground.setCornerRadius(80 * getResources().getDisplayMetrics().density);
-
-        // Creating parent layout
-        LinearLayout parentLayout = new LinearLayout(this);
-        parentLayout.setOrientation(LinearLayout.VERTICAL);
-        parentLayout.setPadding(parentLayoutPaddingLeft, parentLayoutPaddingTop, parentLayoutPaddingRight, parentLayoutPaddingBottom);
-        parentLayout.setBackground(containerBackground);
-
-
-
-
-//        // Creating parent layout
-//        LinearLayout parentLayout = new LinearLayout(this);
-//        parentLayout.setOrientation(LinearLayout.VERTICAL);
-//        int padding = (int) (16 * getResources().getDisplayMetrics().density);
-//        parentLayout.setPadding(padding, padding, padding, padding);
-//        parentLayout.setBackgroundColor(Color.WHITE);
+        int paddingHorizontal = (int) (24 * getResources().getDisplayMetrics().density);
+        int paddingVertical = (int) (20 * getResources().getDisplayMetrics().density);
+        int innerPadding = (int) (16 * getResources().getDisplayMetrics().density);
+        int paddingBottom = (int) (8 * getResources().getDisplayMetrics().density);
+        int buttonMargin = (int) (8 * getResources().getDisplayMetrics().density);
 
         /**
-         * Confirmation Dialog - Title
+         * Create a rounded container background
+         */
+        GradientDrawable containerBackground = new GradientDrawable();
+        containerBackground.setColor(Color.WHITE);
+        containerBackground.setCornerRadius(80 * getResources().getDisplayMetrics().density);
+
+        /**
+         * Setting up parnet layout with contents (center)
+         */
+        LinearLayout parentLayout = new LinearLayout(this);
+        parentLayout.setOrientation(LinearLayout.VERTICAL);
+        parentLayout.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
+        parentLayout.setBackground(containerBackground);
+        parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        /**
+         *  Confirmation Dialog - Main title
          */
         TextView titleView = new TextView(this);
         titleView.setText("Terminate Update");
         titleView.setTextSize(20);
         titleView.setTextColor(Color.BLACK);
         titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setPadding(0, 0, 0, containerPadding / 2);
+        titleView.setPadding(0, 0, 0, innerPadding / 2);
+        titleView.setGravity(Gravity.CENTER);
         parentLayout.addView(titleView);
 
         /**
-         * Confirmation Dialog - Message
+         *  Confirmation Dialog - Sub title
          */
+
         TextView messageView = new TextView(this);
         messageView.setText("Do you really want to cancel this update?");
         messageView.setTextSize(16);
         messageView.setTextColor(Color.DKGRAY);
-        messageView.setPadding(0, 0, 0, containerPadding);
+        messageView.setPadding(0, 0, 0, paddingBottom);
+        messageView.setGravity(Gravity.CENTER);
         parentLayout.addView(messageView);
 
         /**
-         * Confirmation Dialog - Horizontal LinearLayout for Buttons.
+         *  Confirmation Dialog - Additional Info
+         */
+        TextView infoView = new TextView(this);
+        infoView.setText("This update is digital signed and secure.");
+        infoView.setTextSize(10);
+        infoView.setTextColor(Color.GRAY);
+        infoView.setPadding(0, 0, 0, innerPadding);
+        infoView.setGravity(Gravity.CENTER);
+        parentLayout.addView(infoView);
+
+        /**
+         *  Confirmation Dialog - Horizontal LinearLayout for Buttons.
          */
         LinearLayout buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        buttonLayout.setGravity(Gravity.END);
-//        buttonLayout.setPadding(0, containerPadding / 2,0, 0);
+        buttonLayout.setGravity(Gravity.CENTER);
+        buttonLayout.setPadding(0, innerPadding / 2, 0, 0);
 
         /**
          * Confirmation Dialog - "Cancel" Button --> Dismiss the Dialog
          */
+
         Button cancelButton = new Button(this);
         cancelButton.setText("Cancel");
         cancelButton.setTextColor(Color.parseColor("#3A7BD5"));
         cancelButton.setBackground(createRoundedDrawable("#FFFFFF", 8));
-        cancelButton.setPadding(containerPadding, containerPadding /2, containerPadding, containerPadding /2);
-        // Setting the margin
+        cancelButton.setPadding(innerPadding, innerPadding / 2, innerPadding, innerPadding / 2);
+
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        int marginRightForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
-        int marginTopForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
-        int marginBottomForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
-        cancelParams.setMargins(0, marginTopForCancelButton, marginRightForCancelButton, marginBottomForCancelButton);
+        // Setting right margin
+        cancelParams.setMargins(0, 0, buttonMargin, 0);
         cancelButton.setLayoutParams(cancelParams);
-
-
-
-
-
 
         /**
          * Confirmation Dialog - "OK" Button --> Initiate Update Engine Cancel Process.
          */
-
+        Button okButton = new Button(this);
         okButton.setText("OK");
         okButton.setTextColor(Color.WHITE);
         okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
-        okButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
+        okButton.setPadding(innerPadding, innerPadding / 2, innerPadding, innerPadding / 2);
         LinearLayout.LayoutParams okParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        int marginTopForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
-        int marginBottomForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
-        okParams.setMargins(0,marginTopForOKButton,0,marginBottomForOKButton);
-
         okButton.setLayoutParams(okParams);
 
-        okButton.setOnClickListener(v -> {
-
-            // Cancel the update running and navigate back.
-            handleUpdateEngineCancelButton();
-        });
-
-        /**
-         * Adding buttons to the button layout
-         */
-
+        // Adding buttons to ButtonLayout
         buttonLayout.addView(cancelButton);
         buttonLayout.addView(okButton);
-
         parentLayout.addView(buttonLayout);
 
         /**
          * Building AlertDialog with custom view.
          */
+
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(parentLayout)
                 .create();
 
-
-        /**
-         * Remove default background for modern look
-         */
         if(dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(null);
         }
         dialog.show();
 
         /**
-         * Setting the Event Listener for "Cancel" Button, when pressed dismiss dialog.
+         * Defining the Button Listener for "Cancel" Button (Confirmation Dialog)
          */
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
 
+        /**
+         * Defining the Event Listener for "OK" Button (Confirmation Dialog)
+         */
+        okButton.setOnClickListener(v -> {
+            // Cancel the update running and navigate back.
+            handleUpdateEngineCancelButton();
+        });
+
     }
+
+
+
+    /**
+     * --------------- OLD VERSION -----------------------
+     * CUSTOM CONFIRMATION DIALOG BOX
+     *
+     * Display custom confirmation dialog box when user presses "Cancel Update" Button.
+     *
+     */
+
+//    private void showModernCancelConfirmationDialog() {
+//
+//        /**
+//         * Creating Rounded Container Background
+//         */
+//
+//        int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingTop = (int) (20 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingBottom = (int) (20 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingLeft = (int) (24 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingRight = (int) (24 * getResources().getDisplayMetrics().density);
+//
+//        GradientDrawable containerBackground = new GradientDrawable();
+//        containerBackground.setColor(Color.WHITE);
+//        // Set the rounded corners
+//        containerBackground.setCornerRadius(80 * getResources().getDisplayMetrics().density);
+//
+//        // Creating parent layout
+//        LinearLayout parentLayout = new LinearLayout(this);
+//        parentLayout.setOrientation(LinearLayout.VERTICAL);
+//        parentLayout.setPadding(parentLayoutPaddingLeft, parentLayoutPaddingTop, parentLayoutPaddingRight, parentLayoutPaddingBottom);
+//        parentLayout.setBackground(containerBackground);
+//
+//
+//
+//
+////        // Creating parent layout
+////        LinearLayout parentLayout = new LinearLayout(this);
+////        parentLayout.setOrientation(LinearLayout.VERTICAL);
+////        int padding = (int) (16 * getResources().getDisplayMetrics().density);
+////        parentLayout.setPadding(padding, padding, padding, padding);
+////        parentLayout.setBackgroundColor(Color.WHITE);
+//
+//        /**
+//         * Confirmation Dialog - Title
+//         */
+//        TextView titleView = new TextView(this);
+//        titleView.setText("Terminate Update");
+//        titleView.setTextSize(20);
+//        titleView.setTextColor(Color.BLACK);
+//        titleView.setTypeface(null, Typeface.BOLD);
+//        titleView.setPadding(0, 0, 0, containerPadding / 2);
+//        parentLayout.addView(titleView);
+//
+//        /**
+//         * Confirmation Dialog - Message
+//         */
+//        TextView messageView = new TextView(this);
+//        messageView.setText("Do you really want to cancel this update?");
+//        messageView.setTextSize(16);
+//        messageView.setTextColor(Color.DKGRAY);
+//        messageView.setPadding(0, 0, 0, containerPadding);
+//        parentLayout.addView(messageView);
+//
+//        /**
+//         * Confirmation Dialog - Horizontal LinearLayout for Buttons.
+//         */
+//        LinearLayout buttonLayout = new LinearLayout(this);
+//        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+//        buttonLayout.setGravity(Gravity.END);
+////        buttonLayout.setPadding(0, containerPadding / 2,0, 0);
+//
+//        /**
+//         * Confirmation Dialog - "Cancel" Button --> Dismiss the Dialog
+//         */
+//        Button cancelButton = new Button(this);
+//        cancelButton.setText("Cancel");
+//        cancelButton.setTextColor(Color.parseColor("#3A7BD5"));
+//        cancelButton.setBackground(createRoundedDrawable("#FFFFFF", 8));
+//        cancelButton.setPadding(containerPadding, containerPadding /2, containerPadding, containerPadding /2);
+//        // Setting the margin
+//        LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//
+//        int marginRightForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+//        int marginTopForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+//        int marginBottomForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+//        cancelParams.setMargins(0, marginTopForCancelButton, marginRightForCancelButton, marginBottomForCancelButton);
+//        cancelButton.setLayoutParams(cancelParams);
+//
+//
+//
+//
+//
+//
+//        /**
+//         * Confirmation Dialog - "OK" Button --> Initiate Update Engine Cancel Process.
+//         */
+//
+//        okButton.setText("OK");
+//        okButton.setTextColor(Color.WHITE);
+//        okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
+//        okButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
+//        LinearLayout.LayoutParams okParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        int marginTopForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+//        int marginBottomForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+//        okParams.setMargins(0,marginTopForOKButton,0,marginBottomForOKButton);
+//
+//        okButton.setLayoutParams(okParams);
+//
+//        okButton.setOnClickListener(v -> {
+//
+//            // Cancel the update running and navigate back.
+//            handleUpdateEngineCancelButton();
+//        });
+//
+//        /**
+//         * Adding buttons to the button layout
+//         */
+//
+//        buttonLayout.addView(cancelButton);
+//        buttonLayout.addView(okButton);
+//
+//        parentLayout.addView(buttonLayout);
+//
+//        /**
+//         * Building AlertDialog with custom view.
+//         */
+//        AlertDialog dialog = new AlertDialog.Builder(this)
+//                .setView(parentLayout)
+//                .create();
+//
+//
+//        /**
+//         * Remove default background for modern look
+//         */
+//        if(dialog.getWindow() != null) {
+//            dialog.getWindow().setBackgroundDrawable(null);
+//        }
+//        dialog.show();
+//
+//        /**
+//         * Setting the Event Listener for "Cancel" Button, when pressed dismiss dialog.
+//         */
+//
+//        cancelButton.setOnClickListener(v -> dialog.dismiss());
+//
+//    }
 
     /**
      *  Function to create a custom rounded corner radius for Buttons.
