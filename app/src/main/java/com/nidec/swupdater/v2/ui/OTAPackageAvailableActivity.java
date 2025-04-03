@@ -440,12 +440,27 @@ public class OTAPackageAvailableActivity extends Activity {
 
     private void showModernApplyConfirmationDialog() {
 
-        // Default container's padding, parentLayout paddings, color, cornerRadius
-        int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingTop = (int) (20 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingBottom = (int) (20 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingLeft = (int) (24 * getResources().getDisplayMetrics().density);
-        int parentLayoutPaddingRight = (int) (24 * getResources().getDisplayMetrics().density);
+        // Padding values in pixels
+        int paddingHorizontal = (int) (24 * getResources().getDisplayMetrics().density);
+        int paddingVertical = (int) (20 * getResources().getDisplayMetrics().density);
+        int innerPadding = (int) (16 * getResources().getDisplayMetrics().density);
+        int paddingBottom = (int) (8 * getResources().getDisplayMetrics().density);
+        int buttonMargin = (int) (8 * getResources().getDisplayMetrics().density);
+
+
+
+
+//        // Default container's padding, parentLayout paddings, color, cornerRadius
+//        int containerPadding = (int) (16 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingTop = (int) (20 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingBottom = (int) (20 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingLeft = (int) (24 * getResources().getDisplayMetrics().density);
+//        int parentLayoutPaddingRight = (int) (24 * getResources().getDisplayMetrics().density);
+
+        /**
+         * Creating rounded container background
+         */
+
         GradientDrawable containerBackground = new GradientDrawable();
         containerBackground.setColor(Color.WHITE);
         containerBackground.setCornerRadius(80 * getResources().getDisplayMetrics().density);
@@ -454,8 +469,9 @@ public class OTAPackageAvailableActivity extends Activity {
         // Parent container with rounded corners.
         LinearLayout parentLayout = new LinearLayout(this);
         parentLayout.setOrientation(LinearLayout.VERTICAL);
-        parentLayout.setPadding(parentLayoutPaddingLeft, parentLayoutPaddingTop, parentLayoutPaddingRight, parentLayoutPaddingBottom);
+        parentLayout.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
         parentLayout.setBackground(containerBackground);
+        parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
         /**
          * An Update Icon at the top layout
@@ -482,7 +498,7 @@ public class OTAPackageAvailableActivity extends Activity {
         titleView.setTextSize(20);
         titleView.setTextColor(Color.BLACK);
         titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setPadding(0, containerPadding / 2,0, containerPadding / 2);
+        titleView.setPadding(0, 0 ,0, innerPadding / 2);
         titleView.setGravity(Gravity.CENTER);
         parentLayout.addView(titleView);
 
@@ -497,7 +513,7 @@ public class OTAPackageAvailableActivity extends Activity {
         messageView.setText(message);
         messageView.setTextSize(16);
         messageView.setTextColor(Color.DKGRAY);
-        messageView.setPadding(0, 0, 0, containerPadding);
+        messageView.setPadding(0, 0, 0, paddingBottom);
         messageView.setGravity(Gravity.CENTER);
         parentLayout.addView(messageView);
 
@@ -510,7 +526,8 @@ public class OTAPackageAvailableActivity extends Activity {
         infoView.setTextSize(10);
         infoView.setTypeface(null, Typeface.ITALIC);
         infoView.setTextColor(Color.GRAY);
-        infoView.setPadding(0,0,0,containerPadding);
+        infoView.setPadding(0,0,0,innerPadding);
+        infoView.setGravity(Gravity.CENTER);
         parentLayout.addView(infoView);
 
 
@@ -521,6 +538,7 @@ public class OTAPackageAvailableActivity extends Activity {
         LinearLayout buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.CENTER);
+        buttonLayout.setPadding(0, innerPadding / 2, 0, 0);
 
 
         /**
@@ -531,7 +549,7 @@ public class OTAPackageAvailableActivity extends Activity {
         cancelButton.setText("Cancel");
         cancelButton.setTextColor(Color.parseColor("#3A7BD5"));
         cancelButton.setBackground(createRoundedDrawable("#FFFFFF", 8));
-        cancelButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
+        cancelButton.setPadding(innerPadding, innerPadding / 2, innerPadding, innerPadding / 2);
         // Setting the margin
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -549,7 +567,7 @@ public class OTAPackageAvailableActivity extends Activity {
         okButton.setText("Apply");
         okButton.setTextColor(Color.WHITE);
         okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
-        okButton.setPadding(containerPadding, containerPadding / 2, containerPadding, containerPadding / 2);
+        okButton.setPadding(innerPadding, innerPadding / 2, innerPadding, innerPadding / 2);
         LinearLayout.LayoutParams okParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         int marginTopForOKButton = (int) (8 * getResources().getDisplayMetrics().density);

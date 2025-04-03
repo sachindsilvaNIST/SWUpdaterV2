@@ -732,6 +732,7 @@ public class ProgressScreenActivity extends Activity {
         infoView.setText("This update is digital signed and secure.");
         infoView.setTextSize(10);
         infoView.setTextColor(Color.GRAY);
+        infoView.setTypeface(null, Typeface.ITALIC);
         infoView.setPadding(0, 0, 0, innerPadding);
         infoView.setGravity(Gravity.CENTER);
         parentLayout.addView(infoView);
