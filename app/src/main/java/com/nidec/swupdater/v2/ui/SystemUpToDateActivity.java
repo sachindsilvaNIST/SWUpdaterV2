@@ -75,6 +75,12 @@ public class SystemUpToDateActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_up_to_date);
 
+        /**
+         * Setting Gradient Background
+         */
+        setGradientBackground();
+
+
         // Retrieve the shared UpdateManager Instance...
         mUpdateManager = UpdateManagerHolder.getInstance();
         Log.d(TAG_SYSTEM_UP_TO_DATE_ACTIVITY,"mUpdateManager INSTANCE --> " + mUpdateManager);
@@ -196,6 +202,20 @@ public class SystemUpToDateActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+    /**
+     *  Defining Gradient Background
+     */
+
+    private void setGradientBackground() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int[] colors = {Color.parseColor("#E0F7FA"), Color.parseColor("#FFFFFF")};
+            GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gradientDrawable.setCornerRadius(0f);
+            getWindow().getDecorView().setBackground(gradientDrawable);
+        }
     }
 
     /**

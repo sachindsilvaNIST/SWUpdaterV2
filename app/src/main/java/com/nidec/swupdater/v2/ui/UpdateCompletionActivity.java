@@ -64,6 +64,9 @@ public class UpdateCompletionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_completion);
 
+        /**
+         * Setting Gradient Background
+         */
         setGradientBackground();
 
         /**

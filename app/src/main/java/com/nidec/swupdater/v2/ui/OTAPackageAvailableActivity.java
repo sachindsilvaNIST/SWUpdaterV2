@@ -110,6 +110,11 @@ public class OTAPackageAvailableActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ota_package_available);
 
+        /**
+         * Setting Gradient Background
+         */
+        setGradientBackground();
+
 
         /**
          * Loading Spinner before actual activity state(s) begin... for few seconds...
@@ -362,6 +367,19 @@ public class OTAPackageAvailableActivity extends Activity {
             finish();
         }
 
+    }
+
+    /**
+     *  Defining Gradient Background
+     */
+
+    private void setGradientBackground() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int[] colors = {Color.parseColor("#E0F7FA"), Color.parseColor("#FFFFFF")};
+            GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gradientDrawable.setCornerRadius(0f);
+            getWindow().getDecorView().setBackground(gradientDrawable);
+        }
     }
 
 
