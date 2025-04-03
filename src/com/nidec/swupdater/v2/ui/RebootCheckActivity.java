@@ -69,6 +69,8 @@ public class RebootCheckActivity extends Activity {
 
         mUpdateManager.setOnStateChangeCallback(this::onUpdaterStateChange);
 
+        Log.d(TAG_REBOOT_CHECK_ACTIVITY, "onCreate() => Auto-launched by MEDIA_MOUNTED...");
+
         /**
          *  Synchronize with the existing Update Engine Status.
          */
@@ -76,10 +78,7 @@ public class RebootCheckActivity extends Activity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+
 
     @Override
     protected void onResume() {
@@ -110,6 +109,11 @@ public class RebootCheckActivity extends Activity {
         Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNBINDING --> `RebootCheckActivity.java`");
         super.onPause();
         mUpdateManager.unbind();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     /**
@@ -250,8 +254,6 @@ public class RebootCheckActivity extends Activity {
         mTextViewUpdaterState.setText(stateText + "/" + state);
 
         if(state == UpdaterState.REBOOT_REQUIRED){
-            Log.d(TAG_REBOOT_CHECK_ACTIVITY, "UNMOUNTING USB PENDRIVE...");
-
 //            forciblyUnmountUSB(this, "public:8,2");
 
 
