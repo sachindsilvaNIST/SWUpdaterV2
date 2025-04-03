@@ -16,7 +16,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
+
 import android.media.Image;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UpdateEngine;
@@ -27,6 +29,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import android.widget.Button;
 import android.widget.TextView;
@@ -479,6 +482,12 @@ public class OTAPackageAvailableActivity extends Activity {
 
         ImageView iconView = new ImageView(this);
         iconView.setImageResource(android.R.drawable.ic_popup_sync);
+
+        /**
+         * Apply pulse animation - repetitive
+         */
+        startPulseAnimation(iconView);
+
         iconView.setColorFilter(Color.parseColor("#3A7BD5"));
         LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(
                 (int) (48 * getResources().getDisplayMetrics().density),
@@ -634,6 +643,44 @@ public class OTAPackageAvailableActivity extends Activity {
         drawable.setColor(Color.parseColor(colorHex));
         return drawable;
     }
+
+    /**
+     * Defining pulse animation function
+     */
+
+    private void startPulseAnimation(final ImageView mImageView) {
+
+        // Scaling down to 70% and back to 100% - repetitive for subtle pulse effect
+
+        mImageView.animate()
+                .scaleX(0.7f)
+                .scaleY(0.7f)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .setDuration(600)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        mImageView.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setInterpolator(new AccelerateDecelerateInterpolator())
+                                .setDuration(600)
+                                .withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Repeating the animation continously
+                                        startPulseAnimation(mImageView);
+                                    }
+                                })
+                                .start();
+                    }
+                })
+                .start();
+
+    }
+
+
+
 
 
     /**

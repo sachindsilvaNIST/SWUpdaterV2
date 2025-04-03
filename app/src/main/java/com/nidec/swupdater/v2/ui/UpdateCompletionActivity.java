@@ -30,8 +30,6 @@ import android.widget.ImageView;
 import com.nidec.swupdater.v2.R;
 
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
