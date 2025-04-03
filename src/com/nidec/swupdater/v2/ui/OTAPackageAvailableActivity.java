@@ -483,6 +483,7 @@ public class OTAPackageAvailableActivity extends Activity {
         titleView.setTextColor(Color.BLACK);
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setPadding(0, containerPadding / 2,0, containerPadding / 2);
+        titleView.setGravity(Gravity.CENTER);
         parentLayout.addView(titleView);
 
         /**
@@ -497,6 +498,7 @@ public class OTAPackageAvailableActivity extends Activity {
         messageView.setTextSize(16);
         messageView.setTextColor(Color.DKGRAY);
         messageView.setPadding(0, 0, 0, containerPadding);
+        messageView.setGravity(Gravity.CENTER);
         parentLayout.addView(messageView);
 
         /**
@@ -505,7 +507,8 @@ public class OTAPackageAvailableActivity extends Activity {
 
         TextView infoView = new TextView(this);
         infoView.setText("The update is digitally signed and secure.");
-        infoView.setTextSize(5);
+        infoView.setTextSize(10);
+        infoView.setTypeface(null, Typeface.ITALIC);
         infoView.setTextColor(Color.GRAY);
         infoView.setPadding(0,0,0,containerPadding);
         parentLayout.addView(infoView);
@@ -517,7 +520,7 @@ public class OTAPackageAvailableActivity extends Activity {
 
         LinearLayout buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        buttonLayout.setGravity(Gravity.END);
+        buttonLayout.setGravity(Gravity.CENTER);
 
 
         /**
@@ -532,7 +535,7 @@ public class OTAPackageAvailableActivity extends Activity {
         // Setting the margin
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        int marginRightForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginRightForCancelButton = (int) (14 * getResources().getDisplayMetrics().density);
         int marginTopForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
         int marginBottomForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
         cancelParams.setMargins(0, marginTopForCancelButton, marginRightForCancelButton, marginBottomForCancelButton);
@@ -602,7 +605,6 @@ public class OTAPackageAvailableActivity extends Activity {
      *  Function to create a custom rounded corner radius for Buttons.
      *  Function  : createRoundedDrawable()
      */
-
 
     private GradientDrawable createRoundedDrawable(String colorHex, int cornerRadiusDp) {
         GradientDrawable drawable = new GradientDrawable();
