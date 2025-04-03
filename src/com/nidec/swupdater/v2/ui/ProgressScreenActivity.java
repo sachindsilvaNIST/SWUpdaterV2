@@ -756,8 +756,12 @@ public class ProgressScreenActivity extends Activity {
 
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
+        int marginRightForCancelButton = (int) (14 * getResources().getDisplayMetrics().density);
+        int marginTopForCancelButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginBottomForCancelBottom = (int) (8 * getResources().getDisplayMetrics().density);
+
         // Setting right margin
-        cancelParams.setMargins(0, 0, buttonMargin, 0);
+        cancelParams.setMargins(0, marginTopForCancelButton, marginRightForCancelButton, marginBottomForCancelBottom);
         cancelButton.setLayoutParams(cancelParams);
 
         /**
@@ -769,6 +773,10 @@ public class ProgressScreenActivity extends Activity {
         okButton.setBackground(createRoundedDrawable("#3A7BD5", 8));
         okButton.setPadding(innerPadding, innerPadding / 2, innerPadding, innerPadding / 2);
         LinearLayout.LayoutParams okParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        int marginTopForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+        int marginBottomForOKButton = (int) (8 * getResources().getDisplayMetrics().density);
+        okParams.setMargins(0,marginTopForOKButton,0,marginBottomForOKButton);
         okButton.setLayoutParams(okParams);
 
         // Adding buttons to ButtonLayout

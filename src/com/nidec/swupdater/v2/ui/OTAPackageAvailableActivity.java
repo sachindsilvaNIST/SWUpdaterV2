@@ -557,11 +557,12 @@ public class OTAPackageAvailableActivity extends Activity {
         okParams.setMargins(0,marginTopForOKButton,0,marginBottomForOKButton);
 
 
+
+        okButton.setLayoutParams(okParams);
+
         /**
          * Defining the Event Listener for "APPLY" Button (Confirmation Dialog)
          */
-
-        okButton.setLayoutParams(okParams);
 
         okButton.setOnClickListener(v -> {
             // Dismiss dialog box and apply update.
