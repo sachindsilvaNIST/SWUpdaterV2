@@ -30,12 +30,10 @@
 
 <!--    Activity 1 : Display Splash Activity -->
     <activity android:name="com.nidec.swupdater.v2.ui.RebootCheckActivity"
-        android:exported="true"
-        android:launchMode="singleTask">
+        android:exported="true">
         <intent-filter>
-            <action android:name="android.intent.action.MEDIA_MOUNTED" />
-            <data android:scheme="file"/>
-            <category android:name="android.intent.category.DEFAULT" />
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
 
