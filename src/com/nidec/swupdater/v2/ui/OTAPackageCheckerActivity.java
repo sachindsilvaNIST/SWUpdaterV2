@@ -15,6 +15,8 @@ import android.app.ProgressDialog;
 
 import android.content.Intent;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -54,6 +56,11 @@ public class OTAPackageCheckerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ota_package_checker);
+
+        /**
+         * Setting Gradient Background
+         */
+        setGradientBackground();
 
         // Retrieve the shared UpdateManager Instance..
         mUpdateManager = UpdateManagerHolder.getInstance();
@@ -147,6 +154,19 @@ public class OTAPackageCheckerActivity extends Activity {
             Log.d(TAG_OTA_PACKAGE_CHECKER_ACTIVITY, "REBOOT_REQUIRED -> Starting UpdateCompletionActivity...");
             startActivity(new Intent(this, UpdateCompletionActivity.class));
             finish();
+        }
+    }
+
+    /**
+     *  Defining Gradient Background
+     */
+
+    private void setGradientBackground() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int[] colors = {Color.parseColor("#E0F7FA"), Color.parseColor("#FFFFFF")};
+            GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gradientDrawable.setCornerRadius(0f);
+            getWindow().getDecorView().setBackground(gradientDrawable);
         }
     }
 

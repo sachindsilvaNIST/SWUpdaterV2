@@ -98,6 +98,12 @@ public class ProgressScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress_screen);
 
+        /**
+         * Setting Gradient Background
+         */
+
+        setGradientBackground();
+
 
         /**
          * Retrieving IDs of UI Elements...
@@ -252,7 +258,18 @@ public class ProgressScreenActivity extends Activity {
     }
 
 
+    /**
+     *  Defining Gradient Background
+     */
 
+    private void setGradientBackground() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int[] colors = {Color.parseColor("#E0F7FA"), Color.parseColor("#FFFFFF")};
+            GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gradientDrawable.setCornerRadius(0f);
+            getWindow().getDecorView().setBackground(gradientDrawable);
+        }
+    }
 
 
 
