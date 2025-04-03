@@ -20,10 +20,12 @@ import android.os.Bundle;
 
 import android.util.Log;
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ImageView;
 
@@ -51,6 +53,8 @@ public class UpdateCompletionActivity extends Activity {
     private ImageView mImageViewUpdateCompletion;
     private TextView mTextViewUpdateCompletionMainText;
     private TextView mTextViewUpdateCompletionSubText;
+    private TextView mTextViewUpdatedTimeInfo;
+    private TextView mTextViewRebootInstructions;
 
 //    private Button mButtonCloseApp;
 
@@ -59,6 +63,16 @@ public class UpdateCompletionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_completion);
+
+        setGradientBackground();
+
+        /**
+         *  Accessing parent / root layout of UpdateCompletion Activity's XML
+         */
+        LinearLayout updateCompletionRootLayout = (LinearLayout) findViewById(R.id.updateCompletionRootLayout);
+        if(updateCompletionRootLayout != null) {
+            updateCompletionRootLayout.setGravity(Gravity.CENTER);
+        }
 
 
         // Accessing IDs of UI Elements.
@@ -84,16 +98,59 @@ public class UpdateCompletionActivity extends Activity {
         mTextViewUpdateCompletionMainText.setTextSize(22);
         mTextViewUpdateCompletionMainText.setTextColor(Color.BLACK);
         mTextViewUpdateCompletionMainText.setTypeface(null, Typeface.BOLD);
+        mTextViewUpdateCompletionMainText.setGravity(Gravity.CENTER);
 
 
         /**
          * Update completion date and time along with the instructions
          */
 
-        String currentTime = getCurrentTimeString();
-        mTextViewUpdateCompletionSubText.setText("Please reboot your device to complete the update.\n Updated on : " + currentTime);
+        mTextViewUpdateCompletionSubText.setText("Please reboot your device to complete the update");
         mTextViewUpdateCompletionSubText.setTextSize(16);
         mTextViewUpdateCompletionSubText.setTextColor(Color.DKGRAY);
+        mTextViewUpdateCompletionSubText.setGravity(Gravity.CENTER);
+
+        /**
+         * Updated Time Information
+         *
+         */
+        String currentTime = getCurrentTimeString();
+
+        mTextViewUpdatedTimeInfo = new TextView(this);
+        mTextViewUpdatedTimeInfo.setText("Updated on : " + currentTime);
+        mTextViewUpdatedTimeInfo.setTextSize(12);
+        mTextViewUpdatedTimeInfo.setTextColor(Color.GRAY);
+        mTextViewUpdatedTimeInfo.setGravity(Gravity.CENTER);
+
+        LinearLayout.LayoutParams updatedTimeInfoParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mTextViewUpdatedTimeInfo.setLayoutParams(updatedTimeInfoParams);
+
+        /**
+         * Adding Updated Time Information to Update Completion's Root Layout
+         */
+
+        if(updateCompletionRootLayout != null) {
+            updateCompletionRootLayout.addView(mTextViewUpdatedTimeInfo);
+        }
+
+
+        mTextViewRebootInstructions = new TextView(this);
+        mTextViewRebootInstructions.setText("To Reboot, Turn OFF & ON the device by pressing power button.");
+        mTextViewRebootInstructions.setTextSize(16);
+        mTextViewRebootInstructions.setTextColor(Color.parseColor("#3A7BD5"));
+        mTextViewRebootInstructions.setGravity(Gravity.CENTER);
+
+        // Adding margins
+        LinearLayout.LayoutParams instructParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        instructParams.topMargin = (int) (8 * getResources().getDisplayMetrics().density);
+        mTextViewRebootInstructions.setLayoutParams(instructParams);
+
+        /**
+         * Adding reboot instructions to Update Completion's Root Layout
+         */
+        if(updateCompletionRootLayout != null) {
+            updateCompletionRootLayout.addView(mTextViewRebootInstructions);
+        }
 
 
         /**
@@ -152,6 +209,22 @@ public class UpdateCompletionActivity extends Activity {
     }
 
     /**
+     *  Adding gradient background
+     */
+    private void setGradientBackground() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int[] colors = {Color.parseColor("#E0F7FA"), Color.parseColor("#FFFFFF")};
+            GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gradientDrawable.setCornerRadius(0f);
+            getWindow().getDecorView().setBackground(gradientDrawable);
+        }
+    }
+
+
+
+
+
+    /**
      * Defining custom tint color for ImageView Icon.
      */
 
@@ -183,8 +256,8 @@ public class UpdateCompletionActivity extends Activity {
         // Scaling down to 90% and back to 100% - repetitive for subtle pulse effect
 
         imageView.animate()
-                .scaleX(0.9f)
-                .scaleY(0.9f)
+                .scaleX(0.7f)
+                .scaleY(0.7f)
                 .setInterpolator(new AccelerateDecelerateInterpolator())
                 .setDuration(600)
                 .withEndAction(new Runnable() {
