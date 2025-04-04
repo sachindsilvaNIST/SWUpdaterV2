@@ -28,27 +28,35 @@
         >
 
 <!--        Broadcast Receiver listening to USB_DEVICE_ATTACHED-->
-        <receiver android:name="com.nidec.swupdater.v2.receivers.USBReceiverActivity"
-                  android:exported="true">
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
-            </intent-filter>
+<!--        <receiver android:name="com.nidec.swupdater.v2.receivers.USBReceiverActivity"-->
+<!--                  android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>-->
+<!--            </intent-filter>-->
 
-<!--&lt;!&ndash;            META DATA referencing to a specific USB Device &ndash;&gt;-->
-<!--            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"-->
-<!--                       android:resource="@xml/usb_device_filter"/>-->
-        </receiver>
+<!--&lt;!&ndash;&lt;!&ndash;            META DATA referencing to a specific USB Device &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"&ndash;&gt;-->
+<!--&lt;!&ndash;                       android:resource="@xml/usb_device_filter"/>&ndash;&gt;-->
+<!--        </receiver>-->
 
 
 <!--    Activity 1 : Display Splash Activity -->
-    <activity android:name="com.nidec.swupdater.v2.ui.RebootCheckActivity"
-        android:exported="true"
-        android:launchMode="singleTask">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+<!--    <activity android:name="com.nidec.swupdater.v2.ui.RebootCheckActivity"-->
+<!--        android:exported="true"-->
+<!--        android:launchMode="singleTask">-->
+<!--        <intent-filter>-->
+<!--            <action android:name="android.intent.action.MAIN" />-->
+<!--            <category android:name="android.intent.category.LAUNCHER" />-->
+<!--        </intent-filter>-->
+<!--    </activity>-->
+
+        <activity android:name="com.nidec.swupdater.v2.ui.RebootCheckActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     <activity android:name="com.nidec.swupdater.v2.ui.DownloadStateCheckActivity" />
     <activity android:name="com.nidec.swupdater.v2.ui.OTAPackageCheckerActivity" />
