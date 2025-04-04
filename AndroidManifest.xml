@@ -27,6 +27,18 @@
         android:usesCleartextTraffic="true"
         >
 
+<!--        Broadcast Receiver listening to USB_DEVICE_ATTACHED-->
+        <receiver android:name="com.nidec.swupdater.v2.receivers.USBReceiverActivity"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
+            </intent-filter>
+
+<!--            META DATA referencing to a specific USB Device -->
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                       android:resource="@xml/usb_device_filter"/>
+        </receiver>
+
 
 <!--    Activity 1 : Display Splash Activity -->
     <activity android:name="com.nidec.swupdater.v2.ui.RebootCheckActivity"
