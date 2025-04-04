@@ -19,6 +19,7 @@ public class USBReceiverActivity extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(intent.getAction())) {
 
+            Log.d(TAG_USB_RECEIVER_ACTIVITY, "USB_DEVICE_ATTACHED!!!");
 
             Intent launchIntent = new Intent(context, RebootCheckActivity.class);
             launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
