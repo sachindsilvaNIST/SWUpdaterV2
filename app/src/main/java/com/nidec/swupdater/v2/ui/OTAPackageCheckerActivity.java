@@ -163,7 +163,7 @@ public class OTAPackageCheckerActivity extends Activity {
 
     private void setGradientBackground() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            int[] colors = {Color.parseColor("#0090BC"), Color.parseColor("#FFFFFF")};
+            int[] colors = {Color.parseColor("#E0F7FA"), Color.parseColor("#FFFFFF")};
             GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
             gradientDrawable.setCornerRadius(0f);
             getWindow().getDecorView().setBackground(gradientDrawable);
